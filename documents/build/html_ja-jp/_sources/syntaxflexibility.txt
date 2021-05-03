@@ -1,0 +1,675 @@
+.. index:: 
+	single: シンタックスの柔軟性; はじめに
+
+====================
+シンタックスの柔軟性
+====================
+
+Ring コンパイラに標準装備されているシンタックスの柔軟性に関する選択肢です。
+
+.. index:: 
+	pair: シンタックスの柔軟性; キーワード変更
+
+キーワードの変更
+================
+
+ChangeRingKeyword 命令はキーワードを変更します。
+
+.. note:: 共同プロジェクトのチーム間で記法の混用があるときは、キーワードの復元を心がけてください。
+
+
+.. tip:: ChangeRingKeyword 命令は字句解析の段階でコンパイラにより実行されます (構文解析の前に)。
+
+
+文法:
+
+.. code-block:: ring
+	
+	ChangeRingKeyword  <旧キーワード>  <新キーワード>
+
+用例:
+
+.. code-block:: ring
+
+	ChangeRingKeyword see print
+	
+	print "welcome" + nl
+
+	ChangeRingKeyword print see
+
+	see "Welcome" + nl
+
+用例:
+
+.. code-block:: ring
+
+	ChangeRingKeyword  func function
+	ChangeRingKeyword  see  print
+	ChangeRingKeyword  ok   endif
+	ChangeRingKeyword  next endfor
+	ChangeRingKeyword  end  endwhile
+
+	x = 10
+	while x > 0
+		print "x = " + x + nl
+		for t = 1 to 10
+			if t = 3
+				print "number three" + nl
+			endif
+		endfor	
+
+	x--
+	endwhile
+
+	test() 
+
+	function test
+		print "message from test" + nl
+
+	ChangeRingKeyword  function func
+	ChangeRingKeyword  print see
+	ChangeRingKeyword  endif ok
+	ChangeRingKeyword  endfor next
+	ChangeRingKeyword  endwhile end
+
+
+.. index:: 
+	pair: シンタックスの柔軟性; 演算子の変更
+
+演算子の変更
+============
+
+ChangeRingOperator 命令は演算子を変更します。
+
+.. note:: 共同プロジェクトのチーム間で記法の混用があるときは、演算子の復元を心がけてください。
+
+.. tip:: ChangeRingOperartor 命令は字句解析の段階でコンパイラにより実行されます (構文解析の前に)。
+
+
+文法:
+
+.. code-block:: ring
+	
+	ChangeRingOperator  <旧キーワード>  <新キーワード>
+
+用例:
+
+このプログラムは、 + 演算子を _+ へ変更することで隠します。
+
+.. code-block:: ring
+
+	changeringoperator + _+
+	changeringkeyword SEE PRINT
+
+	try
+		print 5 + 10
+	catch
+		print nl print "error" print nl
+	done
+
+	changeringoperator _+ +
+
+このプログラムは、 + 演算子を “plus” へ変更します。
+
+.. code-block:: ring
+
+	changeringoperator + plus 
+	changeringkeyword SEE PRINT
+
+	Print 5 plus 5  
+
+	changeringoperator plus +
+	changeringkeyword PRINT SEE 
+
+.. index:: 
+	pair: シンタックスの柔軟性; シンタックスファイルの読み込み
+
+
+シンタックスファイルの読み込み
+==============================
+
+複数のソースファイルから後で使用するために、ファイルへ ChangeRingKeyword と ChangeRingOperator 命令のグループを格納です。
+これらのファイルは Load 命令で呼び出せません。理由として、
+
+* ChangeRingKeyword および ChangeRingOperator 命令は字句解析の段階で、コンパイラにより実行されます (構文解析の前に)。
+* Load 命令は構文解析の段階で実行されます (字句解析後の段階で)。
+
+解決方法: LoadSyntax 命令を字句解析の段階で実行します。
+
+文法:
+
+.. code-block:: ring
+
+	LoadSyntax	"syntaxfile.ring"
+
+用例:
+
+ファイル : StyleBasicOn.ring
+
+.. code-block:: ring
+
+	ChangeRingKeyword 	see 	print
+	ChangeRingKeyword 	ok 	endif
+	ChangeRingKeyword 	next 	endfor
+	ChangeRingKeyword 	end 	endwhile
+
+ファイル : StyleBasicOff.ring
+
+.. code-block:: ring
+
+	ChangeRingKeyword  print 	see
+	ChangeRingKeyword  endif 	ok
+	ChangeRingKeyword  endfor 	next
+	ChangeRingKeyword  endwhile 	end
+
+ファイル : UseStyleBasic.ring
+
+.. code-block:: ring
+
+	LoadSyntax "stylebasicon.ring"
+
+	x = 10
+	while x > 0
+		print "x = " + x + nl
+		for t = 1 to 10
+			if t = 3
+				print "number three" + nl
+			endif
+		endfor	
+		x--
+	endwhile
+
+	LoadSyntax "stylebasicoff.ring"
+
+	see "done" + nl
+
+.. note:: LoadSyntax 命令により呼び出されるファイルの内容は ChangeRingKeyword と ChangeRingOperator 命令のみ記述してください。
+
+.. tip:: LoadSyntax により呼び出されたファイルは関数、パッケージおよびクラスには対応していません。命令型の命令のみ対応しています。
+
+.. note:: この機能により、同じプロジェクトで使用できる多種多様な記法を作成できます。また、 Ring の訳文では日本語、アラビア語、フランス語などの自然言語に対応できます。
+
+.. tip:: LoadSyntax 命令の効果は、現在のソースコードに関連するものだけに限られます (ファイルスコープ)。
+	
+
+.. index:: 
+	pair: シンタックスの柔軟性; 関数の引数を“()” で囲うには
+
+関数の引数を“()” で囲うには
+=============================
+
+関数の引数は“()”で囲います (オプション扱い)。
+
+用例:
+
+.. code-block:: ring
+
+	hello()
+	sum(3,4)
+
+	func hello()
+		see "Hello" + nl
+
+	func sum(x,y)
+		see x+y+nl
+	
+実行結果:
+
+.. code-block:: ring
+
+	Hello
+	7
+
+用例:
+
+.. code-block:: ring
+
+	myfunc = func x,y { see x + y + nl }
+
+	call myfunc (3,4)
+
+	myfunc2 = func (x,y) { see x+y+nl }
+
+	call myfunc(3,4)
+
+実行結果:
+
+.. code-block:: ring
+
+	7
+	7
+
+.. index:: 
+	pair: シンタックスの柔軟性; ステートメントの末尾および間でセミコロンを使うには
+
+ステートメントの末尾および間でセミコロンを使うには
+==================================================
+
+Ring ではステートメントの末尾、および間でセミコロンを使えます (オプション扱い)。
+
+用例:
+
+.. code-block:: ring
+
+	# セミコロンの使用はオプション扱いです。
+
+	see "Hello" + nl ; see "How are you?" + nl  ; see "Welcome to Ring" + nl ;
+	one() ; two() ; three() ;
+	func one ; see "one" + nl ;
+	func two ; see "two" + nl ;
+	func three ; see "three" + nl ;
+
+
+実行結果:
+
+.. code-block:: ring
+
+
+	Hello
+	How are you?
+	Welcome to Ring
+	one
+	two
+	three
+
+.. index:: 
+	pair: シンタックスの柔軟性; 変数名に $ と @ を使うには
+
+変数名に $ と @ を使うには
+==========================
+
+変数名には Unicode 文字に加えて $ と @ も使えます。
+
+この機能は便利です。例えば、グローバル変数は $ で、そしてオブジェクトの属性は @ で書き始められます。
+
+これは Ruby などでは規則ですが、 Ring ではコンパイラへ影響を及ぼさないオプション扱いのものです。
+
+用例:
+
+.. code-block:: ring
+
+	$global_variable = 5
+
+	new test { hello() }	
+
+	class test
+
+		@instance_variable = 10
+
+		func hello
+
+			local_variable = 15
+
+			see "Global   : " + $global_variable + nl + 
+			    "Instance : " + @instance_variable + nl +
+			    "Local    : " + local_variable + nl
+
+実行結果:
+
+
+.. code-block:: ring
+
+	Global   : 5
+	Instance : 10
+	Local    : 15
+
+.. index:: 
+	pair: シンタックスの柔軟性; If ステートメントで‘but’の代わりに‘elseif’キーワードを使うには
+
+If ステートメントで‘but’の代わりに‘elseif’キーワードを使うには
+==================================================================
+
+If ステートメントで‘but’を使いたくないときは、
+‘elseif’キーワードへ変更できます。
+
+用例:
+
+.. code-block:: ring
+
+	give x
+	if x = 1 see "one"
+	elseif x=2 see "two"
+	elseif x=3 see "three"
+	elseif x=4 see "four"
+	else see "other"
+	ok
+	see nl
+
+.. index:: 
+	pair: シンタックスの柔軟性; Switch ステートメントで‘other’の代わりに‘else’キーワードを使うには
+
+Switch ステートメントで‘other’の代わりに‘else’キーワードを使うには
+======================================================================
+
+Switch ステートメントで‘other’を使いたくないときは、
+‘else’キーワードへ変更できます。
+
+また If ステートメントで‘else’を‘other’キーワードへ置き換えることもできます。
+
+つまり‘other’キーワードは‘else’キーワードと同じ扱いです。
+
+用例:
+
+.. code-block:: ring
+
+	x = 1
+	switch x
+		on 10 
+			see "10" + nl
+		else 
+			see "not 10" + nl
+	end
+
+実行結果:
+
+.. code-block:: ring
+
+	not 10
+
+.. index:: 
+	pair: シンタックスの柔軟性; 制御構造で‘end’キーワードを使うには
+
+制御構造で‘end’キーワードを使うには
+=====================================
+
+‘end’ キーワードは制御構造を閉じます。
+
+* If ステートメント
+* For ループ
+* Switch
+* While
+* Try ～ Catch
+
+用例:
+
+.. code-block:: ring
+
+	see "if statement.." + nl
+	x = 1
+	if x = 1 
+		see "one" + nl
+	elseif x=2 
+		see "two" + nl
+	elseif x=3 
+		see "three" + nl
+	end
+	see "for loop.." + nl
+	for t = 1 to 10
+		see t 
+	end
+	see nl
+	see "switch..." + nl
+	x = 1
+
+	switch x
+		on 1 see "one" + nl
+		on 2 see "two" + nl
+	end
+
+	see "try catch..." + nl
+	try
+		x = 1 / 0
+	catch
+		see "catching error" + nl
+	end
+
+実行結果:
+
+.. code-block:: ring
+
+	if statement..
+	one
+	for loop..
+	12345678910
+	switch...
+	one
+	try catch...
+	catching error
+
+.. index:: 
+	pair: シンタックスの柔軟性; 制御構造の開始と終了で括弧 { } を使うには
+
+制御構造の開始と終了で括弧 { } を使うには
+=========================================
+
+制御構造の開始と終了で括弧 { } を使えます。
+
+* If ステートメント
+* For ループ
+* Switch
+* While
+* Try ～ Catch
+
+用例:
+
+.. code-block:: ring
+
+	see "if statement.." + nl
+	x = 1
+	if x = 1 {
+		see "one" + nl
+	elseif x=2 
+		see "two" + nl
+	elseif x=3 
+		see "three" + nl
+	}
+	see "for loop.." + nl
+	for t = 1 to 10 {
+		see t 
+	}
+	see nl
+	see "switch..." + nl
+	x = 1
+
+	switch x {
+		on 1 see "one" + nl
+		on 2 see "two" + nl
+	}
+
+	see "try catch..." + nl
+	try {
+		x = 1 / 0
+	catch
+		see "catching error" + nl
+	}
+
+実行結果:
+
+.. code-block:: ring
+
+	if statement..
+	one
+	for loop..
+	12345678910
+	switch...
+	one
+	try catch...
+	catching error
+
+
+.. index:: 
+	pair: シンタックスの柔軟性; ‘see’と‘give’ の代わりに‘put’と‘get’を使うには
+
+‘see’と‘give’ の代わりに‘put’と‘get’を使うには
+======================================================
+
+‘see’キーワードを‘put’キーワードへ置き換えられます。
+
+また‘give’キーワードを‘get’キーワードへ置き換えることもできます。
+
+用例:
+
+.. code-block:: ring
+
+	put "Hello World" + nl
+	put "Enter Your Name ? " Get Name
+	Put "Hello " + Name
+
+.. index:: 
+	pair: シンタックスの柔軟性; Switch ステートメントで‘on’の代わりに‘case’を使うには
+
+Switch ステートメントで‘on’の代わりに‘case’を使うには
+=========================================================
+
+Switch ステートメントで‘on’キーワードを‘case’キーワードへ置き換えられます。
+
+用例① :
+
+.. code-block:: ring
+
+	for x=1 to 10 
+		switch x 
+		case 1 put "one" + nl
+		case 2 put "two" + nl
+		case 3 put "thre" + nl
+		else put "else" + nl
+		end
+	end
+
+用例② :
+
+.. code-block:: ring
+
+	for x=1 to 10 {
+		switch x {
+		case 1 put "one" + nl
+		case 2 put "two" + nl
+		case 3 put "thre" + nl
+		else put "else" + nl
+		}
+	}
+
+
+.. index:: 
+	pair: シンタックスの柔軟性; 関数とメソッドの定義で‘func’の代わりに‘def’を使うには
+
+関数とメソッドの定義で‘func’の代わりに‘def’を使うには
+=========================================================
+
+関数、およびメソッドの定義で ‘func’ の代わりに ‘def’ キーワードを使えます。
+
+用例:
+
+.. code-block:: ring
+
+	one() two()
+
+	def one put "one" + nl
+	def two put "two" + nl
+
+.. index:: 
+	pair: シンタックスの柔軟性; Package/Class/Function で括弧 { } を使うには
+
+Package/Class/Function で括弧 { } を使うには
+============================================
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	import mypackage
+
+	new myclass {
+		myfunc() 
+	}
+
+	package mypackage 
+	{
+		class myclass 
+		{
+			func myfunc 
+			{
+				print("Hello, World!\n")
+			}
+		}
+	}
+
+.. index:: 
+	pair: シンタックスの柔軟性; Package/Class/Function キーワードの後で‘end’を使うには
+
+Package/Class/Function キーワードの後で‘end’を使うには
+========================================================
+
+用例:
+
+.. code-block:: ring
+
+	import mypackage
+
+	new myclass {
+		myfunc() 
+	}
+
+	package mypackage 
+		class myclass 
+			def myfunc 
+				put "Hello, World!"
+			end
+		end
+	end
+
+.. index:: 
+	pair: シンタックスの柔軟性; Package/Class/Function キーワードの後で‘endpackage’/’endclass’/’endfunc’を使うには
+
+Package/Class/Function キーワードの後で‘endpackage’/’endclass’/’endfunc’を使うには
+========================================================================================
+
+用例:
+
+.. code-block:: ring
+
+	import mypackage
+
+	new myclass { myfunc() }
+
+	package mypackage
+		class myclass
+			func myfunc			
+				see "welcome"  + nl
+			endfunc
+		endclass
+	endpackage
+
+
+.. index:: 
+	pair: シンタックスの柔軟性; キーワードの後にくる行を無視
+
+キーワードの後にくる行を無視
+============================
+
+Ring 1.8 からコンパイラは、キーワードの後に続く行をトークンとみなして無視するようになりました。
+
+用例:
+
+.. code-block:: ring
+
+	see 
+	"
+		Hello, World!
+	"
+	test()
+
+	func 
+	#======================#
+		Test
+	#======================#
+
+		?
+		"
+	
+		Hello from the Test function
+
+		"
+
+実行結果:
+
+.. code-block:: none
+
+
+	        Hello, World!
+
+
+	        Hello from the Test function
+

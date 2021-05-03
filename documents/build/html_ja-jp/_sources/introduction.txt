@@ -1,0 +1,246 @@
+.. index:: 
+	single: はじめに; はじめに
+
+========
+はじめに
+========
+
+.. image:: thering.jpg
+	:alt: プログラミング言語 Ring のロゴマーク
+
+プログラミング言語 Ring へようこそ！
+
+Ring は画期的で実用性のある汎用マルチパラダイム言語です。 C/C++ プロジェクトへの組み込み、
+C/C++ コードにより拡張・単体プログラミング言語にもなります。
+命令型、手続き型、オブジェクト指向、関数型、メタプログラミング、多重構造による宣言型、および自然言語のプログラミング・パラダイムに対応しています。
+Ring は移植性 (Windows, Linux, macOS, Android, WebAssembly など) があり、小規模、柔軟かつ高速な設計の動的プログラミング言語です。コンソール、GUI、ウェブ、ゲーム、およびモバイル・アプリケーションを作成できます。
+ソースコードをバイトコードへコンパイル後に、
+Ring コンパイラで単体プログラムとして統合を行い、 Ring 仮想計算機で実行します。
+
+さて、 Ring 言語の設計と実装の背景にある目標を議論しましょう。
+
+.. index:: 
+	pair: はじめに; 動機
+
+動機
+====
+
+2011年11月に、新しいバージョンの `Programming Without Coding Technology (PWCT) <http://doublesvsoop.sf.net/>`_ ソフトウェアを白紙段階から開発することを検討し始めました。
+
+ウェブとモバイル開発に対応したマルチプラットフォーム版 Programming Without Coding Technology (PWCT)  の作成に興味がありました。
+
+マルチプラットフォーム対応、より優れた実行性能、コンポーネントを記述できるスクリプト言語であり、
+開発環境の構築にも耐え、多種多様なアプリケーションを開発できるものです。さらに、大規模アプリケーションの開発用に設計してあり、ガベージコレクター (GC) 制御の良くできている高速で生産性の高い小規模な動的プログラミング言語です。
+
+そのため、複数のプログラミング言語を併用するのではなく、開発言語を一本に絞ることを決めました。
+
+様々なプログラミング言語を調査したところ、知性を兼ね備えた新発想の異次元プログラミング言語を求めていることに気づきました。
+
+.. index:: 
+	pair: はじめに; Ring 以外のプログラミング言語
+
+Ring 以外のプログラミング言語
+=============================
+
+Ring は下記のプログラミング言語の影響を受けています。
+
+* Lua
+* Python
+* Ruby
+* C
+* C#
+* BASIC
+* QML
+* xBase
+* Supernova
+
+.. index:: 
+	pair: はじめに; 歴史
+
+歴史
+====
+
+2013年09月より Ring の設計と実装を開始し、21ヶ月後の2015年05月頃に Ring コンパイラと仮想計算機は完成しました。
+
+その後、再検証で三ヶ月間を費やしました。優れたテストを記述してから各種不具合の修正を続け、
+2015年08月末までに不具合の修正を完了しました。
+大量のテストを用意して自動化することは、製品の安定化で大いに役に立ちました。
+
+2015年09月12日に取扱説明書の大部分を執筆しました。
+Facebook ページへアラビア語の記事を投稿して、広報活動を開始しました (Ring の公開前に、手短な説明を読んでいただき、 Ring の考えに興味をもった開発参戦者を探すためです)。
+同日、開発参加に興味がある開発者、そして友人たちから多数の電子メールを受け取りました！
+
+2016年01月25日に Ring 1.0 を公開しました。わずか数日で数千回のダウンロードを達成しました！　そして、世界中の開発者が学習と使用をはじめました。Ring の発展と成功は、皆様から寄せられた声のお蔭でございます。また、皆様から Ring を用いて短時間で作成した素晴らしい用例をいただきました。
+
+2017年12月07日に Ring 1.6 取扱説明書の日本語訳作業が isVowel (旧名義: めぐみ発動機 / GreenWing) により開始されました。 Ring 1.0 の公開から約二年半後となる翌年の 2018年06月03日には、非公式ウェブサイト (Geocities Japan) と Ring 1.7 の日本語訳が公開されました。翌年の 2019年02月05日には OSDN への非公式ウェブサイト移転、同月10日には日本語キット化のテスト版が公開されました。そして、同月22日には、日本語サイトへのアクセス件数が 5,000件 を超えました。
+
+2018年10月06日に公開の Ring 1.9 では Heroku に対応し、クラウド・アプリケーションも開発可能です。
+
+2019年01月25日に公開の Ring 1.10 ではパッケージマネージャーが導入されました。
+
+2019年09月15日に公開の Ring 1.11 では Allegro, SDL に加えて 2D/3D ゲームプログラミングライブラリである `RayLib <https://www.raylib.com/>`_ に対応しました。また、ZeroLibの導入により、リストと文字列で 0 ベースのインデックスを使用できるようになりました。
+
+2020年01月25日に公開の Ring 1.12 では RayLib のサンプルソース集強化、 Load Again コマンドによるソースコードに記述された定数の動的再読み込みに対応しました。また、記念すべきことに Ring は初公開から今年で五周年となりました。今後ともご愛顧いただけますよう宜しくお願い致します。
+
+2020年09月15日に公開の Ring 1.13 では世界初となる Ring 入門書が発売され、さらに StbImage, WebAssembly に対応しました。
+
+2021年01月25日に公開の Ring 1.14 ではレトロゲーム開発向けのゲームエンジンである Tilengine と軽量GUIツールキットである LibUI にも対応しました。また RingSockets により RingQt の使えない環境でもソケットプログラミングが可能となりました。
+
+
+Ring は、今後広く使われるプログラミング言語と大成すべく着実に成長を続けています。
+
+.. index:: 
+	pair: はじめに; 主な機能
+
+主な機能
+========
+
+* 自由なオープンソース (MIT ライセンス)
+* ハイブリッド実装 (コンパイラ + 仮想計算機)
+* オブジェクト指向プログラミングによる宣言型プログラミング
+* オブジェクト指向プログラミングによる自然言語プログラミング
+* 自然言語プログラミング・ライブラリ
+* 三種類の標準コード記法と自作記法を使用可能
+* 柔軟性のあるシンタックス (言語のキーワードと演算子は変更可能)
+* 言語キーワードは英語から他国語 (アラビア語、フランス語、日本語など) へ翻訳可能
+* ステートメントへの明示的な end が不要であるため、シンタックスは簡潔です (; や ENTER は不要)
+* 括弧 { } でオブジェクトへのアクセス、および変数、属性としてメソッド、関数を使えます。
+* 透過型実装 (プログラムごとに字句、構文、およびバイトコードを表示可能)
+* ビジュアル実装 - ビジュアル言語 Programming Without Coding Technology (PWCT) で実装
+* ANSI C で記述  (コード生成 + 手書きのコードと同一記法)
+* 質実剛健たるプログラミング言語
+	* コンパイラ + 仮想計算機 (20,000 行の C コード)
+	* そのほか 500,000 行のコードはライブラリ関連です！
+* 移植性 (Windows, Linux および macOS, Android, WebAssembly など)
+* コメント (一行と複数行)
+* 英数大小文字同一視
+* 動的型付け
+* 弱い型付け (数値と文字列間でのみ自動変換)
+* レキシカルスコープ (グローバル、ローカル、およびオブジェクトのステート)
+* 関数内変数のデフォルトスコープ (ローカル)
+* 関数外変数のデフォルトスコープ (グローバル)
+* ライブラリごと、またはサブプロジェクトで独立したグローバルスコープがあります。
+* ガベージコレクター - メモリの自動管理 (エスケープ解析と参照カウント)
+* ほとんどの場合 (90%)、エスケープ解析によりガベージコレクターの実行を不要にしています (高速です)。
+* 構造化プログラミング
+* 豪華な制御構造と演算子
+* For in では値ではなく参照により項目を取得するため、項目を読み書きできます
+* exit による一階層以上のループからの脱出 (小規模プログラミング専用)
+* 手続き、関数
+* メイン関数 (オプション扱い - グローバルスコープの使用回避)
+* 定義前の関数呼び出し (トップダウンプログラミング)
+* 再帰処理
+* 複数行リテラル
+* インデックスによる文字列内の文字へのアクセス (読み書き)
+* リストのインデックスは 1 から開始
+* クラス、パッケージ、関数には end キーワードは不要
+* 範囲演算子。用例: 1:10 および \"a\":\"z\"
+* 第一級変数、リスト、オブジェクトと関数
+* 値による格納、リストのコピー、オブジェクト (深いコピー)
+* 参照によるリスト、オブジェクト渡し
+* オブジェクト指向への標準対応
+
+	* カプセル化
+	* Setter/Getter (オプション扱い)
+	* プライベートステート (オプション扱い)
+	* インスタンス化
+	* 多態性
+	* コンポジション
+	* 継承 (単一継承)
+	* 演算子のオーバーロード
+	* パッケージ
+
+* リフレクションとメタプログラミング
+* 明瞭なプログラム構造 (ステートメントの後に関数、そしてパッケージとクラス)
+* 例外処理
+* Eval() によるアプリケーション実行中のコード実行
+* 8-bit クリーン設計であるためバイナリデータも処理できます。
+* I/O 命令
+* 算術関数
+* 文字列関数
+* リスト関数
+* ファイル処理関数
+* データベースへの対応 (ODBC, SQLite, MySQL および PostgreSQL)
+* セキュリティ関数 (OpenSSL)
+* インターネット関数 (LibCurl)
+* Zip ファイル処理関数
+* CGI ライブラリ (Ring にて記述)
+
+	* HTTP Get
+	* HTTP Post
+	* ファイルのアップロード
+	* クッキー
+	* URL エンコード
+	* HTML テンプレート
+	* HTML 特殊文字
+	* 関数による HTML の生成
+	* クラスによる HTML の生成
+	* CRUD の用例 (MVC を使用)
+	* ユーザーによる用例 (登録、ログインと確認)
+
+* クラウド経由によるウェブアプリケーションの配布 (Heroku)
+* C/C++ による拡張機能の使用 (単純明快な API)
+* C/C++ プログラムへの組み込み
+* Ring プログラムへの Ring 組み込み
+* 手軽に C/C++ ライブラリと接続するためのコード生成器 (Ring にて記述) を標準装備。
+
+	* RingAllegro (Allegro ラッパー) の開発で使用
+	* RingLibSDL (LibSDL ラッパー) の開発で使用
+	* RingQt (Qt ラッパー) の開発で使用
+
+* デスクトップとモバイル用の 2D ゲーム作成 (Allegro ライブラリ)
+* RingLibSDL 拡張機能
+* シンプルな 2D ゲームエンジンを標準装備
+* RingOpenGL 拡張機能
+* RingFreeGLUT 拡張機能
+* RingRayLib 拡張機能
+* RingTilengine 拡張機能
+* デスクトップとモバイル用の GUI アプリケーションの開発機能 (Qt フレームワーク)
+* コードエディタ (Ring ノートパッド) とフォームデザイナーを搭載した統合開発環境 (IDE)
+* RingREPL (Read-Eval-Print-Loop)
+* トレースとデバッグ
+* 型ヒントライブラリ
+* アプリケーションの配布用に Ring2EXE を標準装備
+* RingLibuv 拡張機能
+* RingLibui 拡張機能
+* RingSockets 拡張機能
+* RingThreads 拡張機能
+* インタプリタ (VM) 全体の停止 (global interpreter (VM) lock) は起こりません (GIL なし) - これはスレッドと平行性において優れています (高速化)
+* RingPM (パッケージ管理プログラム)
+* 豊富なサンプルソースとアプリケーション
+* 完成度の高い取扱説明書
+
+.. index:: 
+	pair: はじめに; ライセンス
+
+ライセンス
+==========
+
+プログラミング言語 Ring
+
+http://ring-lang.net/
+
+Version 1.14
+
+MIT ライセンス (MIT)
+
+Copyright (c) Mahmoud Fayed
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+

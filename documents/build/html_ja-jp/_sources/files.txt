@@ -1,0 +1,783 @@
+.. index:: 
+	single: ファイル; はじめに
+
+========
+ファイル
+========
+
+ファイル関数の用法です。
+
+* Read()
+* Write()
+* Dir()
+* Rename()
+* Remove()
+* Fopen()
+* Fclose()
+* Fflush()
+* Freopen()
+* Tempfile()
+* Tempname()
+* Fseek()
+* Ftell()
+* Rewind()
+* Fgetpos()
+* Fsetpos()
+* Clearerr()
+* Feof()
+* Ferror()
+* Perror()
+* Fgetc()
+* Fgets()
+* Fputc()
+* Fputs()
+* Ungetc()
+* Fread()
+* Fwrite()
+* Fexists()
+* Direxists()
+* Getpathtype()
+* 数値とバイト
+
+.. index:: 
+	pair: ファイル; Read() 関数によるファイル内容の読み取り
+
+Read() 関数
+===========
+
+Read() 関数はファイルの内容を読み取ります。
+
+文法:
+
+.. code-block:: ring
+
+	Read(cFileName) ---> ファイルの内容を文字列で返します。
+
+用例:
+
+.. code-block:: ring
+
+	see read("myfile.txt")
+	
+
+Read() 関数はバイナリファイルの読み取りもできます。
+
+用例:
+
+.. code-block:: ring
+
+	see read("myapp.exe")
+	
+
+.. tip:: Read() 関数で返された文字列を改行ごとに分割したリストへ一括変換するには str2list() 関数を使います。
+
+.. index:: 
+	pair: ファイル; Write() 関数によるファイルへの書き込み
+
+Write() 関数
+============
+
+Write() 関数は文字列をファイルへ書き込みます。
+
+文法:
+
+.. code-block:: ring
+
+	Write(cFileName,cString)	# 文字列 cString をファイル cFileName へ書き込みます。
+
+Write() 関数はバイナリファイルの書き込みもできます。
+
+用例:
+
+.. code-block:: ring
+
+	# ファイルのコピー
+	cFile = read("ring.exe")
+	write("ring2.exe",cFile)
+
+.. index:: 
+	pair: ファイル; Dir()
+
+.. tip:: リストを文字列へ変換して書き込むには list2str() 関数を使います。
+
+
+Dir() 関数
+==========
+
+Dir() 関数はフォルダの内容 (ファイルとサブフォルダ) を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Dir(cFolderPath) ---> ファイルとサブフォルダの内容をリストで返します。
+
+この関数はリストを返します。リストごとの項目は以下のとおりです。
+
+* ファイル / サブフォルダの名前
+
+* 種類 (0 = ファイル , 1 = フォルダ、ディレクトリ)
+
+用例:
+
+.. code-block:: ring
+
+	see "Testing DIR() " + nl
+	mylist = dir("C:\myfolder")
+	for x in mylist
+		if x[2] 
+			see "Directory : " + x[1] + nl
+		else
+			see "File : " + x[1] + nl
+		ok
+	next
+	see "Files count : " + len(mylist)
+
+.. index:: 
+	pair: ファイル; Rename()
+
+Rename() 関数
+=============
+
+Rename() 関数はファイルを名称変更します。
+
+文法:
+
+.. code-block:: ring
+
+	Rename(cOldFileName,cNewFileName) ---> 数値 ( 状態: 成功 (0) , エラー (-1) )
+
+用例:
+
+.. code-block:: ring
+
+	rename("file.txt","help.txt")
+
+.. index:: 
+	pair: ファイル; Remove()
+
+Remove() 関数
+=============
+
+Remove() 関数はファイルを削除します。
+
+
+文法:
+
+.. code-block:: ring
+
+	Remove(cFileName)
+
+用例:
+
+.. code-block:: ring
+
+	remove("test.txt")
+
+.. index:: 
+	pair: ファイル; Fopen()
+
+Fopen() 関数
+============
+
+Fopen() 関数はファイルを開きます。
+
+文法:
+
+.. code-block:: ring
+
+	Fopen(cFileName,cMode) ---> ファイルハンドル
+
+.. csv-table::
+	:header: "モード", "説明"
+	:widths:       20,     80
+
+	"“r”",	"読み取り (ファイルが存在している必要があります)"
+	"“w”",	"書き込み (空のファイルを作成、上書き)"
+	"“a”",	"追記 (ファイルが存在しない場合は作成)"
+	"“r+”",	"更新 (読み取り、書き込み)"
+	"“w+”",	"空のファイルを作成 (読み取り、書き込み)"
+	"“a+”",	"読み取りと追記"
+
+.. index:: 
+	pair: ファイル; Fclose()
+
+Fclose() 関数
+=============
+
+fopen() 関数でファイルを開いて処理を終えた後は、
+Fclose() 関数でファイルを閉じます。
+
+文法:
+
+.. code-block:: ring
+
+	Fclose(ファイルハンドル)
+
+.. index:: 
+	pair: ファイル; Fflush()
+
+Fflush() 関数
+=============
+
+Fflush() 関数はストリームの出力バッファを追い出します (flush)。
+
+文法:
+
+.. code-block:: ring
+
+	Fflush(ファイルハンドル)
+
+.. index:: 
+	pair: ファイル; Freopen()
+
+Freopen() 関数
+==============
+
+同じファイルハンドルで別のファイルを開きますが、
+以前に開いていたファイルを併せて閉じます。
+
+文法:
+
+.. code-block:: ring
+
+	Freopen(cFileName,cMode,file handle) ---> ファイルハンドル
+
+用例:
+
+.. code-block:: ring
+
+	freopen("myprogoutput.txt","w+",stdout)
+	see "welcome" + nl
+	for x = 1 to 10
+		see x + nl
+	next
+
+	##
+	## 必読 : https://ja.wikipedia.org/wiki/デバイスファイル#MS-DOS・Windows
+	## このコードには移植性がありません。使用前に iswindows() で動作環境を
+	## 判定してから各オペレーティングシステム専用のコードを書いてください。
+	##
+
+	freopen("CON","w",stdout)   # Microsoft Windows では
+	see "Done" + nl             # もう一度、標準出力へ表示
+
+実行結果:
+
+.. code-block:: ring
+
+	# 標準出力へ出力
+	Done
+
+	# ファイルへの出力 : myprogoutput.txt
+	welcome
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+
+.. index:: 
+	pair: ファイル; Tempfile()
+
+Tempfile() 関数
+===============
+
+Tempfile() 関数は一時ファイルを作成します (バイナリ形式)。
+
+ファイルはストリームが閉じられたときに自動で削除されます。
+
+文法:
+
+.. code-block:: ring
+
+	TempFile() ---> ファイルハンドル
+
+.. index:: 
+	pair: ファイル; Tempname()
+
+Tempname() 関数
+===============
+
+Tempname() 関数は一時ファイル名を生成します。
+
+生成された名前は唯一無二であり、既存ファイル名とは一切異なります。
+
+文法:
+
+.. code-block:: ring
+
+	Tempname() ---> ファイル名として生成された文字列
+
+.. index:: 
+	pair: ファイル; Fseek()
+
+Fseek() 関数
+============
+
+Fseek() 関数はストリームにおけるファイル位置を設定します。
+
+文法:
+
+.. code-block:: ring
+
+	Fseek(ファイルハンドル, nOffset, nWhence) ---> 0 ならば成功です。
+
+この表は nWhence の値を表したものです。
+
+==	===============================
+値 	説明
+==	===============================
+0 	ファイルの先頭
+1 	現在の位置
+2 	ファイルの末尾
+==	===============================
+
+.. index:: 
+	pair: ファイル; Ftell()
+
+Ftell() 関数
+============
+
+Ftell() 関数 はストリームにおける現在のファイル位置を検出します。 
+
+文法:
+
+.. code-block:: ring
+
+	Ftell(ファイルハンドル) ---> 数値によるファイルの位置です。
+
+.. index:: 
+	pair: ファイル; Rewind()
+
+Rewind() 関数
+=============
+
+Rewind() 関数はファイルの位置を先頭へ設定します。
+
+文法:
+
+.. code-block:: ring
+	
+	Rewind(ファイルハンドル)
+
+.. index:: 
+	pair: ファイル; Fgetpos()
+
+Fgetpos() 関数
+==============
+
+Fgetpos() 関数はハンドルにおける現在のファイル位置を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Fgetpos(ファイルハンドル) ---> 位置ハンドル
+
+.. index:: 
+	pair: ファイル; Fsetpos()
+
+Fsetpos() 関数
+==============
+
+Fsetpos() 関数は現在のファイルの位置を設定します。
+
+文法:
+
+.. code-block:: ring
+
+	Fsetpos(ファイルハンドル,位置ハンドル)
+
+.. index:: 
+	pair: ファイル; Clearerr()
+
+Clearerr() 関数
+===============
+
+clearerr () 関数は EOF エラーとエラーインジケーターをストリームから消去します。
+
+文法:
+
+.. code-block:: ring
+
+	Clearerr(ファイルハンドル)
+
+.. index:: 
+	pair: ファイル; Feof()
+
+Feof() 関数
+===========
+
+Feof() 関数は EOF インジケーターをテストします。
+
+文法:
+
+.. code-block:: ring
+
+	Feof(ファイルハンドル) ---> EOF ならば 1 を、そうでなければ 0 を返します。
+
+.. index:: 
+	pair: ファイル; Ferror()
+
+Ferror() 関数
+=============
+
+Ferror() 関数 はエラーインジケーターをテストします。
+
+文法:
+
+.. code-block:: ring
+
+	Ferror(ファイルハンドル) ---> エラーならば 1 を、そうでなければ 0 を返します。
+
+.. index:: 
+	pair: ファイル; Perror()
+
+Perror() 関数
+=============
+
+Perror() 関数は標準出力エラーへエラーメッセージを表示します。
+
+文法:
+
+.. code-block:: ring
+
+	Perror(cErrorMessage)
+
+.. index:: 
+	pair: ファイル; Fgetc()
+
+Fgetc() 関数
+============
+
+Fgetc() 関数はストリームから次の文字を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Fgetc(ファイルハンドル) ---> 文字または EOF を返します。
+
+
+.. index:: 
+	pair: ファイル; Fgets()
+
+Fgets() 関数
+============
+
+Fgets() 関数はストリームから新しい行を読み取ります。
+
+文法:
+
+.. code-block:: ring
+
+	Fgets(ファイルハンドル,nSize) ---> 文字列
+
+この関数は nSize 文字まで読み取る、または新しい行を読み取るか EOF になると停止します。
+
+.. index:: 
+	pair: ファイル; Fputc()
+
+Fputc() 関数
+============
+
+Fputc() 関数は文字をストリームへ書き込みます。
+
+文法:
+
+.. code-block:: ring
+
+	Fputc(ファイルハンドル,cChar)
+
+.. index:: 
+	pair: ファイル; Fputs()
+
+Fputs() 関数
+============
+
+Fputs() 関数は文字列をストリームへ書き込みます。
+
+文法:
+
+.. code-block:: ring
+
+	Fputs(ファイルハンドル,cString)
+
+
+.. index:: 
+	pair: ファイル; Ungetc()
+
+Ungetc() 関数
+=============
+
+Ungetc() 関数は文字をストリームへプッシュします。
+
+文字は次回の読み取りから利用できます。
+
+文法:
+
+.. code-block:: ring
+
+	Ungetc(ファイルハンドル,文字)
+
+
+.. index:: 
+	pair: ファイル; Fread()
+
+Fread() 関数
+============
+
+Fread() 関数はデータをストリームへ読み込みます。 
+
+文法:
+
+.. code-block:: ring
+
+	Fread(ファイルハンドル,nSize)
+
+.. index:: 
+	pair: ファイル; Fwrite()
+
+Fwrite() 関数
+=============
+
+Fwrite() 関数はデータをストリームへ書き込みます。
+
+文法:
+
+.. code-block:: ring
+
+	Fwrite(ファイルハンドル,cString)
+
+
+.. index:: 
+	pair: ファイル; Fexists()
+
+Fexists() 関数
+==============
+
+Fexists() 関数はファイルの存在を確認します。
+
+文法:
+
+.. code-block:: ring
+
+	Fexists(cFileName) ---> ファイルがあれば 1 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	see fexists("c:\mahmoud\apps\ring\ring.exe") + nl +
+	    fexists("c:\mahmoud\apps\ring\ring2.exe") + nl 
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	0
+
+
+.. index:: 
+	pair: ファイル; Direxists()
+
+Direxists() 関数
+================
+
+Direxists() 関数はディレクトリの存在を確認します。
+
+文法:
+
+.. code-block:: none
+
+	Direxists(cDirPath) ---> ディレクトリがあれば 1 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	? direxists("c:\ring") + nl +
+	  direxists("c:\ring\bin2")
+
+実行結果:
+
+.. code-block:: none
+
+	1
+	0
+
+.. index:: 
+	pair: ファイル; Getpathtype()
+
+Getpathtype() 関数
+==================
+
+Getpathtype() 関数は指定されたパス (ファイルまたはディレクトリ) の種類を確認します。
+
+文法:
+
+.. code-block:: none
+
+	Getpathtype(cPath) ---> 0 ならばパスは存在しません。
+				1 ならば既存のファイルと一致しています。
+				2 ならば既存のディレクトリと一致しています。
+				-1 ならばパスは存在しますが
+				   種類は不明です (例としてはパイプ)
+
+用例:
+
+.. code-block:: ring
+
+	? Getpathtype("c:\ring\bin\ring.exe") + nl +
+	  Getpathtype("c:\ring") + nl +
+	  Getpathtype("c:\ring\bin2") 
+
+実行結果:
+
+.. code-block:: none
+
+	1
+	2
+	0
+
+
+.. index:: 
+	pair: ファイル; 用例
+
+用例
+====
+
+このプログラムはファイル関数をテストします。
+
+.. code-block:: ring
+
+	See "testing file functions" + nl
+
+	See "open file" + nl
+	fp = fopen(exefolder() + "../tests/scripts/s65.ring","r")
+
+	See "reopen" + nl
+	fp = freopen(exefolder() + "../tests/scripts/s78.ring","r",fp)
+	See "close file" + nl
+	fclose(fp)
+
+	see "temp file" + nl
+	fp = tempfile()
+	fclose(fp)
+
+	see "temp name" + nl
+	see tempname() + nl
+
+	remove(exefolder() + "../tests/scripts/mytest2.txt")
+	write(exefolder() + "../tests/scripts/tests1.txt","hello")
+	rename(exefolder() + "../tests/scripts/test1.txt",exefolder() +
+						"../tests/scripts/mytests2.txt")
+
+	see "print file" + nl
+	fp = fopen(exefolder() + "../samples/fromdoc/filefuncs.ring","r")
+	r = fgetc(fp)
+	while isstring(r)
+			see r
+			r = fgetc(fp)
+	end
+	fclose(fp)
+
+	see nl+"print line from the file" + nl
+	fp = fopen(exefolder() + "../samples/fromdoc/filefuncs.ring","r")
+	r = fgets(fp,33)
+	see r + nl
+	fclose(fp)
+	fp = fopen(exefolder() + "../tests/scripts/test78.txt","w+")
+	fseek(fp,0,2) # ファイルの末尾へ移動
+	fputc(fp,"t")
+	fputc(fp,"e")
+	fputc(fp,"s")
+	fputc(fp,"t")
+	fputs(fp,"tests2")
+	fclose(fp)
+
+	see "print file" + nl
+	see read(exefolder() + "../tests/scripts/test78.txt")
+
+	fp = fopen(exefolder() + "../tests/scripts/test78.txt","r")
+	see "testing ungetc() " + nl
+	for x = 1 to 3
+			r = fgetc(fp)
+			see r + nl
+			ungetc(fp,r)
+	next
+	fclose(fp)
+
+	see "testing fread() " + nl
+	fp = fopen(exefilename(),"rb")
+	r = fread(fp,100)
+	see r + nl
+	fclose(fp)
+
+	see "testing fwrite() " + nl
+	fp = fopen(exefolder() + "../tests/scripts/test1.txt","wb")
+	fwrite(fp,r)
+	fclose(fp)
+
+この用例はバイナリファイルの内容を表示します。
+
+.. code-block:: ring
+
+	see "Testing: fread()" +" FileName: "+ exefilename() +nl +nl
+	fp = fopen(exefilename(),"rb")
+	r = fread(fp,800)
+	for n =1 to len(r)
+		if isprint(substr(r, n, 1)) 
+			see substr(r, n, 1) 
+		else
+			see "." 
+		ok
+		### 1 行あたり 80 文字
+		if n % 80 = 0  
+			see nl
+		ok
+	next
+	fclose(fp)
+
+.. index:: 
+	pair: ファイル; 数値とバイト
+
+数値とバイト
+============
+
+この関数は数値とバイトとの間で変換を行います。
+
+* Int2Bytes()
+* Float2Bytes()
+* Double2Bytes()
+* Bytes2Int()
+* Bytes2Float()
+* Bytes2Double()
+
+用例:
+
+.. code-block:: ring
+
+	see "Test Int2Bytes() and Bytes2Int() - Value : 77" + nl
+	r = Int2Bytes(77)
+	see "Int Size : " + len(r) + nl
+	see r + nl
+	see Bytes2Int(r) + nl
+	see "Test Float2Bytes() and Bytes2Float() - Value 77.12" + nl
+	r = Float2Bytes(77.12)
+	see "Float Size : " + len(r) + nl
+	see r + nl
+	see Bytes2Float(r) + nl
+	see "Test Double2Bytes() and Bytes2Double() - Value 9999977.12345" + nl
+	r = Double2Bytes(9999977.12345)
+	see "Double Size : " + len(r) + nl
+	see r + nl
+	decimals(5)
+	see Bytes2Double(r) + nl

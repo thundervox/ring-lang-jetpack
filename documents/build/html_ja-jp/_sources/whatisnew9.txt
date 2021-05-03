@@ -1,0 +1,603 @@
+.. index:: 
+	single: Ring 1.9 の変更履歴; はじめに
+
+=======================
+Ring 1.9 の変更履歴
+=======================
+
+Ring 1.9 (2018年10月06日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.9 の新機能！
+
+* 注目の新作ゲーム : Gold Magic 800
+* 新作ゲーム
+* Ring ノートパッドの改善
+* StdLib の改善
+* BigNumber ライブラリ
+* RingPostgreSQL 拡張機能
+* クラウド経由でのウェブアプリケーション配布
+* RingQt の改善
+* メモリ管理の改善
+* 拡張機能用のコード生成器の更新
+* そのほかの改善
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; 注目の新作ゲーム : Gold Magic 800
+
+注目の新作ゲーム : Gold Magic 800
+=================================
+
+これまでにないパズルゲームです。
+
+体験版 (18 レベルまで) とゲームのソースコードが付属しています。
+
+Steam ページ (44 レベル) : https://store.steampowered.com/app/939200/Gold_Magic_800/
+
+レベルの選択ができます。
+
+.. image:: gmshot2.png
+	:alt: Gold Magic 800 - スクリーンショット 2
+
+このスクリーンショットはレベル (1) です。
+
+.. image:: gmshot3.png
+	:alt: Gold Magic 800 - スクリーンショット 3
+
+Gold Magic 800 レベルエディタです。
+
+.. image:: gmleveleditor.png
+	:alt: Gold Magic 800 レベルエディタ
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; 新作ゲーム
+
+新作ゲーム
+==========
+
+このゲームを Ring アプリケーションとして追加しました。
+
+(1) 2048 ゲーム
+(2) Memory ゲーム
+(3) Wise Quadrat ゲーム
+(4) Tessera ゲーム
+(5) Othello ゲーム
+
+このスクリーンショットは Android 版 2048 ゲームです。
+
+.. image:: game2048_shot1.png
+	:alt: 2048 ゲーム
+
+このスクリーンショットは Tessera ゲームです。
+
+.. image:: tesseragame.png
+	:alt: Tessera ゲーム
+
+このスクリーンショットは Othello ゲームです。
+
+.. image:: othellogame.png
+	:alt: Othello ゲーム
+
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; Ring ノートパッドの改善
+
+Ring ノートパッドの改善
+=======================
+
+(1) 新規スタイル
+(2) 新規モード
+(3) 開いたファイルをタブ UI で切り替え
+(4) バッチファイルの実行に対応
+
+.. image:: rnote19.jpg
+	:alt: Ring ノートパッド
+
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; StdLib の改善
+
+StdLib の改善
+=============
+
+(1) List2Code() 関数を StdLib へ追加しました。
+
+この関数は Ring リストを実行中に Ring ソースコードへ変換することでソースファイルを保存できるようにします。
+
+リストは文字列、数値または部分リストを有しています。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlibcore.ring"
+	aList = 1:10
+	? list2Code(aList)
+
+実行結果:
+
+.. code-block:: ring
+
+	[
+		1,2,3,4,5,6,7,8,9,10
+	]
+
+
+(2) Str2ASCIIList() および ASCIIList2Str() 関数を StdLib へ追加しました。
+
+これらの関数を使うと、文字列と数値リスト間で各項目が 1 バイト ASCII コードから成る文字列表現へ変換します。
+
+これにより、バイト文字列を ASCII リストに変換してリストにある数値の演算ができます (XOR など)。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlibcore.ring"
+
+	cStr = "MmMm"
+
+	aList = Str2ASCIILIST(cStr)
+	? aList 
+
+	cStr2 = ASCIIList2Str(aList)
+	? cStr2
+	? len(cStr2)
+
+実行結果:
+
+.. code-block:: none
+
+	77
+	109
+	77
+	109
+
+	MmMm
+	4
+
+
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; BigNumber ライブラリ
+
+BigNumber ライブラリ
+====================
+
+BigNumber ライブラリで非常に大きい数の算術演算ができます。
+
+用例:
+
+.. code-block:: ring
+
+	load "bignumber.ring"
+
+	num1 = "62345678901234567891678345123456789"    ### 大なり
+	num2 =  "1237894567890123419871236545"          ### 小なり
+	num3 =     "64"                                 ### 小なりを割る
+	num4 = "765432"                 
+	num5 =      "3"                                 ### 累乗            
+    
+	? "Add big numbers:" 
+	a1 = new BigNumber(num1)        a1.Print()
+	a2 = new BigNumber(num2)        a2.Print()
+	a3 = a1 + a2                    a3.Print() ? nl
+
+	? "Substract big numbers:" 
+	a1 = new BigNumber(num1)        a1.Print()
+	a2 = new BigNumber(num2)        a2.Print()
+	a3 = a1 - a2                    a3.Print() ? nl
+
+	? "Multiply big numbers:" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num2)        a2.print()      
+	a3 = a1 * a2                    a3.print() ? nl
+
+	? "Divide big numbers:" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num2)        a2.print()
+	a3 = a1 / a2                    a3.print() ? nl
+    
+	? "Divide big numbers: by very small number" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num3)        a2.print()
+	a3 = a1 / a2                    a3.print() ? nl
+
+	? "Power of big number:" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num5)        a2.print()
+	a3 = a1 ^ a2                    a3.print() ? nl
+    
+実行結果:
+
+.. code-block:: none
+
+	Add big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	62345680139129135781801764994693334
+
+
+	Substract big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	52345687663340000001554925252220244
+
+
+	Multiply big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	77177377243260150103462178714197454736432472780119682305154005
+
+
+	Divide big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	50364288
+
+
+	Divide big numbers: by very small number
+	62345678901234567891678345123456789
+	64
+	974151232831790123307474142554012
+
+
+	Power of big number:
+	62345678901234567891678345123456789
+	3
+	242336636261471172092347146031727004 (実行結果は次行へ続きます)
+	371698195628343934238988256152289508 (実行結果は次行へ続きます)
+	493964611043228971692389860897069
+
+詳しくは「BigNumber ライブラリ」を参照してください。
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; RingPostgreSQL 拡張機能
+
+RingPostgreSQL 拡張機能
+=======================
+
+Ring 1.9 では RingPostgreSQL 拡張機能により PostgreSQL データベースのネイティブ対応があります。
+
+用例:
+
+.. code-block:: ring
+
+	load "postgresqllib.ring"
+
+	conninfo = "user=postgres password=sa dbname = mahdb"
+
+	exit_nicely = func conn {
+		PQfinish(conn)
+		shutdown(1)
+	}
+
+	conn = PQconnectdb(conninfo)
+
+	if (PQstatus(conn) != CONNECTION_OK)
+		fputs(stderr, "Connection to database failed: "+PQerrorMessage(conn))
+			call exit_nicely(conn)
+	ok
+
+	res = PQexec(conn, "
+		DROP DATABASE mahdb;
+	")
+	if PQresultStatus(res) != PGRES_TUPLES_OK
+		fputs(stderr, "Remove failed: " + PQerrorMessage(conn))
+		PQclear(res)
+	ok
+	PQclear(res)
+
+
+	res = PQexec(conn, "CREATE DATABASE mahdb;")
+	if PQresultStatus(res) != PGRES_TUPLES_OK
+		fputs(stderr, "Create database failed: " + PQerrorMessage(conn))
+		PQclear(res)
+	ok
+
+
+	res = PQexec(conn, "
+	CREATE TABLE COMPANY (
+			 ID INT PRIMARY KEY     NOT NULL,
+			 NAME           TEXT    NOT NULL,
+			 AGE            INT     NOT NULL,
+			 ADDRESS        CHAR(50),
+			 SALARY         REAL );
+	")
+	if PQresultStatus(res) != PGRES_TUPLES_OK
+		fputs(stderr, "Create Table failed: " + PQerrorMessage(conn))
+		PQclear(res)
+	ok
+	PQclear(res)
+
+	res = PQexec(conn, "
+			INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)
+			VALUES  (1, 'Mahmoud' , 31, 'Jeddah', 10.00 ),
+					(2, 'Ahmed'   , 27, 'Jeddah', 20.00 ),
+					(3, 'Mohammed', 33, 'Egypt' , 30.00 ),
+					(4, 'Ibrahim' , 24, 'Egypt ', 40.00 );
+	")
+	if PQresultStatus(res) != PGRES_TUPLES_OK
+		fputs(stderr, "Insert Table failed: " + PQerrorMessage(conn))
+		PQclear(res)
+	ok
+	PQclear(res)
+
+	res = PQexec(conn, "
+		   select * from COMPANY
+	")
+	if PQresultStatus(res) != PGRES_TUPLES_OK
+		fputs(stderr, "Select failed: " + PQerrorMessage(conn))
+		PQclear(res)
+		call exit_nicely(conn)
+	ok
+
+
+	nFields = PQnfields(res)
+	for i = 1 to nFields
+			? PQfname(res, i-1) 
+	next
+
+	? copy("*",60)
+
+	for i = 1 to PQntuples(res)
+		for j=1 to nFields
+			see PQgetvalue(res, i-1, j-1) + " "
+		next
+		see nl
+	next
+
+	PQclear(res)
+
+	PQfinish(conn)
+
+実行結果:
+
+.. code-block:: none
+
+	id
+	name
+	age
+	address
+	salary
+	************************************************************
+	1 Mahmoud  31 Jeddah  10
+	2 Ahmed    27 Jeddah  20
+	3 Mohammed 31 Egypt   30
+	4 Ibrahim  24 Egypt   40	
+	
+
+詳しくは「PostgreSQL ライブラリ」を参照してください。
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; クラウド経由でのウェブアプリケーション配布
+
+クラウド経由でのウェブアプリケーション配布
+==========================================
+
+これは新規プロジェクトの作成方法、およびクラウドサービスである Heroku で Ring のウェブアプリケーションを配布する方法を解説するためのチュートリアルです。
+
+デモ : http://testring.herokuapp.com/
+
+プロジェクト : https://github.com/ring-lang/RingWebAppOnHeroku
+
+Heroku ウェブサイト : https://www.heroku.com/
+
+.. image:: ringincloud.png
+	:alt: クラウドでの Ring ウェブアプリケーション
+
+詳しくは「クラウド経由でのウェブアプリケーションの配布方法」を参照してください。
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; RingQt の改善
+
+RingQt の改善
+=============
+
+(1) このクラスを RingQt へ追加しました。
+
+* QDrag
+* QMimeData
+* QDropEvent
+* QDragMoveEvent
+* QDragEnterEvent
+* QDragLeaveEvent
+* QClipboard
+* QChildEvent
+* QGeoPositionInfo
+* QGeoCoordinate
+* QGeoAddress
+* QGeoAreaMonitorInfo
+* QGeoAreaMonitorSource
+* QGeoCircle
+* QGeoPositionInfoSource
+* QGeoRectangle
+* QGeoShape
+* QGeoSatelliteInfo
+* QGeoSatelliteInfoSource
+* QNmeaPositionInfoSource
+* QAxWidget
+* QTextStream
+* QPrinterInfo
+* QPrintPreviewWidget
+* QPrintPreviewDialog
+* QPageSetupDialog
+* QAbstractPrintDialog
+* QPrintDialog
+
+(2) このクラスを更新しました。
+
+* QAllEvents クラス : 新規イベント (ChildAdded, ChildPolished, ChildRemoved)
+* QPainter クラス : 座標点の Ring リストを扱えるようにするためにメソッドを更新 (drawConvexPloygon, drawPoints, drawPolyline) 
+* QVariant : オブジェクトの作成時、様々な仮引数を扱うための追加のバージョン。
+* QAxBase : dynamicCall() および querySubObject() メソッドの異なるバージョン。
+
+この用例は QPrintPreviewDialog クラスの用法です。
+
+用例:
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	new qApp {
+		win1 = new qwidget() {
+			setwindowtitle("Printer Preview Dialog")
+			setgeometry(100,100,800,880)
+			printer1 = new qPrinter(0)
+			show()
+			oPreview = new qPrintPreviewDialog(printer1) {
+				setParent(win1)
+				move(10,10) 
+				setPaintrequestedevent("printPreview()")
+				exec()
+			}
+		}
+		exec()
+	}
+
+	func printPreview
+		printer1  {
+			painter = new qpainter() {
+				begin(printer1)
+				myfont = new qfont("Times",50,-1,0)
+				setfont(myfont)
+				drawtext(100,100,"Test - Page (1)")
+				printer1.newpage()
+				drawtext(100,100,"Test - Page (2)")
+				printer1.newpage()
+				myfont2 = new qfont("Times",14,-1,0)
+				setfont(myfont2)
+				for x = 1 to 30
+					drawtext(100,100+(20*x),"Number : " + x)
+				next 
+				endpaint()
+			}
+		}
+
+スクリーンショット:
+
+.. image:: printpreviewdialog.png
+	:alt: Print Preview Dialog
+
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; メモリ管理の改善
+
+メモリ管理の改善
+================
+
+RING_API_RETMANAGEDCPOINTER() を実装するために Ring API を 更新しました。
+
+RING_API_RETMANAGEDCPOINTER() は C/C++ 言語で記述された Ring 拡張機能でマネージドポインタを Ring へ返します。このポインタは参照カウンタを使用している Ring VM により制御可能です。
+
+これは RingQt の QPixMap オブジェクトなどのアンマネージドのリソース解放用コードを書く必要性を回避するには重要です。
+
+また、コード生成器は必要に応じて拡張機能を RING_API_RETMANAGEDCPOINTER() に対応したものへ自動更新します。
+
+文法:
+
+.. code-block:: ring
+
+	RING_API_RETMANAGEDCPOINTER(void *pValue,const char *cPointerType,
+					void (* pFreeFunc)(void *,void *))
+
+RING_API_RETMANAGEDCPOINTER() の詳細は「C/C++ による拡張機能の開発方法」を参照してください。
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; 拡張機能用のコード生成器の更新
+
+拡張機能用のコード生成器の更新
+==============================
+
+(1) 拡張機能用のコード生成器は <loadfile> 命令に対応しました。
+
+.. code-block:: ring
+
+	<loadfile> filename.cf
+
+これにより拡張機能設定ファイルを複数のファイルへ分割しやすくなりました。
+
+用例:
+
+ファイル : RingQt 拡張機能の qt_module_network.cf より引用
+
+.. code-block:: ring
+
+	<comment>
+					モジュール (ネットワーク)
+	</comment>
+
+	<loadfile> qabstractsocket.cf
+	<loadfile> qnetworkproxy.cf
+	<loadfile> qtcpsocket.cf
+	<loadfile> qtcpserver.cf
+	<loadfile> qhostaddress.cf
+	<loadfile> qhostinfo.cf
+	<loadfile> qnetworkrequest.cf
+	<loadfile> qnetworkaccessmanager.cf
+	<loadfile> qnetworkreply.cf
+
+(2) Ring 1.9 以降ではコード生成器はクラス定義時の <managed> オプションに対応しました。
+
+このオプションにより、生成器は C ポインタを返すために RING_API_RETMANAGEDCPOINTER() を使用します。
+
+これにより、ガベージコレクターは C ポインタを管理対象にします。
+
+用例:
+
+.. code-block:: ring
+
+	<class>
+	name: QFont
+	para: QString, int, int, bool
+	managed
+	</class>
+
+.. index:: 
+	pair: Ring 1.9 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+(1)  Ring コンパイラ - ルールを (要素 -> '-' 式) から (要素 -> '-' 要素) へ変更。
+(2)  Ring VM - エラーメッセージの改善。
+(3)  isNULL() 関数のコードを改善。 - ポインタの検査のために更新。
+(4)  ringvm_evalinscope() 関数のコードを改善。 - トレースライブラリで使用。
+(5)  Space() 関数のコードを改善。
+(6)  Hex() および Dec() 関数のコードを改善。
+(7)  Download() 関数のコードを改善。
+(8)  SubStr() 関数のコードを改善。
+(9)  Unsigned() 関数のコードを改善。
+(10) Chdir() 関数のコードを改善。
+(11) Tempname() 関数のコードを改善。
+(12) HashTable コードを改善。 - 新規キー (strdup() の代わりの ring_strdup() 関数の使用)。
+(13) 新規関数 : SRandom() - 乱数生成器の初期化。
+(14) 新規関数 : IsPointer()
+(15) IsPointer() 関数があるため IsList() は C ポインタで True を返さなくなりました。
+(16) ringvm_see() 関数に関連した ?  演算子の更新しました。
+(17) Ring のテストとして Linux と macOS (Windows だけではない) でのスクリプトの実行。
+(18) RingAllegro を Allegro 5.1 から Allegro 5.2 へ更新。
+(19) RingAllegro へシェーダー関数を追加。
+(20) RingAllegro へジョイスティック関数を追加。
+(21) RingLibSDL へネットワーク関数を追加。
+(22) 2D ゲームエンジン - Text クラス - 事前に Font オブジェクトの用法を参照してください。
+(23) 2D ゲームエンジン - ジョイスティックへの自動対応。
+(24) 必要時、 RingLibCurl はCURLOPT_COPYPOSTFIELDS を自動的に使用するように更新しました。
+(25) Ring ノートパッド - 前を検索 (Find Previous) 機能。
+(26) Ring ノートパッド - 標準スタイル。
+(27) Ring ノートパッド - ファイルの名前に非英語文字 (日本語、アラビア語、フランス語など) を使用可能にするため対応。
+(28) フォームデザイナー - ツールボックスアイコンの細部調整。
+(29) フォームデザイナー - QAllEvents クラス - マウスのダブルクリックイベント。
+(30) ファイルの検索 - 置換および全て置換 (Replace and Replace All) オプション。
+(31) 変換結果の改善のために Qt クラスコンバーターを更新。
+(32) ring/samples/other フォルダへサンプルを追加。
+(33) Ring ノートパッド, RingQt, 2D ゲームエンジンのコードリファクタリング。
+(34) 取扱説明書の改善 - 現在の Ring 環境の状況を反映するために画像を多数更新。
+(35) 取扱説明書の改善 - 取扱説明書へ章節を追加。
+

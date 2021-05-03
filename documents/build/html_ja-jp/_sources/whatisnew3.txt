@@ -1,0 +1,487 @@
+.. index:: 
+	single: Ring 1.3 の変更履歴; はじめに
+
+=======================
+Ring 1.3 の変更履歴
+=======================
+
+Ring 1.3 (2017年05月15日) の変更点と新機能です。
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.3 の新機能！
+
+* RingQt の改善
+* Ring ノートパッドの改善
+* Emacs Editor 用の Ring モード
+* StdLib の改善
+* Loop/Exit 命令の改善
+* 新しい関数
+* 参照による Self 返し
+* ‘from’ キーワードの代わりに‘<’または‘:’演算子の使用
+* Ring のステートを共有せずに Ring を組み込む
+* RingZip ライブラリ
+* フォームデザイナー
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; RingQt の改善
+
+RingQt の改善
+=============
+
+① QPixMap クラスの別バージョンとしてオブジェクトの初期化時に (int width,int height) を
+扱う (QPixMap2) を追加しました。
+
+用例:
+
+.. code-block:: ring
+
+	Load "guilib.ring"
+	New qapp 
+	{
+		win1 =  new qwidget() 
+		{
+			setwindowtitle("Drawing using QPixMap")
+			setgeometry(100,100,500,500)
+			label1 = new qlabel(win1) 
+			{
+				setgeometry(10,10,400,400)
+				settext("")
+			}
+			imageStock = new qlabel(win1) 
+			{               
+				image = new qPixMap2(200,200)   
+				color = new qcolor() {
+					setrgb(255,255,255,255)
+				}
+				pen = new qpen() {
+					setcolor(color)
+					setwidth(10)
+				}
+				new qpainter() {
+					begin(image)
+						setpen(pen)
+						drawline(0,0,200,200)
+						drawline(200,0,0,200)
+					endpaint()
+				}
+				setpixmap(image)   
+			}   
+			show()
+		}
+		exec()
+	}
+
+スクリーンショット:
+
+.. image:: ringqtpixmap2.png
+	:alt: QPixMap2 の使用
+
+② オブジェクトライブラリへ関数を実装しました。
+
+* Last_WindowID()
+* Open_WindowNoShow()
+* Open_WindowAndLink()
+
+なお WindowViewBase クラス名は WindowsViewParent へ変更されました。
+
+このコードの用例では Open_WindowAndLink() は SecondWindowController
+クラスからオブジェクトの作成を行い FirstWindowController クラスへ
+SecondWindow() メソッドを追加します。
+また SecondWindowController クラスへ FirstWindow() メソッドを追加します。
+
+FirstWindowController クラスにある SendMessage() メソッドは
+SecondWindow() メソッドでオブジェクトへアクセスするために使えます。
+
+.. code-block:: ring
+
+	class firstwindowController from windowsControllerParent
+
+	    oView = new firstwindowView
+
+	    func OpenSecondWindow
+        	Open_WindowAndLink(:SecondWindowController,self)
+
+	    func SendMessage
+        	if IsSecondWindow() 
+	            SecondWindow().setMessage("Message from the first window")
+        	ok
+
+	    func setMessage cMessage
+        	oView.Label1.setText(cMessage)
+
+
+③ このクラスを RingQt へ追加しました
+
+* QPixMap2
+* QScrollArea
+* QSplitter
+* QCompleter
+* QCompleter2
+* QCompleter3
+* QProcess
+* QMdiArea
+* QMdiSubWindow
+* QCursor
+* QListView
+* QDesktopServices
+
+④ qt.rh には各種定数が定義されています (guilib.ring から読み込みます)
+
+⑤ 新しいクラス名 - インデックスは 1 から開始します。
+
+RingQt には新しいクラスが追加されています - 別バージョンのクラス名は小文字 “q” で開始されません。
+また GUI コントロールなど扱うときにインデックスが 1 から開始するようにメソッドを更新してあります。
+
+* ComboBox
+* ListWidget
+* TableWidget
+* TreeWidget
+
+前述のクラスは guilib.ring の System.GUI パッケージに実装されています:
+
+使用するには
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	import System.GUI
+
+これは以前のコードに一切影響を与えません。
+つまり Ring の規則と整合性がある優れたコードへの第三の選択です。
+
+また、フォームデザイナーは、クラス間で「インデックスを 0 から開始」、あるいは「インデックスを 1 から開始」を選べるようなりました。
+
+用例 (フォームデザイナーを使用)
+
+(1) https://github.com/ring-lang/ring/blob/master/samples/UsingFormDesigner/indexstart/indexstartView.ring
+
+(2) https://github.com/ring-lang/ring/blob/master/samples/UsingFormDesigner/indexstart/indexstartController.ring
+
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; Ring ノートパッドの改善
+
+Ring ノートパッドの改善
+=======================
+
+① QTextEdit の代わりに QPlainTextEdit を使用
+
+② ソースコード各行の行番号を表示
+
+スクリーンショット:
+
+.. image:: rnotelinenumber.png
+	:alt: Ring ノートパッド - 行番号
+
+③ Ring 関数名、クラス、および開いているファイル語句の自動補完
+
+.. image:: autocomplete.png
+	:alt: Ring ノートパッド - 自動補完
+
+④ 関数とメソッドのリスト
+
+.. image:: functionslist.png
+	:alt: Ring ノートパッド - 関数リスト
+
+⑤ 実行結果のウィンドウ
+
+.. image:: outputwin.png
+	:alt: Ring ノートパッド - 実行結果ウィンドウ
+
+⑥ クラスのリスト
+
+.. image:: classeslist.png
+	:alt: Ring ノートパッド - クラスのリスト
+
+⑦ 現在のスタイルを変更
+
+.. image:: rnotestylemenu.png
+	:alt: Ring ノートパッド - スタイルメニュー
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; Emacs Editor 用の Ring モード
+
+Emacs Editor 用の Ring モード
+=============================
+
+Ring 1.3 では Emacs Editor 用の Ring モードがあります。
+
+スクリーンショット:
+
+.. image:: ringemacs.png
+	:alt: Emacs Editor 用の Ring モード
+
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; StdLib の改善
+
+StdLib の改善
+=============
+
+新規関数を追加しました。
+
+* SplitMany()
+* JustFilePath()
+* JustFileName()
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; Loop|Exit 命令の改善
+
+Loop|Exit 命令の改善
+====================
+
+Loop|Exit 命令は、命令 (数値に限りません) の後に式を受け入れるために更新しました。
+
+文法:
+
+.. code-block:: ring
+
+	Loop|Exit [数値]
+
+変更後:
+
+.. code-block:: ring
+
+	Loop|Exit [式]
+
+用例:
+
+.. code-block:: ring
+
+	XLoop = 2	# ループの外側
+	YLoop = 1	# 最初のループの内側
+	for x = 1 to 10
+        	for y = 1 to 10
+                	see "x=" + x + " y=" + y + nl
+	                if x = 3 and y = 5
+        	                exit XLoop  
+                	ok
+	        next
+	next
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; 新しい関数
+
+新しい関数
+==========
+
+* PackageName() 関数
+* Swap() 関数
+
+用例:
+
+.. code-block:: ring
+
+	aList = [:one,:two,:four,:three]
+	see aList
+	see copy("*",50) + nl
+	swap(aList,3,4)
+	see aList
+
+実行結果:
+
+.. code-block:: ring
+
+	one
+	two
+	four
+	three
+	**************************************************
+	one
+	two
+	three
+	four
+
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; 参照による Self 返し
+
+参照による Self 返し
+====================
+
+この公開版では、クラスのメソッドで Self 返しを使うとオブジェクトを返します。
+
+用例:
+
+.. code-block:: ring
+
+	mylist = [new mytest() {
+		see self
+		x = 20
+		see self
+	}]
+
+	see mylist 
+
+	class mytest
+		x = 15
+		func init 
+			return self	# 参照返し
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 15.000000
+	x: 20.000000
+	x: 20.000000
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; ‘from’キーワードの代わりに‘<’または‘:’演算子の使用
+
+‘from’キーワードの代わりに‘<’または‘:’演算子の使用
+========================================================
+
+この公開版では‘from’キーワードの代わりに‘<’または‘:’演算子を使えます。
+
+文法①:
+
+.. code-block:: ring
+	
+	class Cat from Animal
+
+文法②:
+	
+.. code-block:: ring
+	
+	class Cat < Animal
+
+文法③:
+
+.. code-block:: ring
+	
+	class Cat : Animal
+
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; Ring のステートを共有せずに Ring を組み込む
+
+Ring のステートを共有せずに Ring を組み込む
+===========================================
+
+Ring 1.0 より Ring を C へ組み込むための関数は実装されていました。
+また eval() 関数で Ring プログラムにある Ring のコードを実行できます。
+この公開版では、ステートを共有せずに Ring を Ring プログラムへ組み込むための関数があります。
+
+利点:
+
+* ① Ring プログラムとアプリケーションの統合動作環境下で競合が発生しません。
+* ② Ring のコードを安全な環境で実行して、トレースを行えます。
+
+用例:
+
+.. code-block:: ring
+
+	pState = ring_state_init()
+	ring_state_runcode(pState,"See 'Hello, World!'+nl")
+	ring_state_runcode(pState,"x = 10")
+
+	pState2 = ring_state_init()
+	ring_state_runcode(pState2,"See 'Hello, World!'+nl")
+	ring_state_runcode(pState2,"x = 20")
+
+	ring_state_runcode(pState,"see x +nl")
+	ring_state_runcode(pState2,"see x +nl")
+
+	v1 = ring_state_findvar(pState,"x")
+	v2 = ring_state_findvar(pState2,"x")
+
+	see v1[3] + nl
+	see V2[3] + nl
+
+	ring_state_delete(pState)
+	ring_state_delete(pState2)
+
+実行結果:
+
+.. code-block:: ring
+
+	Hello, World!
+	Hello, World!
+	10
+	20
+	10
+	20
+
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; RingZip ライブラリ
+
+RingZip ライブラリ
+==================
+
+Ring 1.3 には \*.zip ファイルの作成、変更、および展開用の RingZip ライブラリがあります。
+
+用例①: 四本のファイルがある myfile.zip を作成します。
+
+.. code-block:: ring
+
+	load "ziplib.ring"
+	oZip = zip_openfile("myfile.zip",'w')
+	zip_addfile(oZip,"test.c")
+	zip_addfile(oZip,"zip.c")
+	zip_addfile(oZip,"zip.h")
+	zip_addfile(oZip,"miniz.h")
+	zip_close(oZip)
+
+用例②: myfile.zip を myfolder フォルダへ展開します。
+
+.. code-block:: ring
+
+	load "ziplib.ring"
+	zip_extract_allfiles("myfile.zip","myfolder")
+
+用例③: myfile.zip にあるファイル名のリストを表示します。
+
+.. code-block:: ring
+
+	load "ziplib.ring"
+	oZip = zip_openfile("myfile.zip",'r')
+	for x=1 to zip_filescount(oZip)
+	       see zip_getfilenamebyindex(oZip,x) + nl
+	next
+	zip_close(oZip)
+
+用例④: クラスの代わりに関数を使用します。
+
+.. code-block:: ring
+
+	load "ziplib.ring"
+
+	new Zip {
+		SetFileName("myfile.zip")
+		Open("w")
+		AddFile("test.c")
+		AddFile("zip.c")
+		AddFile("zip.h")
+		AddFile("miniz.h")
+		Close()
+	}
+
+.. index:: 
+	pair: Ring 1.3 の変更履歴; フォームデザイナー
+
+フォームデザイナー
+==================
+
+Ring 1.3 では GUI アプリケーション・フォームの手軽な設計、および Ring
+ソースコードの生成を行うためのフォームデザイナーが付属しています。
+
+オブジェクト指向プログラミングとメタプログラミングによる
+約 8000 行の Ring コードを記述しました。
+
+Ring ノートパッドからフォームデザイナーを実行できます。
+
+.. image:: rnotefd.png
+	:alt: フォームデザイナー - Ring ノートパッドの内面図
+
+また、別のウィンドウからフォームデザイナーを実行することもできます。
+
+.. image:: formdesigner.png
+	:alt: フォームデザイナー

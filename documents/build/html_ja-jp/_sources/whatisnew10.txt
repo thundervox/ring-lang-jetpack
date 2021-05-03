@@ -1,0 +1,210 @@
+.. index:: 
+	single: Ring 1.10 の変更履歴; はじめに
+
+========================
+Ring 1.10 の変更履歴
+========================
+
+Ring 1.10 (2019年01月25日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.10 の新機能！
+
+* Chess ゲーム
+* Minesweeper ゲーム
+* Knight Tour ゲーム
+* Game of Life ゲーム
+* Pong ゲーム
+* Snakes and Ladder ゲーム
+* 新作ゲーム
+* Visual Studio Code 用の Ring 拡張機能
+* Ring パッケージ管理プログラム (RingPM)
+* テストの改良
+* そのほかの改善
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Chess ゲーム
+
+Chess ゲーム
+============
+
+Chess ゲーム (二人対戦)
+
+.. image:: chessgame.png
+	:width: 400pt
+	:height: 300pt
+	:alt: Chess ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Minesweeper ゲーム
+
+Minesweeper ゲーム
+==================
+
+ゲームの目的は「地雷」または、爆弾が隠されている長方形のゲーム盤をひとつも爆発させずにゲーム盤を片付けることです。
+
+.. image:: minesweeper.png
+	:width: 400pt
+	:height: 300pt
+	:alt: Minesweeper ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Knight Tour ゲーム
+
+Knight Tour ゲーム
+==================
+
+チェスゲーム盤の全陣地をナイトだけで移動します。
+
+あなたには 63回の移動だけで全陣地を訪れることができるでしょうか？
+
+.. image:: knighttour.png
+	:width: 400pt
+	:height: 300pt
+	:alt: Knight Tour ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Game of Life ゲーム
+
+Game of Life ゲーム
+===================
+
+このゲームは鑑賞用です。進化は初期状態により決定されるため、それ以外の入力値は不要です。
+
+Game of Life では初期構成と進化を観察します。上級プレイヤーは特殊属性模様を作り、相互作用の発生を楽しみます。
+
+.. image:: gameoflife.jpg
+	:width: 400pt
+	:height: 300pt
+	:alt: Game of Life ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Pong ゲーム
+
+Pong ゲーム
+===========
+
+シンプルな「テニス風」の対戦ゲームでありお互いのラケットでボールを打ち返しながらで戦います。
+
+ボールを逃したほうが負けになります。
+
+.. image:: ponggame.png
+	:width: 400pt
+	:height: 300pt
+	:alt: Pong ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Snakes And Ladder ゲーム
+
+Snakes And Ladder ゲーム
+========================
+
+Snakes and Ladder ゲームは Ring 用 2D ゲームエンジンを使用しています。
+
+.. image:: snakesgame.png
+	:width: 400pt
+	:height: 300pt
+	:alt: Snakes ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; 新作ゲーム
+
+新作ゲーム
+==========
+
+このゲームを application フォルダへ追加しました。
+
+* Lights Out ゲーム
+* Dots and Boxes ゲーム
+* Magic Four ゲーム
+* Sums Puzzle ゲーム
+
+このスクリーンショットは Sums Puzzle ゲームです。
+
+.. image:: sumpuzzle.png
+	:width: 400pt
+	:height: 300pt
+	:alt: Sums Puzzle ゲーム
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Visual Studio Code 用の Ring 拡張機能
+
+Visual Studio Code 用の Ring 拡張機能
+=====================================
+
+この拡張機能は Visual Studio Code でプログラミング言語 Ring に対応できるようにします。
+
+.. image:: ringinvscode.png
+	:width: 500pt
+	:height: 300pt
+	:alt: Visual Studio Code による Ring
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; Ring パッケージ管理プログラム (RingPM)
+
+Ring パッケージ管理プログラム (RingPM)
+======================================
+
+Ring にはパッケージのインストール、更新、および削除で使用するパッケージ管理プログラム (RingPM) があります
+
+パッケージ管理プログラムではパッケージ間の互換性確認のために意味つきバージョン管理を使用しています。
+
+パッケージ管理プログラムのオプションは、
+
+.. code-block:: none
+
+	===========================================================================
+	用法 : ringpm [コマンド]
+	コマンド : search  [キーワード...]
+	コマンド : refresh : レジストリの更新 (パッケージリスト)
+	コマンド : install [ <パッケージ名> [from <ユーザ名>] [branch <ブランチ名>] ]
+	コマンド : list    [-u : 更新の確認]
+	コマンド : run     [パッケージ名]
+	コマンド : update  <パッケージ名>
+	コマンド : remove  <パッケージ名>
+	コマンド : format  : すべてのパッケージを削除
+	コマンド : new     <パッケージ名>
+	コマンド : package : 現在のフォルダにパッケージを作成
+	===========================================================================
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; テストの改善
+
+テストの改善
+============
+
+プログラミング言語 Ring のテスト用新型フレームワークです。
+
+.. image:: tests_shot.png
+	:width: 500pt
+	:height: 300pt
+	:alt: テスト
+
+
+.. index:: 
+	pair: Ring 1.10 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+(1)  Ring コンパイラ : 定数のときに最初の演算子の検査を回避するよう「演算子 演算子」の対応を改善。
+(2)  Ring コンパイラ : 存在しないファイルを読み込もうとしたとき、エラーメッセージで呼び出し元のファイル名を表示。
+(3)  Ring コンパイラ : ソースコードファイルで改行のない一行コメントに対応。
+(4)  Ring コンパイラ : nNewObject に対する Parser 構造体で nNoAssignment 属性を変更。
+(5)  Ring VM : 新規オブジェクトへアクセスするために弓括弧内での Return 命令の対応を改善。
+(6)  Ring VM : Dir() 関数 - 実行結果に "." や ".." を追加しないよう変更。
+(7)  Ring VM : Dir() 関数 - Linux と macOS において項目の種類で「ファイル|ディレクトリ」の実行結果を修正。
+(8)  Ring VM : ICO_LISTSTART - オブジェクトの属性設定時に pVM->aSetProperty を整理。
+(9)  Ring VM : ICO_NEWOBJECT - オブジェクトの属性設定時に pVM->aSetProperty を整理。
+(10) Ring VM : Setter および Getter メソッドの対応コードを改善。
+(11) Ring2EXE: ライブラリ情報を ring/ring2exe/libs フォルダ内の個別ファイルへ格納。
+(12) WebLib  : ライブラリを複数のソースコードファイルへ分割整理しました。
+(13) StdLib  : IsVowel() 関数 - コードの改善。
+(14) StdLib  : Palindrome() 関数から IsPalindrome() 関数へ名称変更。
+(15) RingQt  : QString クラスへ Count(), Left(), Mid() および Right() メソッドを追加。
+(16) Read Me ファイルの改善。

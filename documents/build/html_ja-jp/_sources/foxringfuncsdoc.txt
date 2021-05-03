@@ -1,0 +1,908 @@
+.. index:: 
+     single: FoxRing 関数リファレンス; はじめに
+
+========================
+FoxRing 関数リファレンス
+========================
+
+このクラスは FoxPro 互換関数の実装です。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; FoxRing 関数
+
+FoxRing 関数
+============
+
+.. csv-table::
+	:header: "関数名", "説明"
+	:widths:       18,     82
+
+	"frAbs()",				"指定された数値式の絶対値を返します。"
+	"frAddBs()",			"パス表現にバックスラッシュを追加します(必要ならば)。"
+	"frALines()",			"指定された文字列の内容で配列を作成します。"
+	"frAllTrim()",			"指定された文字列の文頭と文末にある空白文字を全て除去します。"
+	"frAsc()",				"文字式の左端にある文字のANSI値を返します。"
+	"frAt()",				"文字式に出現する別の文字式を検索します(英数大小文字を区別します)。"
+	"frAtC()",				"文字式に出現する別の文字式を検索します(英数大小文字を区別しません)。"
+	"frBetween()",			"式値が同一型の二式値の間にあるか確認します。"
+	"frChr()",				"ANSIコードを数値で指定して関連づけられている文字列を返します。"
+	"frEmpty()",			"式の評価が空か判定します。"
+	"frFile()",				"指定されたファイルがディスクにあるか確認します。"
+	"frFileToStr()",		"ファイルの内容を文字列として返します。"
+	"frForceExt()",			"ファイルの旧拡張子を新拡張子で置換した文字列を返します。"
+	"frForcePath()",		"古いものの代わりに置換された新しいパス名を使用したファイル名を返します。"
+	"frIif()",				"論理式の値により2つの値のうち1つを返します。"
+	"frInList()",			"式が別式にある式集合と一致する式か決定します。"
+	"frInt()",				"数値式を評価してから式の整数部分を返します。"
+	"frJustDrive()",		"絶対パスからドライブ文字を返します。"
+	"frJustExt()",			"絶対パスからファイル拡張子の文字を返します。"
+	"frJustFName()",		"絶対パスとファイル名からファイル名の部分を返します。"
+	"frJustPath()",			"絶対パスとファイル名とパスの部分を返します。"
+	"frJustStem()",			"絶対パスとファイル名からステム名(拡張子の前のファイル名)を返します。"
+	"frLen()",				"式の長さを示すことで、文字式の文字数を決定します。"
+	"frListToString()",		"文字列の配列要素で文字列を作成します。"
+	"frLTrim()",			"指定された文字式から先頭の空白文字または構文解析文字を全て削除します。"
+	"frPadL()",				"左側へ指定された長さの空白文字または文字で桁揃えを行い、式から文字列を返します。"
+	"frPadR()",				"右側へ指定された長さの空白文字または文字で桁揃えを行い、式から文字列を返します。"
+	"frProper()",			"文字式から固有名詞として適切に大文字化された文字列を返します。"
+	"frReplicate()",		"指定された文字式を指定回数反復したものを文字列として返します。"
+	"frRTrim()",			"指定された文字式から文末の空白文字または構文解析文字を全て削除します。"
+	"frSetIfEmpty()",		"変数の値が空、NULLまたは0ならば変数の値を設定します。"
+	"frSetSeparatorTo()",	"数値位置分離記号として使用する文字を指定します。"
+	"frSpace()",			"指定された個数の空白文字で構成されている文字列を返します。"
+	"frStr()",				"数値の式と等価な文字を返します。"
+	"frStringToList()",		"指定された文字列の内容でリストを作成します。"
+	"frStrTran()",			"文字式に対して第二文字式を検索を行い、各出現位置を第三文字式で置換します。"
+	"frStuff()",			"式の文字数を指定することにより別の文字式を新しい文字列で置換したものを返します。"
+	"frSubStr()",			"指定された文字式の始点位置から指定された文字数までを返します。"
+	"frTransform()",		"書式コードにより決定された書式で式から文字列を返します。"
+	"frVal()",				"数字で構成された文字式から数値を返します。"
+	"rVarType()",			"式のデータ型を返します。"
+
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frAbs() 関数
+
+frAbs() 関数
+============
+
+.. code-block:: none
+
+    * 文法    : lnReturnValue = frAbs(tnExpression)
+    * 説明    : 指定された数値式の絶対値を返します。
+    *         :
+    * 引数    : <tnExpression>
+    *         : frAbs() の返値は数値式を指定して
+    *         : 得られた絶対値です。
+    * 返値    : <lnReturnValue>
+    *         : 指定された数値式の絶対値を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frAsc() 関数
+
+frAsc() 関数
+============
+
+.. code-block:: none
+
+	 * 文法    : lnReturnValue = frAsc(tcExpression)
+	 * 説明    : 文字式の左端にある文字に対して ANSI 値を返します。
+	 *         : 
+	 * 引数    : <tcExpression>
+	 *         : frAsc() で ANSI 値を返したい文字のある文字式を指定します。
+	 *         : 
+	 *         : tcExpression にある先頭の 1 文字目以降は
+	 *         : frAsc() により無視されます。
+	 * 返値    : <lnReturnValue>
+	 *         : 現在のコードページの文字テーブルに
+	 *         : 関連づけられている文字位置を返します。
+	 *         : 文字ごとに 0 ～ 255 までの範囲内で
+	 *         : 固有の ANSI 値があります
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frAddBs() 関数
+
+frAddBs() 関数
+==============
+
+.. code-block:: none
+
+     * 文法    : lcReturnValue = frAddBs(tcPath)
+     * 説明    : パス表現にバックスラッシュを追加します (必要ならば)。
+     *         :
+     * 引数    : <tcPath>
+     *         : バックスラッシュを追加するパス名を指定します。
+     *         :
+     * 返値    : <lcReturnValue> バックスラッシュを追加したパス名を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frAt() 関数
+
+frAt() 関数
+===========
+
+.. code-block:: none
+
+     * 文法    : lnPos = frAt(tcToSearch, tcString, tnOccurrence)
+     * 説明    : 文字式に出現する別の文字式を検索します。
+     *         : 
+     *         : frAt() による検索では英数大小文字を区別します。
+     *         :
+     * 引数    : <tcToSearch>
+     *         : <tcString> に対して検索する文字式を指定します。
+     *         : 
+     *         : <tcString> 
+     *         : <tcToSearch> に対して検索する文字式を指定します。
+     *         :  
+     *         : <tnOccurrence> 
+     *         : <tcString> に対する <tcToSearch> の検索において
+     *         : 1 番目、 2 番目、 3 番目など出現位置を指定します。
+     *         : 
+     *         : デフォルトでは、 frAt() は <tcToSearch> (tnOccurrence = 1) の
+     *         : 最初の出現位置を検索します。
+     * 返値    : 数値。 frAt() は左端の文字を始点として、
+     *         : 文字式、または別の文字式内にあるメモフィールド、
+     *         : メモフィールドにある最初の文字の位置を示す整数を返します。
+     *         : 
+     *         : 式やフィールドが見つからない、
+     *         : または <tnOccurrence> が <tcToSearch> 内の
+     *         : <tcString> よりも出現回数が多いならばfrAt() は
+     *         : 0 を返します。
+     *         : 
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frAtC() 関数
+
+frAtC() 関数
+============
+
+.. code-block:: none
+
+     * 文法    : lnPos = frAtC(tcToSearch, tcString, tnOccurrence)
+     * 説明    : 文字式に出現する別の文字式を検索します。
+     *         : 
+     *         : frAtC() による検索では英数大小文字を区別しません。
+     *         :
+     * 引数    : <tcToSearch>
+     *         : <tcString> に対して検索する文字式を指定します。
+     *         : 
+     *         : <tcString> 
+     *         : <tcToSearch> に対して検索する文字式を指定します。
+     *         : 
+     *         : <tnOccurrence> 
+     *         : <tcString> に対する <tcToSearch> の検索において
+     *         : 1 番目、 2 番目、 3 番目など出現位置を指定します。
+     *         : 
+     *         : デフォルトでは、 frAtC() は <tcToSearch> (tnOccurrence = 1) の
+     *         : 最初の出現位置を検索します。
+     * 返値    : 数値。 frAtC() は左端の文字を始点として、
+     *         : 文字式、または別の文字式内にあるメモフィールド、
+     *         : メモフィールドにある最初の文字の位置を示す整数を返します。
+     *         : 
+     *         : 式やフィールドが見つからない、
+     *         : または <tnOccurrence> が <tcToSearch> 内の
+     *         : <tcString> よりも出現回数が多いならばfrAtC() は
+     *         : 0 を返します。
+     *         : 
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frChr() 関数
+
+frChr() 関数
+============
+
+.. code-block:: none
+
+     * 文法    : lcReturnValue = frChr(tnExpression)
+     * 説明    : ANSI コードを数値で指定して関連づけられている文字を返します。
+     *         : 
+     * 引数    : <tnExpression>
+     *         : frChr() は 0 ～ 255 までの範囲内の数値に対応する
+     *         : ANSI 文字を指定します。
+     * 返値    : <lcReturnValue>
+     *         : 現在のコードページの文字テーブルに
+     *         : 関連づけられている文字の数値位置に
+     *         : 対応する文字を返します。
+     *         :
+     * 注釈    : tnExpression は 0 ～ 255 までの範囲内を必ず指定してください。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frEmpty() 関数
+
+frEmpty() 関数
+==================
+
+.. code-block:: none
+
+     * 文法    : llReturnValue = frEmpty(tuExpression)
+     * 説明    : 式の評価が空か判定します。
+     *         :
+     * 引数    : <tuExpression>
+     *         : EMPTY() で評価する式を指定します。
+     *         : 式には数値、文字、または論理型を指定できます。
+     *         : 
+     *         :
+     * 返値    : <llReturnValue> 論理
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frFile() 関数
+
+frFile() 関数
+=============
+
+.. code-block:: none
+
+     * 文法    : llReturnValue = frFile(tcFileName, tnFlag)
+     * 説明    : 指定されたファイルがディスクにあるか確認します。
+     *         :
+     * 引数    : <tcFileName>
+     *         : 指定されたファイル名で確認します。
+     *         : tcFileName にはファイルの拡張子が必要です。
+     *         : ディレクトリでのファイル検索、
+     *         : またはカレントディレクトリ以外のドライブ、
+     *         : あるいはドライブをファイル名として
+     *         : パスと一緒に指定できます。
+     *         : 
+     *         : <tnFlag> 
+     *         : tnFlag は将来の互換性ために予約されています。
+     *         : このバージョンでは、ディスクにファイルがあるときは
+     *         : 常に true を返します。
+     * 返値    : <llReturnValue> 論理
+     *         : True ならばファイルはディスクにあります。
+     *         : False ならばファイルはディスクにありません。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frFileToStr() 関数
+
+frFileToStr() 関数
+==================
+
+.. code-block:: none
+
+     * 文法    : lcReturnValue = frFileToStr(tcFileName)
+     * 説明    : ファイルの内容を文字列として返します。
+     *         :
+     * 引数    : <tcFileName>
+     *         : ファイルの内容を文字列として返したい
+     *         : ファイル名を指定します。
+     *         : ファイル現在のデフォルトディレクトリ以外の
+     *         : ディレクトリにある場合は、
+     *         : ファイル名と一緒にパスを指定してください。
+     *         :
+     * 返値    : <lcReturnValue> 
+     *         : 指定されたファイル内容がある文字列。
+     *         :
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frStr() 関数
+
+frStr() 関数
+============
+
+.. code-block:: none
+
+     * 文法    : lcReturnValue = frStr(tnValue, tnLen, tnDec)
+     * 説明    : 数値の式と等価な文字を返します。
+     *         :
+     * 引数    : <tnValue>
+     *         : 評価する数値の式を指定します。
+     *         : 
+     *         : <tnLen>
+     *         : 返された文字列の長さを指定します。
+     *         : tnLen が 0 ならば、デフォルトは 10 文字になります。
+     *         : tnLen < 0 ならば、 文字列の長さは数値と同じです。
+     *         : 
+     *         : 注意  
+     *         : 式に小数点がある場合は、小数点は 1 文字として、
+     *         : そして、文字列の各桁も 1 文字として長さに算入されます。
+     *         : 
+     *         : <tnDec> 
+     *         : 返された文字列にある小数位の桁数の数値を指定します。
+     *         : 
+     *         : tnDec を使って小数位の桁数の数字を指定するには、
+     *         : nLength を有する必要があります。nDecimalPlaces を省略した場合、
+     *         : 小数位の桁数の数字はゼロ (0) がデフォルトになります。
+     *         : 
+     * 返値    : 文字列データ型。 frStr() は指定された数値の式と
+     *         : 等価な文字列を返します。 
+     *         : 
+     *         : 特定の条件により、 frStr() は次のことを返すことがあります:
+     *         : tnValue よりも少ない小数位の桁数を指定した場合は返値は切り上げられます。
+     *         : 丸め込みの処理結果が近似小数位の桁数でなく上方ならば、
+     *         : ROUND( ) による処理が入ります。
+     *         : 詳しくは、 ROUND( ) 関数を参照してください。
+     *         : 
+     *         : nExpression が整数であり、nExpression の桁数が
+     *         : nLength 以下ならば、frStr( ) は数値の
+     *         : 桁あふれを示すためにアスタリスク文字列を返します。
+     *         : 
+     *         : nExpression が小数点であり、nExpression の残り小数点の桁数が
+     *         : nLength 以下または等しいならば、frStr() は
+     *         : 数値の桁あふれを示すためにアスタリスク文字列を返します。
+     *         : 
+     *         : nLength が nExpression で評価された値の長さよりも長いならば、
+     *         : frStr() は先頭を空白文字で桁揃えした文字列を返します。
+     *         : 
+     *         : nExpression が数値あるいは浮動小数点数型を有しており、
+     *         : nLength が nExpression の桁数以下ならば、
+     *         : frStr() は指数表現を用いた値を返します。
+     *         : 
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frSetIfEmpty() 関数
+
+frSetIfEmpty() 関数
+===================
+
+.. code-block:: none
+
+     * 文法    : tuReturnValue = frSetIfEmpty(tuValue, tuNewValue)
+     * 説明    : 変数の値が空、 NULL または 0 ならば
+     *         : 変数の値を設定します。
+     * 引数    : <tuValue>
+     *         : 評価を行う値。
+     *         :
+     *         : <tuNewValue>
+     *         : tuValue が空ならば変数の値を設定します。
+     *         :
+     * 返値    : tuValue が空ならば tuNewValue を、
+     *         : それ以外は元値を返します。
+     * 注釈    : この関数は Visual FoxPro にはありません。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frSpace() 関数
+
+frSpace() 関数
+==============
+
+.. code-block:: none
+
+     * 文法    : lcReturnValue = frSpace(tnSpaces)
+     * 説明    : 指定された個数の空白文字で構成されている文字列を返します。
+     *         : 
+     * 引数    : <tnSpaces>
+     *         : frSpace() は指定された個数の空白文字を返します。
+     *         :
+     * 返値    : <lcReturnValue> 
+     *         : 文字
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frInList() 関数
+
+frInList() 関数
+===============
+
+.. code-block:: none
+
+     * 文法    : llReturnValue = frInList(tuExpression, taList)
+     * 説明    : 式が別式にある式集合と一致する
+     *         : 式か決定します。
+     * 引数    : <tuExpression>
+     *         : リストで検索する式を frInList() へ指定します。
+     *         :
+     *         : <taList>
+     *         : 検索する式のリストを指定します。
+     *         : リストには最低でも 1 要素が存在する必要があります。
+     *         : 式のリストにある式は同一データ型である
+     *         : 必要はありません。
+     *         :
+     * 返値    : <luReturnValue> Null または論理値。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frForcePath() 関数
+
+frForcePath() 関数
+==================
+
+.. code-block:: none
+
+     * 文法    : lcReturnValue = frForcePath(tcFileName, tcPath)
+     * 説明    : 古いものの代わりに置換された新しい
+     *         : パス名を使用したファイル名を返します。
+     * 引数    : <tcFileName>
+     *         : 新しいパスを取得するファイル名 (パスあるいは拡張子の
+     *         : 有無にかかわらず) を指定します。
+     *         : <tcPath>
+     *         : tcFileName の新しいパスを指定します。
+     *         :
+     * 返値    : <lcReturnValue> 
+     *         : 古いものの代わりに置換された新しい
+     *         : パス名を使用したファイル名を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frAllTrim() 関数
+
+frAllTrim() 関数
+================
+
+.. code-block:: none
+
+	文法	: lcReturnValue = frAllTrim(tcExpression, tcCharacter)
+
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frLTrim() 関数
+
+frLTrim() 関数
+==============
+
+.. code-block:: none
+
+	文法	: lcRet = frLTrim(tcExpression, tcCharacter)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frJustDrive() 関数
+
+frJustDrive() 関数
+==================
+
+.. code-block:: none
+
+	 * 文法	: lcReturnValue = frJustDrive(tcPath)
+	 * 説明	: 絶対パスからドライブ文字を返します。
+	 *		:
+	 * 引数   	: <tcPath>
+	 *		: ドライブ文字を求めたい絶対パス名を指定します。
+	 *		: 
+	 * 返値	: <lcReturnValue> 
+	 *		: 絶対パスからドライブ文字を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frJustExt() 関数
+
+frJustExt() 関数
+================
+
+.. code-block:: none
+
+	 * 文法	: lcReturnValue = frJustExt(tcPath)
+	 * 説明	: 絶対パスからファイル拡張子の文字列を返します。
+	 *		: 
+	 * 引数   	: <tcPath>
+	 *		: 拡張子を求めたいファイルのあるフルパスを指定します。
+	 *		: 
+	 * 返値	: <lcReturnValue> 
+	 *		: 絶対パスからファイル拡張子の文字列を返します。
+	 *		: 
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frJustStem() 関数
+
+frJustStem() 関数
+=================
+
+.. code-block:: none
+
+	 * 文法	: lcReturnValue = frJustStem(tcPath)
+	 * 説明	: 絶対パスとファイル名からステム名 (拡張子の前のファイル名) を
+	 *		: 返します。
+	 * 引数   	: <tcPath>
+	 *		: ステムを求めたいファイル名 (パスを含む)を指定します。
+	 *		: 
+	 * 返値	: <lcReturnValue> 
+	 *		: 絶対パスからファイル名のステム名を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frRTrim() 関数
+
+frRTrim() 関数
+==============
+
+.. code-block:: none
+
+	 文法	: lcRet = frRTrim(tcExpression, tcCharacter)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frJustPath() 関数
+
+frJustPath() 関数
+=================
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frJustPath(tcExpression)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frForceExt() 関数
+
+frForceExt() 関数
+=================
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frForceExt(tcFileName, tcNewExtension)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frALines() 関数
+
+frALines() 関数
+===============
+
+.. code-block:: none
+
+	文法	: tnReturnValue = frALines(taList, tcExpression, tcSeparator)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frJustFName() 関数
+
+frJustFName() 関数
+==================
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frJustFName(tcExpression)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frPadL() 関数
+
+frPadL() 関数
+=============
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frPadL(tcString, tnLen, tcChar)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frPadR() 関数
+
+frPadR() 関数
+=============
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frPadR(tcString, tnLen, tcChar)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frProper() 関数
+
+frProper() 関数
+===============
+
+.. code-block:: none
+
+     * 文法    : tcReturnValue = frProper(tcExpression)
+     * 説明    : 文字式から固有名詞として適切に
+     *         : 大文字へ変換した文字列を返します。
+     * 引数    : <tcExpression>
+     *         :  frProper() には大文字へ変換したい
+     *         : 文字列を文字式を指定します。
+     * 返値    : <tcReturnValue> 
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frReplicate() 関数
+
+frReplicate() 関数
+==================
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frReplicate(tcString, tnTimes)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frLen() 関数
+
+frLen() 関数
+============
+
+.. code-block:: none
+
+	文法	: tnReturnValue = frLen(tcString)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frStuff() 関数
+
+frStuff() 関数
+==============
+
+.. code-block:: none
+
+     * 文法    : tcReturnValue = frStuff(tcExpression, tnStartRep,
+                                         tnCharRep,    tcToReplace)
+     * 説明    : 式の文字数を指定することにより
+     *         : 別の文字式を新しい文字列で置換したものを返します。
+     *         :
+     * 引数    : <tcExpression>
+     *         : 置換対象の文字式を指定します。
+     *         : 
+     *         : <tnStartRep>
+     *         : <tcExpression> の置換開始位置を指定します。
+     *         : 
+     *         : <tnCharRep>
+     *         : 置換文字数を指定します。
+     *         : <tnCharRep> が 0 ならば、変換文字列 <tcToReplace> には
+     *         : <tcExpression> が挿入されます。
+     *         : 
+     *         : <tcToReplace>
+     *         : 置換文字式を指定します。
+     *         : <tcToReplace> が空文字列ならば、指定された文字数により 
+     *         : <tnCharRep> は <tcExpression> から削除されます。
+     *         :
+     * 返値    : 文字
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frSubStr() 関数
+
+frSubStr() 関数
+===============
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frSubStr(tcString, tnInitialPosition, tnNumberBytes)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frStrTran() 関数
+
+frStrTran() 関数
+================
+
+.. code-block:: none
+
+	文法	: tcReturnValue = frStrTran(tcString, tcOldString, tcNewString)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frListToString() 関数
+
+frListToString() 関数
+=====================
+
+.. code-block:: none
+
+	 * 文法	: lcRet = frListToString(taList)
+	 * 注釈	: この関数は Visual FoxPro にはありません。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frInt() 関数
+
+frInt() 関数
+============
+
+.. code-block:: none
+
+	文法		: lnInt = frInt(tnExpression)
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frStringToList() 関数
+
+frStringToList() 関数
+=====================
+
+.. code-block:: none
+
+	 * 文法	: laList = frStringToList(tcExpression)
+	 * 注釈	: この関数は Visual FoxPro にはありません。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frIIf() 関数
+
+frIIf() 関数
+============
+
+.. code-block:: none
+
+     * 文法    : luReturnValue = frIIf(tlExpression, tuReturnIfTrue, tuReturnIfFalse)
+     * 説明    : 論理式の値により 2 つの値のうち 1 つを返します。
+     *         : 
+     * 引数    : <tlExpression>
+     *         : frIIf() で評価する論理式を指定します。
+     *         :
+     *         : <tuReturnTrue>, <tuReturnFalse>
+     *         : tlExpression の評価が True ならば tuReturnIfTrue を、
+     *         : 未評価ならば tuReturnIfFalse が返されます。
+     *         : tlExpression の評価が False または Null ならば tuReturnIfFalse を、
+     *         : 未評価ならば tuReturnIfTrue が返されます。
+     *         : 
+     * 返値    : <luReturnValue> は <tuReturnIfTrue> または <tuReturnIfFalse> により定義済み。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frVal() 関数
+
+frVal() 関数
+============
+
+.. code-block:: none
+
+     * 文法    : luReturnValue = frVal(tcExpression)
+     * 説明    : 数字で構成された文字式から数値を返します。
+     *         : 
+     * 引数    : <tcExpression>
+     *         : 16 までの数字で構成された文字式を指定します。
+     *         :
+     * 返値    : <tnValue>
+     *         : 数値を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frBetween() 関数
+
+frBetween() 関数
+================
+
+.. code-block:: none
+
+     * 文法    : luReturnValue = frBetween(tuTestValue, tuLowValue, tuHighValue)
+     * 説明    : 式値が同一型の 2 式値の間にあるか確認します。
+     *         : 
+     *         : 
+     *         : 
+     * 引数    : <tuTestValue>
+     *         : 評価する式を指定します。
+     *         :
+     *         : <tuLowValue>
+     *         : 低い範囲値を指定します。
+     *         :
+     *         : <tuHighValue>
+     *         : 高い範囲値を指定します。
+     *         :
+     * 返値    : <luReturnValue>
+     *         : 論理順序の NULL 値を返します。
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frSetSeparatorTo() 関数
+
+frSetSeparatorTo() 関数
+=======================
+
+.. code-block:: none
+
+     * 文法    : frSetSeparatorTo(tuExpression)
+     * 説明    : 数値位置分離記号として使用する文字を指定します。
+     *         :
+     * 引数    : <tuExpression>
+     *         : 数値位置分離記号として使用する文字を指定します。 
+     *         :
+     *         : frSetSeparatorTo() は数値位置分離記号を
+     *         : デフォルトからの変更で使用します。
+     *         : 例えば、空白文字 " "  またはカンマ "," です。
+     *         : デフォルト値へ戻すには frSetSeparatorTo(Null) を指定します
+     *         :
+     * 返値    : なし
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frTransform() 関数
+
+frTransform() 関数
+==================
+
+.. code-block:: none
+
+     * 文法    : tcReturnValue = frTransform(tuExpression, tcFormatCodes)
+     * 説明    : 書式コードにより決定された書式で式から文字列を返します。
+     *         : 
+     * 引数    : <tuExpression>
+     *         : 式の書式を指定します。
+     *         :
+     *         : <tcFormatCodes>       
+     *         : 式の書式処理方法を決定するために
+     *         : 1 つ以上の書式コードを指定します。
+     *         : 
+     * 返値    : <tcReturnValue>
+
+これは tcFormatCodes で利用できる書式コードのリスト表です。
+
+.. csv-table::
+	:header: "書式コード", "説明"
+	:widths:       20,     80
+
+	"@!",	"文字列にある文字を全て大文字へ変換します。"
+	"@T",	"文字の値から先頭と文末にある空白文字を除去します。"
+	"@B",	"数値データを表示範囲内で左揃えします。"
+	"@L",	"数値の文字列データに対して先頭を 0 で桁合わせします。"
+	"@C",	"掛け売りを示すために正数値に CR を追加します。"
+	"@X",	"借り方を示すために負数値に DB を追加します。"
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; frVarType() 関数
+
+frVarType() 関数
+================
+
+.. code-block:: none
+
+     * 文法    : lcRet = frVarType(tuExpression)
+     * 説明    : 式のデータ型を返します。
+     *         :
+     * 引数    : <tuExpression>
+     *         : データ型を返したい式を指定します。
+     *         : frVartype() は式のデータ型を示す一文字を返します。
+     *         : 
+     *         : この表は frVarType() が返すデータ型のリストです。
+     *         : 
+     *         :
+     *         : -------------------   -------------------------------------
+     *         : 返値                  データ型
+     *         : -------------------   -------------------------------------
+     *         : C                     文字
+     *         : N                     数値
+     *         : A                     リスト 
+     *         : O                     オブジェクト 
+     *         : U                     未定義型
+     *         : -------------------   -------------------------------------
+     *         :
+     * 返値    : 文字
+
+.. index:: 
+     pair: FoxRing 関数リファレンス; 用例
+
+用例
+====
+
+.. code-block:: ring
+
+	Load "foxring.ring"
+
+
+	mf = new frFunctions
+
+	/*----------------------------------------------------------*/
+	 * frProper() サンプル
+	/*----------------------------------------------------------*/
+
+	lcStr1 = "ring is a good language"
+	?mf.frProper(lcStr1)
+	?mf.frProper(Upper(lcStr1))
+
+
+	/*----------------------------------------------------------*/
+	 * frStuff() サンプル
+	/*----------------------------------------------------------*/
+
+	lcStr1 = "abcdefghijklm"
+	lcStr2 = "12345" 
+
+	// 挿入
+	?mf.frStuff(lcStr1, 4, 0, lcStr2)     
+	// 置換
+	?mf.frStuff(lcStr1, 4, 3, lcStr2)     
+	// 削除
+	?mf.frStuff(lcStr1, 4, 6, "")     
+	// 置換と挿入
+	?mf.frStuff(lcStr1, 4, 1, lcStr2)     
+	// 置換と削除
+	?mf.frStuff(lcStr1, 4, 4, lcStr2)     
+	// 置換、残りを削除
+	?mf.frStuff(lcStr1, 4, Len(lcStr1), lcStr2)   
+
+	/*----------------------------------------------------------*/
+
+
+
+	?mf.frAbs(-45)      
+	?mf.frAbs(10-30)    
+	?mf.frAbs(30-10)    
+
+	lcNumber1 = 40
+	lcNumber2 = 2
+
+	?mf.frAbs(lcNumber2-lcNumber1)  
+
+
+
+
+	lcCompletFileName = "C:\ring\docs\source\contribute.txt"
+
+	?mf.frFile(lcCompletFileName, Null)
+	if mf.frFile(lcCompletFileName, Null) {
+	  ?mf.frFileToStr(lcCompletFileName)
+	else
+	  ?"File does not exist"
+	}
+
+	lcNewPath = "C:\ring_2\docs\source\"
+	?mf.frJustExt(lcCompletFileName)
+	?mf.frJustDrive(lcCompletFileName)
+	?mf.frJustStem(lcCompletFileName)
+	?mf.frForcePath(lcCompletFileName, lcNewPath)
+	?mf.frTransform("    Ring is a good language    ", 
+			"@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+	?mf.frAllTrim("    Ring is a good language    ", Null) 
+	?mf._version
+	lnValue = 3125.54
+	?mf.frTransform(lnValue, "@B")+ "Euros"
+	?mf.frTransform(lnValue, "@C 9999,999,999,999.999")
+	mf.frSetSeparatorTo(" ")
+	?mf.frTransform(lnValue, "9999,999,999,999.999")
+	?mf.frInt(lnValue)
+	?mf.frForceExt("teste", "dbf")
+	// 書式コード "@L" を frTransform() 関数へ追加
+	?mf.frTransform("123", "@L 999999")
+	?mf.frTransform(123, "@L 999999")
+

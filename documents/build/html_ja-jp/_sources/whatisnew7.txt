@@ -1,0 +1,460 @@
+.. index:: 
+	single: Ring 1.7 の変更履歴; はじめに
+
+=======================
+Ring 1.7 の変更履歴
+=======================
+
+Ring 1.7 (2018年01月25日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.7 の新機能！
+
+* 新しい命令: Load Package
+* ringvm_see() と ringvm_give() 関数
+* ring_state_new() と ring_state_mainfile() 関数
+* トレースライブラリの改善
+* Ring ノートパッドの改善
+* RingQt の改善
+* Ring2EXE の改善
+* RingZip の改善
+* 取扱説明書の改訂
+* Ring VM の改善
+* RingLibuv 拡張機能
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; 新しい命令: Load Package
+
+新しい命令: Load Package
+========================
+
+‘Load’ 命令により、複数の Ring ソースファイルを同じプロジェクトで使えます。
+
+しかし、これらのファイルでは同じグローバルスコープを共有しています。
+
+さて、 “Load Package” 命令もあります。
+
+“Load Package” では新しいグローバルスコープへライブラリ (\*.ring ファイル) を読み込むことができます。
+
+グローバル変数との名前衝突回避となるため、ライブラリの作成時は非常に便利です。
+
+用例:
+
+ファイル: loadpackage.ring
+
+.. code-block:: ring
+
+	x = 100
+	? "Hello, World!"
+	load package "testloadpackage.ring"
+
+	? x
+	test()
+
+ファイル: testloadpackage.ring
+
+.. code-block:: ring
+
+	? "Hello from testloadpackage.ring"
+
+	x = 1000
+
+	test()
+
+	func test
+		? x
+
+実行結果:
+
+.. code-block:: none
+
+	Hello, World!
+	Hello from testloadpackage.ring
+	1000
+	100
+	1000
+
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; ringvm_see() と ringvm_give() 関数
+
+ringvm_see() と ringvm_give() 関数
+==================================
+
+ringvm_see() 関数で See 命令の挙動を変更します。
+
+また ring_see() 関数で元の挙動を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	see "Hello world" + nl
+	see 123 + nl
+	see ["one","two","three"]
+	see new point {x=10 y=20 z=30} 
+
+	func ringvm_see t
+		ring_see("We want to print: ")
+		ring_See(t)
+
+	class point x y z
+
+実行結果:
+
+.. code-block:: none
+
+	We want to print: Hello world
+	We want to print: 123
+	We want to print: one
+	two
+	three
+	We want to print: x: 10.000000
+	y: 20.000000
+	z: 30.000000
+
+ringvm_give() 関数は Give 命令の挙動を変更します。
+
+また、 ring_give() 関数は元の挙動を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	see "Name: " give name
+	see "Hello " + name
+
+	func ringvm_give
+		see "Mahmoud" + nl
+		return "Mahmoud"
+
+実行結果:
+
+.. code-block:: ring
+
+	Name: Mahmoud
+	Hello Mahmoud
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; ring_state_new() と ring_state_mainfile() 関数
+
+ring_state_new() と ring_state_mainfile() 関数
+==============================================
+
+ring_state_new() と ring_state_mainfile() 関数は Ring プログラムから別の Ring プログラムを実行します。
+
+ring_state_main() 関数とは異なり、こちらは Ring ステートの削除時に制御できます！
+
+これは GUI プログラムから別の GUI プログラムを実行するときに重要です。
+
+この場合は GUI ライブラリ (RingQt) を共有しており、
+
+呼び出し元は qApp.Exec() を呼び出すからです。
+
+よって、下位プログラムを停止せずにメインプログラムへ戻ります。
+
+ここで下位プログラムのステートを削除してしまうと、下位プログラムのイベント実行時に問題が発生します。
+
+ステートを保持することは、下位 GUI プログラムの収容先となっている GUI プログラムでは重要です。
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; トレースライブラリの改善
+
+トレースライブラリの改善
+========================
+
+トレースライブラリの更新により、デバッガのブレークポイントで “callstack” 命令を利用できるようになりました。
+
+この命令は関数のコールスタックを表示します。
+
+用例:
+
+.. code-block:: ring
+
+	load "tracelib.ring"
+
+	func main
+		? "Hello from main!"
+		test1()
+
+	func test1 
+		? "Hello from test1!"
+		test2()
+
+	func test2 
+		? "Hello from test2!"
+		test3()
+
+	func test3 
+		? "Hello from test3!"
+		breakpoint()
+
+
+.. image:: callstack.png
+	:alt: コールスタック
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; Ring ノートパッドの改善
+
+Ring ノートパッドの改善
+=======================
+
+Ring ノートパッドを更新しました。
+
+(1) 拡張子 \*.cf への対応
+(2) ハッシュ関数 (SHA256) 使用時の改善 - “Save Changes?” (変更を保存しますか？) メッセージ
+(3) Ring ノートパッド - ×ボタン - Saving Changes? で問い合わせるようになりました。
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; RingQt の改善
+
+RingQt の改善
+=============
+
+このクラスを RingQt へ追加しました。
+
+(1)  QStackedWidget
+(2)  QCalendarWidget
+(3)  QOpenGLFunctions
+(4)  QOpenGLContext
+(5)  QSurfaceFormat
+(6)  QOpenGLWidget
+(7)  QOpenGLVersionProfile
+(8)  QOpenGLFunctions_3_2_Core
+(9)  QVector2D
+(10) QVector3D
+(11) QVector4D
+(12) QQuaternion
+(13) QMatrix4x4
+(14) QOpenGLPaintDevice
+(15) QPaintDevice
+(16) QOpenGLTimerQuery
+(17) QOpenGLDebugLogger
+(18) QOpenGLFramebufferObject
+(19) QOpenGLVertexArrayObject
+(20) QOpenGLBuffer
+(21) QOpenGLShaderProgram
+(22) QOpenGLShader
+(23) QOpenGLTexture
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; Ring2EXE の改善
+
+Ring2EXE の改善
+===============
+
+C/C++ コンパイラがないとき、想定された動作を行うために Ring2EXE を更新しました。
+
+これにより、アプリケーションの配布に適したものを生成できます (exe ファイルと ring ファイル)。
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; RingZip の改善
+
+RingZip の改善
+==============
+
+このライブラリの更新により、サブフォルダにあるファイルの展開に対応しました！
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; 取扱説明書の改訂
+
+取扱説明書の改訂
+================
+
+(1) RingQt クラスの章 - クラスリストの並べ替えを行いました。
+
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; Ring VM の改善
+
+Ring VM の改善
+===============
+
+(1) エラーメッセージの改善
+(2) List2Str() 関数で数値を有するリストに対応
+(3) 分離記号 _ のある数値の対応を修正
+(4) 変数を使用せずにリストを作成 (ステートメント –> 式 –> リスト)
+(5) isNULL() - 英数大小文字同一視 - Null および null は NULL と同等に扱われます。
+(6) このオブジェクトで属性に Self オブジェクトの追加へ対応
+(7) ‘:’ 演算子を使用後に小文字リテラルのキーワードを作成
+(8) オブジェクトの表示 - decimals() 関数の考慮
+(9) 定数を閉られていない場合 - 定数の始点を決定
+(10) リストのあるオブジェクトの表示時におけるエラーメッセージの改善
+(11) VarPtr() - ローカルスコープにある変数のポインタの取得に対応
+(12) 新しいスレッドの作成時に perfomance 命令を normal 命令へ交換
+
+.. index:: 
+	pair: Ring 1.7 の変更履歴; RingLibuv 拡張機能
+
+RingLibuv 拡張機能
+===================
+
+Ring 1.7 から RingLibuv 拡張機能を利用できるようなりました。
+
+Libuv は非同期 I/O に主眼を置いたマルチプラットフォーム対応ライブラリです。
+
+用例 (イベントループ):
+
+.. code-block:: ring
+
+	load "libuv.ring"
+
+	counter = 0
+	idler = NULL 
+
+	func main
+		idler = new_uv_idle_t()
+		uv_idle_init(uv_default_loop(), idler)
+		uv_idle_start(idler, "wait()")
+		? "Idling..."
+		uv_run(uv_default_loop(), UV_RUN_DEFAULT);
+		uv_loop_close(uv_default_loop());
+		destroy_uv_idle_t(idler)
+
+	func wait
+		counter++
+		if counter >= 100000
+			uv_idle_stop(idler)
+		ok
+
+実行結果:
+
+.. code-block:: none
+
+	Idling...
+
+用例 (サーバー):
+
+.. code-block:: ring
+
+	load "libuv.ring"
+	load "objectslib.ring"
+
+	? "Testing RingLibuv - Server Side - Using Classes"
+
+	open_object(:MyServer)
+
+	class MyServer from ObjectControllerParent
+
+		DEFAULT_PORT    = 13370
+		DEFAULT_BACKLOG = 1024
+		
+		addr    = new_sockaddr_in()
+		server  = NULL
+		client  = NULL
+		myloop  = NULL
+		
+		func start
+			myloop = uv_default_loop()
+			server = new_uv_tcp_t()
+			uv_tcp_init(myloop, server)
+			uv_ip4_addr("127.0.0.1", DEFAULT_PORT, addr)
+			uv_tcp_bind(server, addr, 0)
+			r = uv_listen(server, DEFAULT_BACKLOG, Method(:newconnection) )
+			if r 
+				? "Listen error " + uv_strerror(r)
+				return 1
+			ok
+			uv_run(myloop, UV_RUN_DEFAULT)
+			destroy_uv_tcp_t(server)
+			destroy_uv_sockaddr_in(addr)
+		
+		func newconnection
+			? "New Connection"
+			aPara   = uv_Eventpara(server,:connect)
+			nStatus = aPara[2]
+			if nStatus < 0
+				? "New connection error : " + nStatus 
+				return 
+			ok
+			client = new_uv_tcp_t()
+			uv_tcp_init(myloop, client)
+			if uv_accept(server, client) = 0 
+					uv_read_start(client, uv_myalloccallback(), 
+								Method(:echo_read))
+			ok
+		
+		func echo_read 
+			aPara = uv_Eventpara(client,:read)
+			nRead = aPara[2]
+			buf   = aPara[3]
+			if nRead > 0
+				req = new_uv_write_t()
+					wrbuf = uv_buf_init(get_uv_buf_t_base(buf), nread)
+				uv_write(req, client, wrbuf, 1, Method(:echo_write))
+				? uv_buf2str(wrbuf)
+				message = "message from the server to the client"
+				buf = new_uv_buf_t()
+				set_uv_buf_t_len(buf,len(message))
+				set_uv_buf_t_base(buf,varptr("message","char *"))
+				uv_write(req, client, buf, 1, Method(:echo_write))
+			ok
+		
+		func echo_write
+			aPara = uv_Eventpara(client,:read)
+			req   = aPara[1]
+	
+
+実行結果:
+
+クライアントを実行すると、 “New Connection” メッセージが表示されます。
+
+そして “hello from the client” メッセージが表示されます。
+
+.. code-block:: none
+
+	Testing RingLibuv - Server Side - Using Classes
+	New Connection
+	hello from the client
+
+用例 (スレッドの使用):
+
+.. code-block:: ring
+
+	load "libuv.ring"
+	load "objectslib.ring"
+
+	? "Testing RingLibuv - Threads - Using Classes"
+
+	open_object(:MyThreads)
+
+	class MyThreads from ObjectControllerParent
+
+		func Start
+			one_id = new_uv_thread_t()
+			two_id = new_uv_thread_t()
+			uv_thread_create(one_id, Method(:One))
+			uv_thread_create(two_id, Method(:Two))
+			uv_thread_join(one_id)
+			uv_thread_join(two_id)
+			destroy_uv_thread_t(one_id)
+			destroy_uv_thread_t(two_id)
+		
+		func one
+			? "Message from the First Thread!"
+		
+		func Two
+			? "Message from the Second Thread!"
+		
+
+実行結果:
+
+.. code-block:: none
+
+	Testing RingLibuv - Threads - Using Classes
+	Message from the First Thread!
+	Message from the Second Thread!
+
+この拡張機能 (RingLibuv) の詳細は「RingLibuv の用法」を参照してください。
+

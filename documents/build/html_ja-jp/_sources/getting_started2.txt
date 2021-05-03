@@ -1,0 +1,150 @@
+.. index:: 
+	single: 入門 - 第二形式; はじめに
+
+===============
+入門 - 第二形式
+===============
+
+.. index:: 
+	pair: 入門 - 第二形式; Hello World
+
+Hello World
+===========
+
+このプログラムは、 Hello World のメッセージを画面表示します (標準出力)。
+
+.. code-block:: ring
+
+	put "Hello World"
+
+.. index:: 
+	pair: 入門 - 第二形式; プログラムの実行
+
+プログラムの実行
+================
+
+プログラムを実行するには、ファイルにコードを保存します。例えば : hello.ring です。
+コマンドラインまたはターミナルから、 Ring でプログラムを実行します (事前に ring/bin フォルダのパスを追加してください)。
+
+.. code-block:: ring
+
+	ring hello.ring
+
+.. note:: Ring ノートパッドでもコードの記述と実行ができます (パスの設定は不要です)。
+
+.. index:: 
+	pair: 入門 - 第二形式; 実行可能ファイルの作成
+
+実行可能ファイルの作成
+======================
+
+Ring2EXE でアプリケーションの実行可能ファイルを作成します。
+
+.. code-block:: ring
+
+	ring2exe hello.ring -static
+
+.. index:: 
+	pair: 入門 - 第二形式; 英数大小文字同一視
+
+英数大小文字同一視
+==================
+
+Ring は英数大小文字同一視です。同じプログラムを違う記法で書くこともできます。
+
+.. tip:: 全てのプログラムのソースコードで同じ記法を一つ選択することをお勧めします。
+
+.. code-block:: ring
+
+	PUT "Hello World"
+
+.. code-block:: ring
+
+	Put "Hello World"
+
+
+.. index:: 
+	pair: 入門 - 第二形式; 複数行リテラル
+
+複数行リテラル
+==============
+
+この用例のとおり、複数行リテラルを記述できます。
+
+.. code-block:: ring
+
+	Put "
+		Hello 
+		Welcome to the Ring programming language
+		How are you?
+
+	    "
+
+また、変数 nl で改行の挿入、
++ 演算子で文字列を連結します。
+
+改行で NL があるように、同じく Tab (タブ) と CR (キャリッジリターン) もあります。
+
+.. note:: 値 nl は改行を意味しますが、
+	 改行に相当する文字コードはオペレーティングシステムにより異なります。
+
+.. code-block:: ring
+
+	Put "Hello" + nl + "Welcome to the Ring programming language" + 
+	    nl + "How are you?"
+
+.. index:: 
+	pair: 入門 - 第二形式; 標準入力の取得
+
+標準入力の取得
+==============
+
+Get 命令でユーザからの標準入力を取得します。
+
+.. code-block:: ring
+
+	Put "What is your name? "
+	Get cName
+	Put "Hello " + cName
+
+.. index:: 
+	pair: 入門 - 第二形式; 文末終端子は明示不要
+
+文末終端子は明示不要
+====================
+
+ステートメントを区切るために ‘;’ の記述、または ENTER を押さなくてもいいです。
+前述のプログラムは一行で記述できます。
+
+.. code-block:: ring
+
+	Put "What is your name? " get cName put "Hello " + cName
+
+.. index:: 
+	pair: 入門 - 第二形式; コメントの記述
+
+コメントの記述
+================
+
+一行コメントと複数行コメントを記述できます。
+
+一行コメントは # または // で始まります。
+
+複数行コメントは /* ～ \*/ です。
+
+.. code-block:: ring
+
+	/* 
+		プログラムの名前    : はじめての Ring プログラム
+		日付                : 2016.09.09
+		作者                : Mahmoud Fayed
+	*/
+
+	Put "What is your name? " 	# 画面へメッセージを表示
+	get cName 			# ユーザからの標準入力を取得
+	put "Hello " + cName		# こんにちわ！
+
+	// Put "Bye!"
+
+.. note:: // による一行コメントは一種のコード記法です。
+

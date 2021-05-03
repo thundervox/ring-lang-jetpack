@@ -1,0 +1,327 @@
+.. index:: 
+	single: Ring 1.12 の変更履歴; はじめに
+
+====================
+Ring 1.12 の変更履歴
+====================
+
+Ring 1.12 (2020年01月25日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.12 の新機能！
+
+* Go ゲーム
+* ASCII コード表アプリケーション
+* BMI 計算機アプリケーション
+* カレンダーアプリケーション
+* ユリウス積日カレンダーアプリケーション
+* チュートリアル: 数値を単語表記へ変換
+* Load Again コマンド
+* ring_state_filetokens() 関数
+* 組み込み型オブジェクトファイルの生成
+* RingRayLib の改良
+* そのほかの改善
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; Go ゲーム
+
+Go ゲーム
+=========
+
+囲碁ゲームの実装です
+
+.. image:: go.png
+	:alt: Go Game
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; ASCII コード表アプリケーション
+
+ASCII コード表アプリケーション
+==============================
+
+ASCII コード表を表示するアプリケーションです。
+
+.. image:: asciitable.png
+	:alt: ASCII Table
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; BMI 計算機アプリケーション
+
+BMI 計算機アプリケーション
+==========================
+
+BMI を計算するだけのアプリケーションです。
+
+.. image:: BMI.png
+	:alt: BMI 計算機
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; カレンダーアプリケーション
+
+カレンダーアプリケーション
+==========================
+
+これは 2020 年カレンダーです。
+
+.. image:: calendar.png
+	:alt: calendar
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; ユリウス積日カレンダーアプリケーション
+
+ユリウス積日カレンダーアプリケーション
+======================================
+
+これはユリウス積日カレンダーアプリケーションです。
+
+.. image:: juliancalendar.png
+	:alt: juliandaycalendar
+
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; チュートリアル: 数値を単語表記へ変換
+
+チュートリアル: 数値を単語表記へ変換
+====================================
+
+フォルダ : ring/samples/other/number2words
+
+.. image:: number2words.png
+	:alt: Number2Words
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; Load Again コマンド
+
+Load Again コマンド
+===================
+
+Ring 1.12 から Load Again コマンドが使えるようになりました。
+
+このコマンドを使うと Ring ソースファイルにある定数を何度でも読み込めます。
+
+これはグローバル定数による翻訳用 Ring ソースファイルを使用するときに便利です。
+
+用例:
+
+下記はアラビア語と英語に対応するプロジェクトからの引用です。
+
+english.ring と arabic.ring ファイルには翻訳で使う定数があります。
+
+これらのファイルはプログラムの開始時に読み込まれます。
+
+Load コマンドで同じファイルの再読み込みはできません。
+
+Load コマンドは同じソースファイルを一度だけ読み込み、それ以降の読み込み指定は無視するからです。
+
+しかし Load Again コマンドならできます。
+
+よって、下記のコードにより実行中にファイルの再利用ができます。
+
+.. code-block:: ring
+
+	func setLang nLanguage
+		if C_ENV_DEFAULT_LANG = nLanguage
+			return
+		ok
+		C_ENV_DEFAULT_LANG = nLanguage
+		# 言語の変更
+			switch nLanguage 
+				on C_TRANSLATION_ENGLISH
+					load again "translation/english.ring"
+				on C_TRANSLATION_ARABIC 
+					load again "translation/arabic.ring"
+			off
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; ring_state_filetokens() 関数
+
+ring_state_filetokens() 関数
+============================
+
+ring_state_filetokens() 関数は Ring ソースコードファイルにあるトークンを一括取得します。
+
+.. code-block:: ring
+
+	C_FILENAME 	= "test_tokens.ring"
+	C_WIDTH		= 12
+
+	# ファイルの書き込み
+		write(C_FILENAME,'
+				see "Hello, World!"
+				? 3*2+3
+				Name = "Ring"
+				? Name
+	')
+
+	# トークンの種類
+		C_KEYWORD 	= 0
+		C_OPERATOR 	= 1
+		C_LITERAL 	= 2
+		C_NUMBER 	= 3
+		C_IDENTIFIER 	= 4
+		C_ENDLINE 	= 5
+
+	# キーワードリスト
+	aKEYWORDS = ["IF","TO","OR","AND","NOT","FOR","NEW","FUNC", 
+	"FROM","NEXT","LOAD","ELSE","SEE","WHILE","OK","CLASS","RETURN","BUT", 
+	"END","GIVE","BYE","EXIT","TRY","CATCH","DONE","SWITCH","ON","OTHER","OFF", 
+	"IN","LOOP","PACKAGE","IMPORT","PRIVATE","STEP","DO","AGAIN","CALL","ELSEIF", 
+	"PUT","GET","CASE","DEF","ENDFUNC","ENDCLASS","ENDPACKAGE", 
+	"CHANGERINGKEYWORD","CHANGERINGOPERATOR","LOADSYNTAX"]
+
+	pState = ring_state_new()
+	aList = ring_state_filetokens(pState,C_FILENAME)
+	PrintTokens(aList)
+	ring_state_delete(pState)
+
+	func PrintTokens aList
+		for aToken in aList
+			switch aToken[1]
+			on C_KEYWORD 
+				? Width("Keyword",C_WIDTH) + ": "  + aKeywords[0+aToken[2]]
+			on C_OPERATOR 
+				? Width("Operator",C_WIDTH)  + ": " + aToken[2]
+			on C_LITERAL 
+				? Width("Literal",C_WIDTH)  + ": " + aToken[2]
+			on C_NUMBER 
+				? Width("Number",C_WIDTH)  + ": " + aToken[2]
+			on C_IDENTIFIER 
+				? Width("Identifier",C_WIDTH)  + ": " + aToken[2]
+			on C_ENDLINE 
+				? "EndLine"
+			off
+		next
+
+	func Width cText,nWidth
+		return cText+copy(" ",nWidth-len(cText))
+
+実行結果:
+
+.. code-block:: none
+
+	EndLine
+	Keyword     : SEE
+	Literal     : Hello, World!
+	EndLine
+	Operator    : ?
+	Number      : 3
+	Operator    : *
+	Number      : 2
+	Operator    : +
+	Number      : 3
+	EndLine
+	Identifier  : name
+	Operator    : =
+	Literal     : Ring
+	EndLine
+	Operator    : ?
+	Identifier  : name
+	EndLine
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; 組み込み型オブジェクトファイルの生成
+
+組み込み型オブジェクトファイルの生成
+====================================
+
+-geo オプションはソースコードファイル (\*.ring) から組み込み型オブジェクトファイル (C ソースコード) を生成します。
+
+コマンド:
+
+.. code-block:: ring
+
+	ring test.ring -geo
+
+このコマンドは最低でも 3 ファイルを生成します。
+
+.. code-block:: ring
+
+	test.c
+	ringappcode.c
+	ringappcode.h
+
+プロジェクトの規模により、大量のファイルを生成します。
+
+生成後のファイルは Ring VM のバイトコードとして実行されます。
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; RingRayLib の改良
+
+RingRayLib の改良
+=================
+
+RingRayLib の新作サンプル集を追加しました。
+
+	* 音声の読み込みと再生
+	* テクスチャの入力
+	* 音楽のストリーミング再生
+	* 長方形の拡縮
+	* カラーパレット
+	* 視線追従
+	* 当たり判定の領域
+	* ベジェ曲線
+	* 画像生成
+	* 15パズルゲーム
+	* キュービックマップ
+
+スクリーンショット:
+	
+.. image:: raylib_cubicmap.png
+	:alt: RayLib の用例
+
+.. index:: 
+	pair: Ring 1.12 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+* 新作サンプル集
+	* ring/samples/other/Hex2UTF8.ring
+	* ring/samples/other/CalmoSoftPrimesTable.ring
+	* ring/samples/other/CalmoSoftTicTacToeGame.ring
+	* ring/samples/other/CalmoSoftSimpleGoGame.ring
+	* ring/samples/other/arabicmysql.ring 
+	* ring/samples/other/CalmoSoftExtraCube.ring
+	* ring/samples/other/DynamicCode/anonfunc.ring
+	* ring/samples/other/DynamicCode/deletethisfile.ring
+	* ring/samples/other/DynamicCode/modifythisfile.ring
+	* ring/samples/other/changesyntax/ArabicDemo.ring
+	* ring/samples/other/changesyntax/EnglishDemo.ring
+	* ring/samples/other/changesyntax/ChangeKeywordsArabic.ring
+	* ring/samples/other/changesyntax/ChangeKeywordsEnglish.ring
+	* ring/samples/other/changesyntax/pascal.ring
+	* ring/samples/other/hijridate.ring
+
+* Ring ノートパッド - プロジェクトファイル - デスクトップ画面の幅による最小幅の設定
+* Ring ノートパッド - 実行結果ウィンドウ - テキスト末尾へのカーソル移動
+* Ring ノートパッド - 実行結果ウィンドウ - 改行を正しく表示できるようになりました
+* フォームデザイナー - スタイルの改善 - 色と寸法の制御
+* VideoMusicPlayer を RingQt 更新後に正常動作させるために更新
+* FlappyBird3000 - Android での応答速度を向上
+* Snake ゲーム : デフォルトのウィンドウ寸法を変更 (800x600)
+* Maze ゲーム : デフォルトのウィンドウ寸法を変更 (800x600) 
+* Maze ゲーム : プレイヤによるカメラ移動
+* Maze ゲーム : ゲームをやり直すときに You Win メッセージを消去
+* ゲームエンジン : ゲームウィンドウが生成できないときにエラーメッセージを表示
+* Ring テスト : Linux と macOS 用のビルドファイル build.sh を追加
+* RingQt : Qt 5.12.6 へ更新
+* RingQt : QQMLEngine クラスの追加
+* RingQt : Bluetooth 対応を除く RingQt ビルドファイルの追加
+* RingQt : イベントコードの大きさを従来の 100 文字から 200 文字へ変更
+* RingQt : RingQt クラスの章において Qt ドキュメントのリンクを修正
+* RingQt for Android : Ring オブジェクトファイル (ringo) の実行用コードの改善
+* RingQt アプリケーションを正常に配布できるようにするために Ring2EXE の RingQt 用の構成ファイルを更新
+* コード生成器 : 構造体関数の生成時に関数名を英数小文字へ変換するようになりました
+* OSCopyFolder() 関数でも下位フォルダのファイルをコピーできるようにするために更新
+* fgetpos() 関数は想定した動作になるよう更新
+* IsFunction() 関数は英数大小同一動作になるよう更新
+* Space() 関数は空白文字列の出力を消去するよう更新
+* Ring コンパイラ : Windows 用の Clang コンパイラのビルドファイル buildclang.bat を追加
+* Ring VM - 内部ハッシュ関数の更新
+* Ring VM - オブジェクトの新規作成時における pVM->aSetProperty 設定用コードの改善
+* Ring VM - ステート管理用のコードを改善

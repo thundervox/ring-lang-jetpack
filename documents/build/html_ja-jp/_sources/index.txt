@@ -1,0 +1,145 @@
+.. Ring documentation master file, created by
+   sphinx-quickstart on Sun May 03 10:07:42 2015.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+ようこそ Ring 取扱説明書へ！
+============================
+
+目次:
+
+.. toctree::
+   :maxdepth: 2
+
+   時速でデキるアプリケーション開発 <ringapps>
+   はじめに <introduction>
+   Ring ノートパッドの用法 <ringnotepad>
+   入門 - 第一形式 <getting_started>
+   入門 - 第二形式 <getting_started2>
+   入門 - 第三形式 <getting_started3>
+   変数 <variables>
+   演算子 <operators>
+   制御構造 - 第一形式 <controlstructures>
+   制御構造 - 第二形式 <controlstructures2>
+   制御構造 - 第三形式 <controlstructures3>
+   標準入力の取得 <getinput>
+   関数 - 第一形式 <functions>
+   関数 - 第二形式 <functions2>
+   関数 - 第三形式 <functions3>
+   プログラムの構造 <programstructure>
+   リスト <lists>
+   文字列 <strings>
+   日付と時刻 <dateandtime>
+   データ型の検査と変換 <checkandconvert>
+   算術関数 <mathfunc>
+   ファイル <files>
+   システム関数 <systemfunc>
+   Eval() とデバッグ <evaldebug>
+   デモプログラム <demo>
+   ODBC 関数 <odbc>
+   MySQL 関数 <mysql>
+   SQLite 関数 <sqlite>
+   PostgreSQL 関数 <postgresql>
+   セキュリティとインターネット関数 <secfunc>
+   オブジェクト指向プログラミング (OOP) <oop>
+   関数型プログラミング (FP) <fp>
+   リフレクションとメタプログラミング <metaprog>
+   多重構造の宣言型プログラミング <declarative>
+   自然言語プログラミング <natural>
+   自然言語ライブラリの用法 <naturallibrary>
+   変数と属性のスコープ規則 <scope>
+   関数とメソッドのスコープ規則 <scope2>
+   シンタックスの柔軟性 <syntaxflexibility>
+   型ヒントライブラリについて <typehints>
+   トレースライブラリとインタラクティブデバッガ <debug>
+   Ring プログラムへ Ring を組み込むには <ringemb>
+   Stdlib 関数 <stdlib>
+   Stdlib クラス <stdlibclasses>
+   デスクトップ、 WebAssembly とモバイル開発 (RingQt)<qt>
+   フォームデザイナーの用法 <formdesigner>
+   Qt3D によるグラフィックスプログラミング <qt3d>
+   RingQt アプリケーション用のオブジェクトライブラリ <ringqtobjects>
+   多国語アプリケーション <multilanguage>
+   モバイル用 RingQt アプリケーションのビルド方法 <qtmobile>
+   WebAssembly 用 RingQt アプリケーションのビルド方法 <qtwebassembly>
+   ウェブ開発 (CGI ライブラリ) <web>
+   クラウド経由でのウェブアプリケーションの配布方法 <deployincloud>
+   グラフィックスと 2D ゲームプログラミング (RingAllegro) <allegro>
+   デモプロジェクト - 2D ゲームエンジン <gameengine>
+   Android 用ゲームのビルド方法 <gameengineandorid>
+   RingRayLib の用法 <ringraylib>
+   RingOpenGL と RingFreeGLUT の用法 (3D グラフィックス) <usingopengl>
+   RingOpenGL と RingAllegro の用法 (3D グラフィックス) <usingopengl2>
+   デモプロジェクト -  Gold Magic 800 ゲーム <goldmagic800>
+   RingTilengine の用法 <tilengine>
+   性能改善に関する情報 <performancetips>
+   コマンドラインオプション <compiler>
+   Ring アプリケーションの配布方法 (手動) <distribute>
+   Ring2EXE による Ring アプリケーションの配布方法 <distribute_ring2exe>
+   Ring パッケージ管理プログラム (RingPM) <ringpm>
+   ZeroLib 関数リファレンス <zerolib>
+   FoxRing 関数リファレンス <foxringfuncsdoc>
+   BigNumber 関数リファレンス <bignumber>
+   RingLibCurl の用法 <libcurl>
+   RingLibCurl 関数リファレンス <ringlibcurlfuncsdoc>
+   RingSockets の用法 <socket>
+   RingThreads の用法 <threads>
+   RingLibui の用法 <libui>
+   RingZip の用法 <ringzip>
+   RingLibZip 関数リファレンス <ringlibzipfuncsdoc>
+   RingMurmurHash 関数リファレンス <ringmurmurhashfuncsdoc>
+   RingConsoleColors 関数リファレンス <ringconsolecolorsfuncsdoc>
+   RingAllegro 関数リファレンス <ringallegrofuncsdoc>
+   RingLibSDL の用法 <libsdl>
+   RingLibSDL 関数リファレンス <ringlibsdlfuncsdoc>
+   Ringlibuv の用法 <libuv>
+   RingLibuv 関数リファレンス <ringlibuvfuncsdoc>
+   RingFreeGLUT 関数リファレンス <ringfreeglutfuncsdoc>
+   RingStbImage 関数リファレンス <ringstbimage>
+   RingOpenGL (OpenGL 1.1) 関数リファレンス <ringopengl11funcsdoc>
+   RingOpenGL (OpenGL 1.2) 関数リファレンス <ringopengl12funcsdoc>
+   RingOpenGL (OpenGL 1.3) 関数リファレンス <ringopengl13funcsdoc>
+   RingOpenGL (OpenGL 1.4) 関数リファレンス <ringopengl14funcsdoc>
+   RingOpenGL (OpenGL 1.5) 関数リファレンス <ringopengl15funcsdoc>
+   RingOpenGL (OpenGL 2.0) 関数リファレンス <ringopengl20funcsdoc>
+   RingOpenGL (OpenGL 2.1) 関数リファレンス <ringopengl21funcsdoc>
+   RingOpenGL (OpenGL 3.0) 関数リファレンス <ringopengl30funcsdoc>
+   RingOpenGL (OpenGL 3.1) 関数リファレンス <ringopengl31funcsdoc>
+   RingOpenGL (OpenGL 3.2) 関数リファレンス <ringopengl32funcsdoc>
+   RingOpenGL (OpenGL 3.3) 関数リファレンス <ringopengl33funcsdoc>
+   RingOpenGL (OpenGL 4.0) 関数リファレンス <ringopengl40funcsdoc>
+   RingOpenGL (OpenGL 4.1) 関数リファレンス <ringopengl41funcsdoc>
+   RingOpenGL (OpenGL 4.2) 関数リファレンス <ringopengl42funcsdoc>
+   RingOpenGL (OpenGL 4.3) 関数リファレンス <ringopengl43funcsdoc>
+   RingOpenGL (OpenGL 4.4) 関数リファレンス <ringopengl44funcsdoc>
+   RingOpenGL (OpenGL 4.5) 関数リファレンス <ringopengl45funcsdoc>
+   RingOpenGL (OpenGL 4.6) 関数リファレンス <ringopengl46funcsdoc>
+   RingQt クラスとメソッドリファレンス <qtclassesdoc>
+   低水準関数 <lowlevel>
+   チュートリアル: C/C++ による拡張機能の開発方法 <extension_tutorial>
+   C/C++ による拡張機能の開発方法 <extension>
+   Ring を C/C++ プログラムへ組み込むには <embedding>
+   C/C++ ライブラリ接続用コード生成器 <codegenerator>
+   コード生成器を用いたはじめての拡張機能開発 <ringbeep>
+   言語設計 <languagedesign>
+   リリースノート: Version 1.1 <whatisnew>
+   リリースノート: Version 1.2 <whatisnew2>
+   リリースノート: Version 1.3 <whatisnew3>
+   リリースノート: Version 1.4 <whatisnew4>
+   リリースノート: Version 1.5 <whatisnew5>
+   リリースノート: Version 1.6 <whatisnew6>
+   リリースノート: Version 1.7 <whatisnew7>
+   リリースノート: Version 1.8 <whatisnew8>
+   リリースノート: Version 1.9 <whatisnew9>
+   リリースノート: Version 1.10 <whatisnew10>
+   リリースノート: Version 1.11 <whatisnew11>
+   リリースノート: Version 1.12 <whatisnew12>
+   リリースノート: Version 1.13 <whatisnew13>
+   リリースノート: Version 1.14 <whatisnew14>
+   リリースノート: Version 1.15 <whatisnew15>
+   テキストエディタの設定 <codeeditors>
+   よくある質問と回答 (FAQ) <faq>
+   ソースコードからのビルド方法 <sourcecode>
+   開発への参戦について <contribute>
+   言語仕様書 <reference>
+   関連情報 <resources>

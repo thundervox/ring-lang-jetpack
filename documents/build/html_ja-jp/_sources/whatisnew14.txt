@@ -1,0 +1,727 @@
+.. index:: 
+	single: Ring 1.14 の変更履歴; はじめに
+
+====================
+Ring 1.14 の変更履歴
+====================
+
+Ring 1.14 (2021年01月25日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.14 の新機能！
+
+* MyCoffee (ウェブアプリケーション)
+* ウェブ開発のサンプル
+* 新作サンプル集
+* アーランの B 公式
+* 顧客情報フォーム
+* RingTilengine 拡張機能
+* RingLibui 拡張機能
+* RingSockets 拡張機能
+* RingThreads 拡張機能
+* RingOpenSSL の改良
+* 関数の追加
+* 関数の改良
+* 文字列処理における実行性能の向上
+* 数値処理の改良
+* CLOC (Count Lines of Code) の追加
+* そのほかの改善
+
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; MyCoffee (Web ウェブアプリケーション)
+
+MyCoffee (ウェブアプリケーション)
+=================================
+
+WebLib ライブラリと PostgreSQL データベースを用いたウェブアプリケーションです。
+
+スクリーンショット:
+
+.. image:: mycoffee1.png
+	:alt: MyCoffee1
+
+.. image:: mycoffee2.png
+	:alt: MyCoffee2
+
+.. image:: mycoffee3.png
+	:alt: MyCoffee3
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; ウェブ開発のサンプル
+
+ウェブ開発のサンプル
+====================
+
+Hassouna Course は、講義番号 301 よりウェブ開発を扱います。
+
+今回の講義ではバックエンドのウェブ開発で WebLib を採用しています。
+
+講義専用 YoutTube プレイリストは: 
+
+* https://www.youtube.com/watch?v=a3ZYjssAvbI&list=PLHIfW1KZRIfn1cs2BupsdJ7dzCQ7wmHFk
+
+このフォルダにサンプル集を追加しました:
+
+* https://github.com/ring-lang/ring/tree/master/samples/UsingArabic/HassounaCourse/WebDevelopment
+
+スクリーンショット:
+
+* Calculator のサンプル
+
+.. image:: hweb1.png
+	:alt: ウェブ開発のサンプル 1
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 新作サンプル集
+
+新作サンプル集
+==============
+
+以下のサンプルを samples フォルダへ追加しました
+
+	* ring/samples/UsingQML/sample12 フォルダ
+	* ring/samples/General/TimeServer フォルダ
+	* ring/samples/General/BinarokuGame フォルダ
+	* ring/samples/Language/EnumGenerator フォルダ
+	* ring/samples/Language/DynamicObject フォルダ
+	* ring/samples/Drawing/MatrixMultiply3DRotationCube
+
+スクリーンショット:
+
+.. image:: drawpi.png
+	:alt: Matrix Multiplication
+
+.. image:: UsingQtQuick3D.png
+	:alt: Qt Quick 3D
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; アーランのＢ式
+
+アーランのＢ式
+=================
+
+このアプリケーションはアーランのＢ式で使います (回路交換系)
+
+.. image:: erlangb.png
+	:alt: erlangb
+
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 顧客情報フォーム
+
+顧客情報フォーム
+================
+
+SQLite と TableWidget を用いたアプリケーションです。
+
+アラビア語、英語とフランス語のユーザインタフェースが使えます。
+
+.. image:: customersapp.png
+	:alt: customersapp
+
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; RingTilengine 拡張機能
+
+RingTilengine 拡張機能
+=======================
+
+この拡張機能では Tilengine の機能を全て使えます - Tilengine はラスターエフェクトが使える「セガ メガドライブ」や「任天堂 スーパーファミコン」風の 2D レトロゲーム制作に向いたゲーム、およびグラフィックスエンジンです。
+
+用例:
+
+.. code-block:: ring
+
+	load "tilengine.ring"
+
+	TLN_Init(400, 240, 1, 0, 0)
+	TLN_SetLoadPath("assets\sonic")
+	foreground = TLN_LoadTilemap ("Sonic_md_fg1.tmx", NULL)
+	TLN_SetLayerTilemap(0, foreground)
+
+	TLN_CreateWindow(NULL, 0)
+	while TLN_ProcessWindow()
+		TLN_DrawFrame(0)
+	end
+
+	TLN_DeleteTilemap(foreground)
+	TLN_Deinit()
+
+スクリーンショット:
+
+.. image:: tilengine_shot3.png
+	:alt: tilengine
+
+.. image:: tilengine_shot5.png
+	:alt: tilengine
+
+.. image:: tilengine_shot8.png
+	:alt: tilengine
+
+.. image:: tilengine_shot9.png
+	:alt: tilengine
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; RingLibui 拡張機能
+
+RingLibui 拡張機能
+===================
+
+この拡張機能は Libui の全機能を扱えます。
+
+この拡張機能は Ring による軽量 GUI アプリケーションの開発と配布で使えます (1 MB 以下)。
+
+ランタイムファイルとファイルサイズ (Ring 1.14)
+
+* Ring.dll (448 KB)
+* Libui.dll (210 KB)
+* Ring_Libui.dll (633 KB)
+* 圧縮前のファイル            - 合計 : 1,291 KB
+* 圧縮後のファイル (ZIP 形式) - 合計 :   504 KB
+
+
+用例:
+
+.. code-block:: ring
+
+	load "libui.ring"
+
+	oWindow = uiNewWindow( "Say Hello", 500, 80, True)
+	uiWindowOnClosing(oWindow,"closeApp()")
+
+	lbl1 = uiNewLabel("Name: ")
+	text1 = uiNewEntry()
+
+	btn1 = uiNewButton("SayHello")
+	uiButtonOnClicked(btn1,"sayHello()")
+
+	btn2 = uiNewButton("Close")
+	uiButtonOnClicked(btn2,"closeApp()")
+
+	lbl2 = uiNewLabel("")
+
+	g = uiNewGrid() uiGridSetPadded(g, 1) uiWindowSetChild(oWindow, g)
+	uiGridAppend(g, lbl1, 0, 0, 2, 1, 1, uiAlignCenter, 0, uiAlignCenter)
+	uiGridAppend(g, text1, 1, 0, 2, 1, 1, uiAlignFill, 0, uiAlignFill)
+	uiGridAppend(g, btn1, 0, 1, 1, 2, 1, uiAlignFill, 0, uiAlignFill)
+	uiGridAppend(g, btn2, 2, 1, 1, 1, 1, uiAlignFill, 0, uiAlignFill)
+	uiGridAppend(g, lbl2, 0, 3, 2, 1, 1, uiAlignCenter, 0, uiAlignCenter)
+
+	uiControlShow( oWindow )
+	uiMain()
+
+	func sayHello 
+		uiLabelSetText(lbl2,"Hello " + uiEntryText(text1))
+
+	func closeApp
+		uiQuit()
+
+
+スクリーンショット:
+
+.. image:: libui_6.png
+	:alt: RingLibui スクリーンショット
+
+.. image:: libui_14.png
+	:alt: RingLibui スクリーンショット
+
+.. image:: libui_16.png
+	:alt: RingLibui スクリーンショット
+
+.. image:: libui_26.png
+	:alt: RingLibui スクリーンショット
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; RingSockets 拡張機能
+
+RingSockets 拡張機能
+=====================
+
+Ring では、 RingQt, RingLibuv および RingLibSDL などのソケット拡張機能が使えます。
+
+この公開版ではソケット用の特別な拡張機能があります。
+
+これは前述のライブラリが使えないアプリケーションで有益です。
+
+用例 (サーバのコード): 
+
+.. code-block:: ring
+
+	# TCP サーバ
+
+	load "sockets.ring" 
+
+	sock = socket(AF_INET,SOCK_STREAM,0) 
+	bind(sock,"127.0.0.1",5050)
+	listen(sock,5)
+	ns = accept(sock)
+	send(ns,"Hello Client")
+	msg = recv(ns,1024)
+	? "Client Say >> " + msg
+	close(sock)
+	? "ソケットの接続を終了しました"
+
+用例 (クライアントのコード):
+
+.. code-block:: ring
+
+	# TCP クライアント
+
+	load "sockets.ring" 
+
+	sock = socket(AF_INET,SOCK_STREAM)
+	connect(sock,"127.0.0.1",5050)
+
+	send(sock,"Hello Server")
+	msg = recv(sock,1024)
+	? "Server Say >> " + msg
+
+	close(sock)
+	? "ソケットの接続を終了しました"
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; RingThreads 拡張機能
+
+RingThreads 拡張機能
+=====================
+
+Ring では、 RingQt, RingLibuv および RingLibSDL などのスレッド拡張機能が使えます。
+
+この公開版ではスレッド用の特別な拡張機能があります。
+
+これは前述のライブラリが使えないアプリケーションで有益です。
+
+用例:
+
+.. code-block:: ring
+
+	load "threads.ring"
+
+	func main
+
+		nThreads = 2
+		aList = list(nThreads)
+
+		for x=1 to nThreads
+			aList[x] = new_thrd_t()
+			thrd_create(aList[x],"Hello("+x+")")
+		next
+
+		for x=1 to nThreads
+			res= 0
+			thrd_join(aList[x],:res)
+		next
+
+		? :Done
+		shutdown()
+
+	func Hello x
+
+		for r=1 to 100
+			? "("+r+") Hello("+x+") 関数からのメッセージ"
+		next
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; RingOpenSSL の改良
+
+RingOpenSSL の改良
+==================
+
+RingOpenSSL 拡張機能へ関数を追加しました。
+
+以下の関数は大規模ファイル、またはデータの全内容を単独文字列として読み込むことなくハッシュ値を計算します。
+
+.. code-block:: none
+
+	md5init() -> MD5_CTX
+	md5update (MD5_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	md5final (MD5_CTX) -> 文字列
+	
+	sha1init() -> SHA_CTX
+	sha1update (SHA_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha1final (SHA_CTX) -> 文字列
+	
+	sha224init() -> SHA224_CTX
+	sha224update (SHA224_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha224final (SHA224_CTX) -> 文字列
+	
+	sha256init() -> SHA256_CTX
+	sha256update (SHA256_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha256final (SHA256_CTX) -> 文字列
+	
+	sha384init() -> SHA384_CTX
+	sha384update (SHA384_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha384final (SHA384_CTX) -> 文字列
+	
+	sha512init() -> SHA512_CTX
+	sha512update (SHA512_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha512final (SHA512_CTX) -> 文字列
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 関数の追加
+
+関数の追加
+==========
+
+* DirExists() 関数
+
+.. code-block:: none
+
+	Direxists(cDirPath) ---> ディレクトリがあれば 1 を返します。
+
+* GetPathType() 関数
+
+.. code-block:: none
+
+	Getpathtype(cPath) ---> 0 ならばパスは存在しません。
+				1 ならば既存のファイルと一致しています。
+				2 ならば既存のディレクトリと一致しています。
+				-1 ならばパスは存在しますが
+				   種類は不明です (例としてはパイプ)
+
+* SysSet() 関数
+
+SysGet() 関数は環境変数を取得します。
+
+.. code-block:: none
+
+	SysSet(cVariable, cValue) ---> 1 ならば成功であり 0 ならば失敗です。
+
+* SysUnset() 関数
+
+SysSet() 関数は指定された環境変数を定義します。
+
+.. code-block:: none
+
+	SysUnset(cVariable) ---> 1 ならば成功であり 0 ならば失敗です。
+
+
+* GetArch() 関数
+
+GetArch() 関数は Ring 実行可能ファイルが動作しているアーキテクチャ名を検出します。
+
+文法:
+
+.. code-block:: none
+
+	GetArch() ---> cString (Ring 実行可能ファイルが動作しているアーキテクチャ名)
+
+用例:
+
+.. code-block:: ring
+
+	switch getarch()
+	on "x86"
+	        ? "x86 32bit アーキテクチャ"
+	on "x64"
+	        ? "x64 64bit アーキテクチャ"
+	on "arm64"
+	        ? "ARM64 64bit アーキテクチャ"
+	on "arm"
+	        ? "ARM 32bit アーキテクチャ"
+	other
+	        ? "Unknown アーキテクチャ"
+	off
+
+
+* NofProcessors() 関数
+
+NofProcessors() 関数はシステムに搭載されている CPU の論理プロセッサ数を検出します。
+
+文法:
+
+.. code-block:: none
+
+	NofProcessors() ---> nProcessors
+
+用例:
+
+.. code-block:: ring
+
+	? NofProcessors()
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 関数の改良
+
+関数の改良
+==========
+
+* Log() 関数
+
+
+指定の底で対数計算をするために関数を更新
+
+文法:
+
+.. code-block:: none
+
+	Log(nNumber)	   --> nNumber の対数を返します (e を底とする)。
+	Log(nNumber,nBase) --> nBase を底とする nNumber の対数を返します
+
+用例:
+
+.. code-block:: ring
+
+	? log(10)	# 2.30
+	? log(2)	# 0.69
+	? log(10,10)	# 1
+	? log(2,2)	# 1
+	? log(100,10)	# 2
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 文字列処理における実行性能の向上
+
+文字列処理における実行性能の向上
+================================
+
+* Ring 1.14 では可変長、および固定長の文字列を処理するプログラムが三倍高速になります。
+
+
+用例:
+
+.. code-block:: ring
+
+	load "openssllib.ring"
+	f = fopen(exefilename(),"rb")
+	h = SHA256Init()
+	while true 
+	  s = fread(f, 4096)
+	  if isstring(s) 
+	    SHA256Update(h, s)
+	  else
+	    exit
+	  ok
+	end
+	digest = SHA256Final(h)
+	fclose(f)
+	? digest
+
+実行結果:
+
+.. code-block:: none
+
+	4e677154639dae3baa048ce5ae0b04b63bcd33316e2d2041297dcee85604d778
+
+* Ring 1.14 では文字列へ別の文字列を追加する処理は六十倍高速になります。
+
+用例:
+
+.. code-block:: ring
+
+	t1 = clock()
+	test = "My Ring"
+	for x = 1 to 20000
+		test += x
+	next 
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+実行結果:
+
+.. code-block:: none
+
+	Time : 0.01 seconds
+
+* 以上の改良により拡張機能用の Ring コード生成器の動作速度が向上しました (四倍の高速化)。
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; 数値処理の改良
+
+数値処理の改良
+==============
+
+(1) 十六進数の用法
+
+用例:
+
+.. code-block:: ring
+
+	x = 0x10
+	? x		# 16
+	x = 0xff
+	? x		# 255
+	x = 0x0A
+	? x		# 10
+	? 0xFFFF	# 65535
+	? 0x0A + 1	# 10+1 = 11
+
+(2) 大規模倍数値の表示
+
+用例:
+
+.. code-block:: ring
+
+	c = 999999999999999
+	for i = 1 to 13
+		c *= 999999999999999
+	next
+	? "c = " + c
+
+実行結果:
+
+.. code-block:: none
+
+	c = 9.999999999999862032924046117813879019544782068185773946275755888189234614925384380788550958e+209
+
+(3) 大規模倍数値で String() と Number() を使う方法
+
+用例:
+
+.. code-block:: ring
+
+	c1 = 999999999999999
+	for i = 1 to 13 
+		c1 *= 999999999999999
+	next
+	
+	s = string(c1)	? "c1 = " + s
+	c2 = number(s)	? "c2 = " + c2
+	
+	? "c2 - c1 = " + (c2 - c1)
+	
+	str1	= "-2222044646462"
+	c	= Number(str1)
+	str2	= String(c)
+	
+	if str1 = str2 
+		? "Strings Identical"
+	else
+		? "Strings Mismatch!"
+	ok
+
+実行結果:
+
+.. code-block:: none
+
+	c1 = 9.999999999999862032924046117813879019544782068185773946275755888189234614925384380788550958e+209
+	c2 = 9.999999999999862032924046117813879019544782068185773946275755888189234614925384380788550958e+209
+	c2 - c1 = 0
+	Strings Identical
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; CLOC (Count Lines of Code) の追加
+
+CLOC (Count Lines of Code) の追加
+=================================
+
+CLOC (コード行数集計器) は指定されたアプリケーションのフォルダパスからソースコードの検索を行い
+プログラミング言語ごとのファイル数、空行、コメント行数、コード行数の集計結果を表示します。
+
+
+用法:
+
+.. code-block:: none
+
+	ringcloc <アプリケーションのフォルダパス>
+
+用例 (1):
+
+.. code-block:: none
+
+	ringcloc c:\ring\tools\ringnotepad
+
+実行結果:
+
+.. code-block:: none
+
+	      47 text files.
+	      47 unique files.
+	      11 files ignored.
+	
+	github.com/AlDanial/cloc v 1.88  T=1.18 s (39.0 files/s, 3212.2 lines/s)
+	-----------------------------------------------------------------------------------
+	Language                         files          blank        comment           code
+	-----------------------------------------------------------------------------------
+	Ring                                33            273            139           3186
+	Bourne Shell                         4             22              9             88
+	DOS Batch                            4              3              7             20
+	INI                                  1              0              0             15
+	C                                    1              0              1             10
+	Markdown                             2              4              0              8
+	Windows Resource File                1              0              0              1
+	-----------------------------------------------------------------------------------
+	SUM:                                46            302            156           3328
+	-----------------------------------------------------------------------------------
+
+用例 (2):
+
+.. code-block:: none
+
+	ringcloc c:\ring\tools\formdesigner
+
+実行結果:
+
+.. code-block:: none
+
+	      54 text files.
+	      54 unique files.
+	      13 files ignored.
+	
+	github.com/AlDanial/cloc v 1.88  T=1.54 s (34.5 files/s, 7122.4 lines/s)
+	-------------------------------------------------------------------------------
+	Language                     files          blank        comment           code
+	-------------------------------------------------------------------------------
+	Ring                            52           1306            567           9071
+	Markdown                         1              5              0              7
+	-------------------------------------------------------------------------------
+	SUM:                            53           1311            567           9078
+	-------------------------------------------------------------------------------
+
+.. index:: 
+	pair: Ring 1.14 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+* Ring コンパイラ - 無名関数の FUNC キーワード文の後に現れた改行を読み飛ばし
+* Ring コンパイラ - 無名関数の関数パラメータ文の後に現れた改行を読み飛ばし
+* Ring コンパイラ - リスト項目のアクセス文の後に現れた改行を読み飛ばし
+* Ring コンパイラ - オブジェクトの属性文の後に現れた改行を読み飛ばし
+* Ring コンパイラ - 97 桁の数値に対応
+* Ring コンパイラ - ステートメント --> 式 --> '(' ')' へ対応
+* Ring コンパイラ - ステートメント --> 式 --> '(' 式 ')' '.' 属性|メソッド へ対応
+* Ring コンパイラ - リテラルが閉じられていないときのエラーメッセージを改善
+* Ring VM - Str2Hex() 関数 - 実行性能の向上
+* Ring VM - Hex2Str() 関数 - 実行性能の向上
+* Ring VM - SubStr() 関数 - コードを改善 
+* Ring VM - Dec() 関数 - コードを改善
+* Ring VM - String() 関数 - コードを改善
+* Ring VM - Number() 関数 - コードを改善 
+* Ring VM - Decimals() 関数 - 0 ～ 90 までの有効範囲に対応
+* Ring VM - バイナリ文字列同士の比較 - コードを改善
+* Ring VM - IsWindows64() 関数 - コードを改善
+* Ring VM - Unsigned() 関数 - コードを改善
+* Ring VM - 関数の呼び出し - リストと多重リストのステート管理を改善
+* Ring VM - AddAttribute() - 新規属性のデフォルト型は文字列になります
+* Ring VM - Dir() 関数 - コードを改善
+* Ring VM - Copy() 関数 - コードを改善 (負数の無視)
+* Ring VM - 一階層以上のループから抜けたときの step 値の復旧
+* Ring VM - After (For-In ループ) - 参照は削除しますが値のコピーは保持します
+* Ring VM - 複数スレッド動作時のコードを改善
+* Ring VM - Try/Catch/Done の後でステートを復旧するときのコードを改善
+* Ring VM - Try/Catch/Done の後で Raise() を多重呼び出ししたときのコードを改善
+* Ring VM - インストラクション実行時の結果表示を読みすやくしました
+* Ring VM - & 演算子を用いた文字列の文字参照を返せる機能に対応
+* Ring VM - Call コマンド - 関数名 - 英数大小文字同一視
+* Ring コンパイラ/VM ソースコード - 再整形による可読性の向上
+* Ring コンパイラ/VM ソースコード - コードのリファクタリング
+* Ring コンパイラ/VM - 新規インストラクション: ICO_FREETEMPLISTS
+* RingPM - 新規パッケージ: GUILib (GUILib クラスの分割パッケージ)
+* RingPM - 新規パッケージ: ObjectsLib (ObjectsLib クラスの分割パッケージ)
+* RingPM - 新規パッケージ: CLOC (Count Lines of Code)
+* RingQt - QWebEngineView クラス - 追加: Print(QPrinter,cEventCode) メソッド
+* RingQt - QCombobox クラス - 追加: setCurrentText() および addItems() メソッド
+* RingQt - 追加: QLocale クラス
+* RingQtRuntime パッケージ: GUILib および ObjectsLib パッケージを使用
+* GameEngine - グラフィックスライブラリへディレイ関数を追加: gl_delay() 関数
+* GameEngine - ウィンドウのアイコン読み込む時に Resources クラスを使用
+* RingAllegro - コードを改善
+* RingMurmurHash - コードを改善
+* RingOpenSSL - RandBytes() 関数 - コードを改善
+* RingZip - GetFileNameByIndex() 関数 - コードを改善
+* RingLibSDL - LibSDL version 2.0.14 でビルド

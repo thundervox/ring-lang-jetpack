@@ -1,0 +1,441 @@
+.. index:: 
+	single: 制御構造 - 第一形式; はじめに
+
+===================
+制御構造 - 第一形式
+===================
+
+第一形式による制御構造の用法です。
+
+.. index:: 
+	pair: 制御構造; 分岐処理
+
+
+分岐処理
+========
+
+* If ステートメント
+
+文法:
+
+.. code-block:: ring
+
+	if 式
+		ステートメント・ブロック
+	but 式
+		ステートメント・ブロック
+	else
+		ステートメント・ブロック
+	ok
+
+用例:
+
+.. code-block:: ring
+
+	see " 
+		Main Menu
+		---------
+		(1) Say Hello
+		(2) About
+		(3) Exit
+
+	    " give nOption
+
+	if nOption = 1	see "Enter your name : " give name see "Hello " + name + nl
+	but nOption = 2 see "Sample : using if statement" + nl
+	but nOption = 3 bye
+	else see "bad option..." + nl
+	ok
+              
+
+.. index:: 
+	pair: 制御構造 - 第一形式; Switch ステートメント
+
+* Switch ステートメント
+
+文法:
+
+.. code-block:: ring
+
+	switch 式
+	on 式
+		ステートメント・ブロック
+	other
+		ステートメント・ブロック
+	off
+
+用例:
+
+.. code-block:: ring
+
+	See " 
+		Main Menu
+		---------
+		(1) Say Hello
+		(2) About
+		(3) Exit
+
+	    " Give nOption
+
+	Switch nOption
+	On 1 See "Enter your name : " Give name See "Hello " + name + nl
+	On 2 See "Sample : using switch statement" + nl
+	On 3 Bye
+	Other See "bad option..." + nl
+	Off
+
+
+.. index:: 
+	pair: 制御構造 - 第一形式; ループ処理
+
+ループ処理
+==========
+
+.. index:: 
+	pair: 制御構造 - 第一形式; While ループ
+
+* While ループ
+
+文法:
+
+.. code-block:: ring
+
+	while 式
+		ステートメント・ブロック
+	end
+
+用例:
+
+.. code-block:: ring
+
+	While True
+
+		See " 
+			Main Menu
+			---------
+			(1) Say Hello
+			(2) About
+			(3) Exit
+
+		    " Give nOption
+
+		Switch nOption
+		On 1 
+			See "Enter your name : " 
+			Give name 
+			See "Hello " + name + nl
+		On 2 
+			See "Sample : using while loop" + nl
+		On 3 
+			Bye
+		Other 
+			See "bad option..." + nl
+		Off
+	End
+
+.. index:: 
+	pair: 制御構造 - 第一形式; For ループ
+
+* For ループ
+
+文法:
+
+.. code-block:: ring
+
+	for 識別子=式 to 式 [step 式]
+		ステートメント・ブロック
+	next
+
+用例:
+
+.. code-block:: ring
+
+	# 1 ～ 10 までの数値を表示します。
+	for x = 1 to 10	 see x + nl  next
+
+用例:
+
+.. code-block:: ring
+
+	# 動的ループ
+	See "Start : " give nStart       
+	See "End   : " give nEnd
+	See "Step  : " give nStep
+	For x = nStart to nEnd Step nStep
+		see x + nl
+	Next
+
+用例:
+
+.. code-block:: ring
+
+	# 0 ～ 10 までの偶数値を表示します。
+	for x = 0 to 10 step 2
+		see x + nl
+	next
+
+用例:
+
+.. code-block:: ring
+
+	# 10 ～ 0 までの偶数値を表示します。
+	for x = 10 to 0 step -2
+		see x + nl
+	next
+
+
+.. index:: 
+	pair: 制御構造 - 第一形式; For in ループ
+
+* For in ループ
+
+文法:
+
+.. code-block:: ring
+
+	for 識別子 in リストまたは文字列  [step 式]
+		ステートメント・ブロック
+	next
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:10                     # 1 ～ 10 までの数値があるリストを作成します。
+	for x in aList see x + nl  next  # 1 ～ 10 までの数値を表示します。
+
+.. index:: 
+	pair: 制御構造 - 第一形式; Step オプション
+
+For in での Step オプションの用法
+=====================================
+
+For in で Step オプションを使うと、繰り返しのたびに対象となった項目の数値における処理を省きます。
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:10    # 1 ～ 10 までの数値を有するリストを作成します。
+	# リスト内にある奇数の項目を表示します。
+	for x in aList step 2
+		see x + nl  
+	next  
+
+
+.. index:: 
+	pair: 制御構造 - 第一形式; For in でのリスト変更方法
+
+For in でのリスト変更方法
+=========================
+
+(For in) は項目を参照で取得します。
+
+つまり、ループの内側で項目の読み取りと編集ができます。
+	
+用例:
+
+.. code-block:: ring
+
+	aList = 1:5     # 1 ～ 5 までの数値を有するリストを作成します。
+	# リストの数値を文字列へ置換します。
+	for x in aList  
+		switch x
+		on 1  x = "one"
+		on 2  x = "two"
+		on 3  x = "three"
+		on 4  x = "four"
+		on 5  x = "five"
+		off
+	next
+	see aList	# リストの項目を表示します。
+
+.. index:: 
+	pair: 制御構造 - 第一形式; Do ～ Again ループ
+
+Do ～ Again ループ
+==================
+
+文法:
+
+.. code-block:: ring
+	
+	do
+		ステートメント・ブロック
+	again 式
+
+用例:
+
+.. code-block:: ring
+
+	x = 1 
+	do 
+		see x + nl 
+		x++ 
+	again x <= 10
+
+.. index:: 
+	pair: 制御構造 - 第一形式; Exit 命令
+
+Exit 命令
+=========
+
+一階層以上のループの外側へ脱出します。
+
+
+文法:
+
+.. code-block:: ring
+
+	exit  [式]	# ループの内側
+
+
+用例:
+
+.. code-block:: ring
+
+	for x = 1 to 10
+		see x + nl
+		if x = 5 exit ok
+	next
+
+.. index:: 
+	pair: 制御構造 - 第一形式; 二階層のループからの脱出
+
+二階層のループからの脱出
+========================
+
+この用例では Exit 命令で二階層のループから一気に脱出する方法を示します。
+
+用例:
+
+.. code-block:: ring
+
+	for x = 1 to 10
+		for y = 1 to 10
+			see "x=" + x + " y=" + y + nl
+			if x = 3 and y = 5
+				exit 2	   # 二階層のループから脱出
+			ok
+		next
+	next			
+
+.. index:: 
+	pair: 制御構造 - 第一形式; Loop 命令
+
+Loop 命令
+=========
+
+次のループの繰り返し処理を飛ばすために使用されます。
+
+文法:
+
+.. code-block:: ring
+
+	loop [式]       # ループの内側
+
+用例:
+
+.. code-block:: ring
+
+	for x = 1 to 10
+		if x = 3
+			see "Number Three" + nl
+			loop
+		ok
+		see x + nl
+	next
+
+.. index:: 
+	pair: 制御構造 - 第一形式; 短絡評価
+
+短絡評価
+========
+
+論理演算子 and/or は `短絡評価 <https://ja.wikipedia.org/wiki/短絡評価>`_ となります。
+
+AND 演算子において最初の引数が 0 ならば、
+次の引数の評価は不要であるため、結果は 0 です。
+
+OR 演算子において最初の引数が 1 ならば、
+次の引数の評価は不要であるため、結果は 1 です。
+
+用例:
+
+.. code-block:: ring
+
+	/* 実行結果
+	** nice 
+	** nice 
+	** great	
+	*/
+
+	x = 0 y = 10
+
+	if (x = 0 and nice()) and (y = 10 and nice())
+		see "great" + nl
+	ok
+
+	func nice  see "nice" + nl   return 1
+
+
+用例:
+
+.. code-block:: ring
+
+	# 実行結果なし
+
+	x = 0 y = 10
+
+	if (x = 1 and nice()) and (y = 10 and nice())
+		see "great" + nl
+	ok
+
+	func nice  see "nice" + nl   return 1
+
+
+用例:
+
+.. code-block:: ring
+
+	/* 実行結果
+	** nice
+	** great
+	*/
+ 
+	x = 0 y = 10
+
+	if (x = 0 and nice()) or (y = 10 and nice())
+		see "great" + nl
+	ok
+
+	func nice  see "nice" + nl  return 1			
+
+
+.. index:: 
+	pair: 制御構造 - 第一形式; 評価方法の解説
+
+評価方法の解説
+==============
+
+* True, False, nl と NULL は言語で定義済みの変数です。
+
+* True = 1
+
+* False = 0
+
+* nl = 改行
+
+* NULL = 空文字列 = “”
+
+* 0 (False) は以外はすべて True として評価されます。
+
+用例:
+
+.. code-block:: ring
+
+	# 実行結果 = message from the if statement
+
+	if 5	# 非ゼロ (0) であるため 5 は true として評価されます。
+		see "message from the if statement" + nl
+	ok

@@ -1,0 +1,68 @@
+.. index:: 
+     single: RingMurmurHash 関数リファレンス; はじめに
+
+===============================
+RingMurmurHash 関数リファレンス
+===============================
+
+Murmurhash 拡張機能では MurmurHash ライブラリの全機能を扱えます。
+
+.. index:: 
+     pair: RingMurmurHash 関数リファレンス; MurmurHash1 関数
+
+MurmurHash1 関数
+=====================
+
+uint32_t murmurhash1(string key, int seed, [bool return_type]);
+
+uint32_t murmurhash1_aligned(string key, int seed, [bool return_type]);
+
+
+.. index:: 
+     pair: RingMurmurHash 関数リファレンス; MurmurHash2 関数
+
+MurmurHash2 関数
+=====================
+
+uint32_t murmurhash2(string key, int seed, [bool return_type]);
+
+uint32_t murmurhash2a(string key, int seed, [bool return_type]);
+
+uint64_t murmurhash64a(string key, int seed, [bool return_type]);
+
+uint64_t murmurhash64b(string key, int seed, [bool return_type]);
+
+uint32_t murmurhash_neutral2(string key, int seed, [bool return_type]);
+
+uint32_t murmurhash_aligned2(string key, int seed, [bool return_type]);
+
+.. index:: 
+     pair: RingMurmurHash 関数リファレンス; MurmurHash3 関数
+
+MurmurHash3 関数
+=====================
+
+uint32_t murmurhash3_x86_32(string key, int seed, [bool return_type]);
+
+list murmurhash3_x86_128(string key, int seed, [bool return_type]);
+
+list murmurhash3_x64_128(string key, int seed, [bool return_type]);
+
+第三仮引数はオプション扱いであり、返値の型を設定するためのものです。この仮引数はブール値 [ true, false ] を受け取ります。 true ならば16進数値を返し、 false ならば整数値を返します。
+
+.. index:: 
+     pair: RingMurmurHash 関数リファレンス; 用例
+
+用例
+=======
+
+
+.. code-block:: ring
+
+	load "murmurhashlib.ring"
+
+	key = "Ring Language"
+
+	see murmurhash3_x86_32(key, 0, 0) + nl // 実行結果: 1894444853
+	see murmurhash3_x86_32(key, 0, 1) + nl // 実行結果: 70eaef35
+

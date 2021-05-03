@@ -1,0 +1,159 @@
+.. index:: 
+	single: C/C++ プログラムへ Ring を組み込むには; はじめに
+
+======================================
+C/C++ プログラムへ Ring を組み込むには
+======================================
+
+この関数により C/C++ プログラムから Ring を使えます。
+
+.. code-block:: C
+
+	RingState *ring_state_init();
+	ring_state_runcode(RingState *pState,const char *cCode);
+	ring_state_delete(RingState *pState);
+
+.. index:: 
+	pair: C/C++ プログラムへ Ring を組み込むには; Ring のステート
+
+Ring のステート
+================
+
+考えかたとしては ring_state_init() で Ring ステートの新規作成後に、
+ring_state_runcode() 関数を呼び出すことで、同一ステートの Ring コードの実行します。
+処理完了後に ring_state_delete() を呼び出して、メモリを解放します。
+
+用例:
+
+.. code-block:: C
+
+	#include "ring.h"
+	#include "stdlib.h"
+	int main(int argc, char *argv[])
+	{	
+	  RingState *pState = ring_state_init();
+	  printf("welcome\n");
+	  ring_state_runcode(pState,"see 'hello world from the ring programming language'+nl");
+	  ring_state_delete(pState);
+	}
+
+実行結果:
+
+.. code-block:: C
+
+	welcome
+	hello world from the ring programming language
+
+.. index:: 
+	pair: C/C++ プログラムへ Ring を組み込むには; Ring ステート関数
+
+Ring ステート関数
+=================
+
+Ring の API にはステートの作成と削除を行う関数です。
+また、新しい変数の作成と変数の値を取得するための関数もあります。
+
+.. code-block:: C
+
+	RingState * ring_state_init ( void ) ;
+	RingState * ring_state_delete ( RingState *pRingState ) ;
+	void ring_state_runcode ( RingState *pRingState,const char *cStr ) ;
+	List * ring_state_findvar ( RingState *pRingState,const char *cStr ) ;
+	List * ring_state_newvar ( RingState *pRingState,const char *cStr ) ;
+	int  ring_state_main ( int argc, char *argv[] ) ;
+	void ring_state_runfile ( RingState *pRingState,const char *cFileName ) ;
+	void ring_state_runobjectfile ( RingState *pRingState,const char *cFileName ) ;
+	void ring_state_runobjectstring ( RingState *pRingState,char *cString,const char *cFileName ) ;
+
+.. index:: 
+	pair: C/C++ プログラムへ Ring を組み込むには; Ring ステート変数
+
+Ring ステート変数
+=================
+
+同一プログラム内で複数の Ring のステートを作成できます。また、変数の作成と値の変更もできます。
+
+ring_state_findvar() 関数は変数のリストを取得します。
+
+ring_state_newvar() 関数は新しい変数を作成します。
+
+用例:
+
+.. code-block:: C
+
+	#include "ring.h"
+	#include "stdlib.h"
+	
+	int main(int argc, char *argv[])
+	{
+	  List *pList;
+
+  	  RingState *pState = ring_state_init();
+	  RingState *pState2 = ring_state_init();
+
+	  printf("welcome\n");
+	  ring_state_runcode(pState,"see 'hello world from the ring programming language'+nl");
+
+	  printf("Again from C we will call ring code\n");
+	  ring_state_runcode(pState,"for x = 1 to 10 see x + nl next");
+
+	  ring_state_runcode(pState2,"for x = 1 to 5 see x + nl next");
+
+	  printf("Now we will display the x variable value from ring code\n");
+	  ring_state_runcode(pState,"see 'x value : ' + x + nl ");
+	  ring_state_runcode(pState2,"see 'x value : ' + x + nl ");
+
+	  pList = ring_state_findvar(pState,"x");
+
+	  printf("Printing Ring variable value from C , %.0f\n",
+		  	ring_list_getdouble(pList,RING_VAR_VALUE));
+
+	  printf("now we will set the ring variable value from C\n");
+	  ring_list_setdouble(pList,RING_VAR_VALUE,20);
+
+	  ring_state_runcode(pState,"see 'x value after update : ' + x + nl ");
+
+	  pList = ring_state_newvar(pState,"v1");
+	  ring_list_setdouble(pList,RING_VAR_VALUE,10);	
+
+	  pList = ring_state_newvar(pState,"v2");
+	  ring_list_setdouble(pList,RING_VAR_VALUE,20);
+
+	  ring_state_runcode(pState,"see 'v1 + v2 = ' see v1+v2 see nl");
+
+	  ring_state_runcode(pState,"see 'end of test' + nl");
+
+	  ring_state_delete(pState);
+	  ring_state_delete(pState2);
+	}
+
+実行結果:
+
+.. code-block:: ring
+
+	welcome
+	hello world from the ring programming language
+	Again from C we will call ring code
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+	1
+	2
+	3
+	4
+	5
+	Now we will display the x variable value from ring code
+	x value : 11
+	x value : 6
+	Printing Ring variable value from C , 11
+	now we will set the ring variable value from C
+	x value after update : 20
+	v1 + v2 = 30
+	end of test

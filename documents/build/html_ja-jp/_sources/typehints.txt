@@ -1,0 +1,145 @@
+.. index:: 
+	single: 型ヒントライブラリ; 型ヒントライブラリについて
+
+==========================
+型ヒントライブラリについて
+==========================
+
+型ヒントライブラリの用法です。
+
+
+.. index:: 
+	pair: 型ヒントライブラリ; 型ヒントを使う理由
+
+型ヒントを使う理由
+==================
+
+このライブラリはソースコードへ型情報を追加します。
+このようなツールで非常に便利です。
+
+* コードエディタ
+* 静的解析
+
+.. note:: Ring は動的言語であり、コンパイラによる型検査は行われません。
+
+.. index:: 
+	pair: 型ヒントライブラリ; 用例
+
+用例
+====
+
+この用例は型ヒントライブラリの用法です。
+
+.. code-block:: ring
+
+	load "typehints.ring"
+
+	see sum(3,4) + nl ;
+	see sayHello("Mahmoud");
+
+	int func sum(int x,int y) {
+		return x+y ;
+	}
+
+	string func sayHello(string name) {
+		return "Hello " + name ;
+	}
+
+.. index:: 
+	pair: 型ヒントライブラリ; ユーザ型
+
+ユーザ型
+========
+
+型ヒントライブラリは非常に強力であり、自動的にユーザ型 (クラス) へ対応します。
+
+用例:
+
+.. code-block:: ring
+
+	load "typehints.ring"
+
+	import mypackage 
+
+	test()  { main([:one,:two,:three]) }
+
+	myclass func test() {
+		see "Testing User Types!" + nl
+		return new myclass
+	}
+
+	package mypackage {
+		public class myclass {
+			public static void func main(list args) {
+				see "welcome" + nl
+				see args
+			}
+		}
+	}
+
+.. index:: 
+	pair: 型ヒントライブラリ; コードの内側で型を使うには
+
+コードの内側で型を使うには
+==========================
+
+また、コードの内側で型を使えます (関数プロトタイプだけに限定されません)。
+
+用例:
+
+.. code-block:: ring
+
+	load "typehints.ring"
+
+	int 	sum = sum(3,4)
+	string 	msg = sayHello("Mahmoud")
+
+	see "Sum = " + sum + nl + msg + nl
+
+
+	int func sum(int x,int y) {
+		return x+y ;
+	}
+
+	string func sayHello(string name) {
+		return "Hello " + name ;
+	}
+
+.. index:: 
+	pair: 型ヒントライブラリ; 規則
+
+規則
+====
+
+* 関数プロトタイプ : 型を使うには、引数の前後を ‘(‘ と ‘)’ で必ず囲んでください。
+* 関数のコード : 型を使うには、必ず変数の値を設定してください (代入)。
+
+この型はライブラリで定義してあります。
+
+.. code-block:: ring
+
+	# 低水準型
+	char 		 
+	unsigned 	 
+	signed 		 
+	int 		 
+	short 		 
+	long 		 
+	float 		 
+	double 		 
+	void 		 
+
+	# 高水準型
+	string 		 
+	list 		 
+	number 		 
+	object		 
+
+	# その他
+	public		 
+	static		 
+	abstract	 
+	protected	 
+	override	 
+
+

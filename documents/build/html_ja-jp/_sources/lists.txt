@@ -1,0 +1,793 @@
+.. index:: 
+	single: リスト; はじめに
+
+======
+リスト
+======
+
+リストの用法です。
+
+.. index:: 
+	pair: リスト; リストの作成
+
+リストの作成
+============
+
+角括弧の内側にリストを定義することで、新しいリストを作成できます。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [1,2,3,4,5]
+
+また : 演算子や、
+
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:5
+	aList2 = "a":"z"
+
+用例:
+
+.. code-block:: ring
+
+	aList = 5:1
+	aList2 = "z":"a"
+
+list() 関数でも新しいリストを作成できます。
+
+文法:
+
+.. code-block:: ring
+
+	list = list(size)
+
+二次元リストを作成するには、
+
+.. code-block:: ring
+
+	list = list(nRows,nCols)
+
+用例 (1)
+
+.. code-block:: ring
+
+	aList = list(10)	# aList で 10 項目を割り当てます。
+
+用例 (2)
+
+.. code-block:: ring
+
+	aList = list(5,4)	# 5 行 4 列からなる二次元リストを作成します。
+
+.. note:: リストのインデックスは 1 が始点となります。
+
+.. index:: 
+	pair: リスト; リスト項目の追加
+
+項目の追加
+==========
+
+Add() 関数はリストへ新しい項目を追加します。
+
+文法:
+
+.. code-block:: ring
+
+	Add(List,Item)
+
+
+用例:
+
+.. code-block:: ring
+
+	aList = ["one","two"]
+	add(aList,"three")
+	see aList
+
+\+ 演算子も使えます。
+
+文法:
+
+.. code-block:: ring
+
+	リスト + 項目
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:10    # 1 ～ 10 までの数値を有するリストを作成します。
+	aList + 11      # リストへ数値 11 を追加
+	see aList       # リストを表示
+
+.. index:: 
+	pair: リスト; リストのサイズ取得
+
+リストのサイズ取得
+==================
+
+len() 関数はリストのサイズを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Len(List)
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:20  see len(aList)  # 20 を表示
+
+.. index:: 
+	pair: リスト; リスト項目の削除
+
+リスト項目の削除
+================
+
+del() 関数はリストから項目を削除します。
+
+文法:
+
+.. code-block:: ring
+
+	del(list,index)
+
+用例:
+
+.. code-block:: ring
+
+	aList = ["one","two","other","three"]
+	Del(aList,3)	# 3 番目の項目を削除
+	see aList   	# one two three を表示
+
+
+.. index:: 
+	pair: リスト; リスト項目の取得
+	
+リスト項目の取得
+================
+
+リストから項目を取得するには、
+
+文法:
+
+.. code-block:: ring
+
+	List[Index]
+
+用例:
+
+.. code-block:: ring
+
+	aList = ["Cairo","Riyadh"]
+	see "Egypt : " + aList[1] + nl +
+	    "KSA   : " + aList[2] + nl
+
+.. index:: 
+	pair: リスト; リスト項目への代入
+
+リスト項目への代入
+==================
+
+リストの項目へ値を代入するには、
+
+文法:
+
+.. code-block:: ring
+
+	List[Index] = Expression
+
+用例:
+
+.. code-block:: ring
+
+	aList = list(3)	# 三項目を有するリストを作成します。
+	aList[1] = "one" aList[2] = "two" aList[3] = "three"
+	see aList
+
+.. index:: 
+	pair: リスト; 検索
+
+検索
+====
+
+Find() 関数はリスト内の項目を検索します。
+
+文法:
+
+.. code-block:: ring
+
+	Find(List,ItemValue)                    ---> 項目のインデックス
+	Find(List,ItemValue,nColumn)            ---> nColumn を検索して項目のインデックスを返します。
+	Find(List,ItemValue,nColumn,cAttribute) ---> 項目のインデックス
+
+用例:
+
+.. code-block:: ring
+
+	aList = ["one","two","three","four","five"]
+	see find(aList,"three")		# 3 を表示
+
+用例:
+
+.. code-block:: ring
+
+	mylist = [["one",1],
+		  ["two",2],
+		  ["three",3]]
+
+	see find(mylist,"two",1) + nl		# 2 を表示
+	see find(mylist,2,2) + nl		# 2 を表示
+
+また binarysearch() 関数は整列後のリストを検索します。
+
+文法:
+
+.. code-block:: ring
+
+	BinarySearch(List,ItemValue)         ---> 項目のインデックス
+	BinarySearch(List,ItemValue,nColumn) ---> nColumn を検索して項目のインデックスを返します。
+
+用例:
+
+.. code-block:: ring
+
+	aList = ["one","two","three","four","five"]
+	aList = sort(aList)
+	see binarysearch(aList,"three")
+
+実行結果:
+
+.. code-block:: ring
+
+	five
+	four
+	one
+	three
+	two
+	4
+
+.. index:: 
+	pair: リスト; 整列
+
+整列
+====
+
+Sort() 関数はリストを整列します。
+
+文法:
+
+.. code-block:: ring
+
+	Sort(List)                    ---> 整列後のリスト
+	Sort(List,nColumn)            ---> nColumn に基づいて整理されたリスト
+	Sort(List,nColumn,cAttribute) ---> 属性に基づいて整列されたリスト
+
+用例:
+
+.. code-block:: ring
+
+	aList = [10,12,3,5,31,15]
+	aList = sort(aList) see aList # 3 5 10 12 15 31 を表示
+
+文字列の整列もできます。
+
+用例:
+
+.. code-block:: ring
+
+	mylist = ["mahmoud","samir","ahmed","ibrahim","mohammed"]
+	see mylist                # 整列前のリストを表示
+	mylist = sort(mylist)     # リストの整列
+	see "list after sort"+nl
+	see mylist                # ahmed ibrahim mahmoud mohammed samir を表示
+
+特定の列に基づいてリストを整列できます。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [ ["mahmoud",15000] ,
+		  ["ahmed", 14000 ] ,
+		  ["samir", 16000 ] ,
+		  ["mohammed", 12000 ] ,
+	 	  ["ibrahim",11000 ] ]
+
+	aList2 = sort(aList,1)
+	see aList2
+
+実行結果:
+
+.. code-block:: ring
+
+	ahmed
+	14000
+	ibrahim
+	11000
+	mahmoud
+	15000
+	mohammed
+	12000
+	samir
+	16000
+
+
+.. index:: 
+	pair: リスト; 反転
+
+反転
+====
+
+Reverse() 関数はリストを反転します。
+
+文法:
+
+.. code-block:: ring
+
+	Reverse(List) ---> 反転されたリスト
+
+用例:
+
+.. code-block:: ring
+
+	aList = [10,20,30,40,50]
+	aList = reverse(aList)
+	see aList 	# 50 40 30 20 10 を表示
+
+.. index:: 
+	pair: リスト; リスト項目の挿入
+
+リスト項目の挿入
+================
+
+Insert() 関数はリストへ項目を挿入します。
+
+文法:
+
+.. code-block:: ring
+
+	Insert(List,Index,Item)
+
+**\インデックスの後**\ に項目を挿入します。
+
+用例:
+
+.. code-block:: ring
+
+	aList = ["A","B","D","E"]
+	insert(aList,2,"C")    # インデックス 2 の後に位置 3 へ "C" を挿入します。
+	see aList              # A B C D E を表示
+
+
+また、 insert(aList, 0 ,Value) で **\リストの先頭位置 (最初)**\に項目を挿入します
+
+.. code-block:: ring
+
+	aList = 1:5
+	insert(aList,0,0)  // リスト、先頭位置 (0)、挿入する項目のデータ
+	See aList # 0 ～ 5 までの数値を表示します。
+
+
+.. index:: 
+	pair: リスト; 多重リスト
+
+多重リスト
+==========
+
+リストは他のリストを有しています。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [ 1 , [10,20,30] , 5 , [100,1000,5000] ]
+	aList2 = [
+	"one","two", 
+	[3,4],
+	[20,30], ["three",
+		  "four",
+		  "five",[100,200,300]
+                 ]
+	]
+	
+	see aList[2]            # 10 20 30 を表示
+	see aList[4][3] + nl    # 5000 を表示
+	see aList2[5][2] + nl   # four を表示
+	see aList2[5][4][3]     # 300 を表示
+
+.. index:: 
+	pair: リスト; リストのコピー
+
+リストのコピー
+==============
+
+代入演算子はリスト (多重リストも含む) をコピーします。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [
+	"one","two", 
+	[3,4],
+	[20,30], ["three",
+		  "four",
+		  "five",[100,200,300]
+                 ]
+	]
+
+	aList2 = aList          # aList から aList2 へコピー
+	aList2[5] = "other"     # 項目番号 five を変更
+	see aList2[5] + nl      # other を表示
+	see aList[5]            # three four five 100 200 300 を表示
+
+
+.. index:: 
+	pair: リスト; 第一級リスト
+
+第一級リスト
+============
+
+リストは `第一級オブジェクト <https://ja.wikipedia.org/wiki/第一級オブジェクト>`_ であるため、リストへ変数を格納したり、関数へリストを渡したり、さらに関数からリストを返せます。
+
+用例:
+
+.. code-block:: ring
+
+	aList = duplicate( [1,2,3,4,5] )
+	see aList[10] + nl		  # 5 を表示
+
+	see mylist()			  # 10 20 30 40 50 を表示
+	
+	func duplicate list
+		nMax = len(list)
+		for x = 1 to nMax
+			list + list[x]
+		next
+		return list
+
+	func mylist return [10,20,30,40,50]
+
+.. index:: 
+	pair: リスト; リストを定義時に使用するには
+		
+リストを定義時に使用するには
+============================
+
+初回にリストを定義するときに、リストとリスト項目を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [ [1,2,3,4,5] , aList[1] , aList[1] ]
+	see aList	# 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 を表示
+	
+用例:
+
+.. code-block:: ring
+
+	x = [ 1, 2, x ]
+	? x		# 1 2 1 2 を表示
+	? len(x)	# 3 を表示
+	? x[1]		# 1 を表示
+	? x[2]		# 2 を表示
+	? x[3]		# 1 2 を表示
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	2
+	1
+	2
+
+	3
+	1
+	2
+	1
+	2
+
+	
+.. index:: 
+	pair: リスト; リストを関数へ渡すには
+
+リストを関数へ渡すには
+======================
+
+リストは参照渡しにより関数へ渡されるため、呼び出された関数側でリストの処理や変更ができます。
+
+用例:
+
+.. code-block:: ring
+
+	func main
+		aList = [1,2,3,4,5]     # Main 関数内でローカルなリストを作成します。
+		myfunc(aList)           # リストを参照渡しにすることで、関数を呼び出します。
+		see aList               # 1 2 3 4 5 6 7 8 9 10 を表示します。
+
+	func myfunc list
+		list + [6,7,8,9,10]
+
+
+.. index:: 
+	pair: リスト; 文字列インデックスによるリストへのアクセス
+
+文字列インデックスによるリストへのアクセス
+==========================================
+
+項目のインデックスを数値で決定することで、項目の値の設定または項目を取得できますが、
+二つの項目を有するリストであり、かつ最初の項目が文字列から構成されている項目ならば、
+文字列インデックスで項目へアクセスできます。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [ ["one",1] , ["two",2] , ["three",3] ]
+	see aList["one"] + nl +
+	    aList["two"] + nl +
+	    aList["three"] 	# 1 2 3 の表示
+
+この種類のリストは演算子 : および = で定義したほうがより優れたシンタックスになります。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [ :one = 1 , :two = 2 , :three = 3 ]
+	see aList["one"] + nl +
+	    aList["two"] + nl +
+	    aList["three"] + nl	# 1 2 3 の表示
+	see aList[1]		# one 1 表示
+
+.. tip:: 識別子 (単語) の先頭に : (コロン) を付けるとリテラルとして扱われます。
+
+.. note:: = で二つの項目を有するリストを定義すると最初の項目は左辺となり、
+	次の項目は右辺となるリストを作成します。
+
+文字列インデックスでリストへ新しい項目を追加できます。
+
+用例:
+
+.. code-block:: ring
+	
+	aList = []
+	aList["Egypt"] = "Cairo"
+	aList["KSA"] = "Riyadh"
+	see aList["Egypt"] + nl +       # Cairo を表示
+	aList["KSA"] + nl               # Riyadh を表示
+
+.. index:: 
+	pair: リスト; リストによる仮引数または実引数の渡しかた
+
+リストによる仮引数または実引数の渡しかた
+========================================
+
+この種類のリストでは、仮引数の順序は重要ではないため、 
+関数へ渡すための仮引数としては非常に優れています (順序の変更ができます)。
+
+仮引数は、オプション扱いの場合があります。
+
+用例:
+
+.. code-block:: ring
+
+	myconnect (  [ :server = "myserver.com" , :port = 80 , 
+                       :username = "mahmoud" , :password = "password" ] ) 
+
+	func myconnect mypara
+	
+		# 接続の詳細を表示
+		see "User Name : " + mypara[:username] + nl +
+		    "Password  : " + mypara[:password] + nl +
+                    "Server    : " + mypara[:server] + nl +
+                    "Port      : " + mypara[:port]
+.. index:: 
+	pair: リスト; リスト配列による仮引数または実引数の渡しかた
+
+リスト配列による仮引数または実引数の渡しかた
+============================================
+
+配列形式により、関数へ仮引数また実引数を渡します。
+
+用例:
+
+.. code-block:: ring
+
+     myList = [5,7,3,9]    ### 配列は実引数または仮引数のリストです。
+     result = sum(myList)
+     See "Sum result: "+ result +n
+
+     func sum(aList)
+       acc = 0
+       sizeList = len(aList)
+   
+       for i = 1 to sizeList
+          See aList[i] +nl
+          acc = acc + aList[i]
+       next
+     return acc
+ 
+
+.. index:: 
+	リスト: リストまたはハッシュテーブルを引数として返すには
+
+リストまたはハッシュテーブルを引数として返すには
+================================================
+	
+関数から配列またはハッシュ形式で引数を返します。
+
+用例:
+
+.. code-block:: ring
+
+	sudoku = [  [2,9,0],
+		    [0,0,1],
+		    [0,0,0] ]
+
+	aOutput = myFunctionArray(sudoku)
+		See "Return Array: T/F: "+ aOutput[1] +" Row: "+ aOutput[2] +" Col: "+ aOutput[3] +nl
+
+	aOutput = myFunctionHash(sudoku)
+		See "Return Hash.: T/F: "+ aOutput[:lValue] +" Row: "+ aOutput[:nRow] +" Col: "+ aOutput[:nCol] +nl
+
+	###--------------------------------
+	### isSolvedSoduku - 配列を返します
+
+	Func myFunctionArray(sudoku)
+	    for Row = 1 to 9
+		for Col = 1 to 9
+		    if sudoku[Row][Col] = 0
+
+			//-----------------------------
+			// 三要素から成る配列を返します
+			return [False, Row, Col]                    
+		    ok
+		next
+	    next
+	return [True, Row, Col]
+
+	###------------------------------------
+	### isSolvedSoduku - ハッシュを返します
+
+	Func myFunctionHash(sudoku)
+	    for Row = 1 to 3
+		for Col = 1 to 3
+		    if sudoku[Row][Col] = 0
+
+			//-----------------------------------------
+			// 三要素から成るハッシュテーブルを返します
+			return  [   :lValue = False, 
+				    :nRow   = Row, 
+				    :nCol   = Col   
+				]
+		    ok
+		next
+	    next
+
+	return  [ :lValue = False, :nRow = Row, :nCol = Col ]           
+
+	###-----------------------------
+
+.. index:: 
+	pair: リスト; リストと再帰による多次元配列の作成方法
+
+リストと再帰による多次元配列の作成方法
+======================================
+	
+指定の大きさによる多次元配列でも関数の再帰で作成できます。
+
+用例:
+
+.. code-block:: ring
+
+        ###---------------------------------------------------------------------------------
+        ### 配列の作成 -- 指定の大きさの次元:  三次元、四次元、五次元など
+
+        dimList = [4,3,4]
+        bList   = createDimList(dimList)
+	
+        ###---------------------------------------------------------------------------------
+        ### 1 のカウンタを使用して配列へ代入 ,  4x4x4 = 256 , 2x3x4x5x6 = 720
+
+        Counter = 1
+
+        for Col=1 to dimList[1]
+          for Row=1 to dimList[2]
+            for Dep=1 to dimList[3]
+                    blist[Col][Row][Dep] = Counter
+                    Counter++
+            next
+          next
+        next
+
+        ###---------------------------------------------------------------------------------
+        ### ブロック形式で配列の要素を表示します。
+
+        for Col=1 to dimList[1]
+          for Row=1 to dimList[2]
+            for Dep=1 to dimList[3]
+                    See bList[Col][Row][Dep] See " "
+            next
+	    See nl
+          next
+            See nl
+        next
+
+        ###=================================================================================
+        ### 関数
+
+        ###---------------------------------------------------------------------------------
+        ### 次元をもつ配列を再帰的に作成します。
+        ### 配列の次元を渡すことで呼び出します: dimList = [2,3,4,5]
+        ### 最初のエントリーで全ての反復呼び出しの降下を行い newParms を作成します。
+        ###
+        ### 用例:
+        ###    dimList = [4,2,3,2]                <<< 配列形式による次元の大きさと数値です。
+        ###    bList   = createDimList(dimList)   <<< 入力からの配列を使用して呼び出します。
+
+        func createDimList(dimArray)
+
+             sizeList = len(dimArray)
+
+             newParms = []
+             for i = 2 to sizeList
+                Add(newParms, dimArray[i])
+             next
+
+             alist = list(dimArray[1])
+
+             if sizeList = 1
+                return aList
+             ok
+
+             for t in alist
+                 t = createDimList(newParms)
+             next
+
+        return alist
+	
+     
+.. index:: 
+	pair: リスト; 項目の交換
+
+項目の交換
+==========
+
+Swap() 関数はリスト項目を交換します。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [:one,:two,:four,:three]
+	see aList
+	see copy("*",50) + nl
+	swap(aList,3,4)
+	see aList
+
+実行結果:
+
+.. code-block:: ring
+
+	one
+	two
+	four
+	three
+	**************************************************
+	one
+	two
+	three
+	four
+
+

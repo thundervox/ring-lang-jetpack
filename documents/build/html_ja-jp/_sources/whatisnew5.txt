@@ -1,0 +1,2119 @@
+.. index:: 
+	single: Ring 1.5 の変更履歴; はじめに
+
+===================
+Ring 1.5 の変更履歴
+===================
+
+Ring 1.5 (2017年08月21日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.5 の新機能！
+
+* Video-Music-Player アプリケーション
+* Windows StartUp Manager アプリケーション
+* Calculator アプリケーション
+* Ring ノートパッドの改善
+* StdLib の改善
+* WebLib の改善
+* RingQt の改善
+* オブジェクトライブラリの改善
+* RingFreeGLUT 拡張機能
+* RingOpenGL 拡張機能
+* 拡張機能用のコード生成器の改善
+* 拡張機能用のドキュメント生成器の改善
+* Ring 仮想計算機 - トレース関数
+* トレースライブラリとインタラクティブデバッガ
+* より柔軟性のあるシンタックス
+* 型ヒントライブラリ
+* 品質の改善
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Video-Music-Player アプリケーション
+
+Video-Music-Player アプリケーション
+===================================
+
+Video-Music-Player アプリケーションを Applications フォルダへ追加しました。
+
+スクリーンショット:
+
+.. image:: videomusicplayer.jpg
+	:alt: Video Music Player
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Windows StartUp Manager アプリケーション
+
+Windows StartUp Manager アプリケーション
+========================================
+
+Windows StartUp Manager アプリケーション
+
+URL : https://github.com/ring-lang/WinStartupManager
+
+スクリーンショット:
+
+.. image:: winstartupman.jpg
+	:alt: Windows Startup Manager
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Calculator アプリケーション
+
+Calculator アプリケーション
+===========================
+
+Calculator アプリケーションを Applications フォルダへ追加しました。
+
+スクリーンショット:
+
+.. image:: calcapp.jpg
+	:alt: Calculator アプリケーション
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Ring ノートパッドの改善
+
+Ring ノートパッドの改善
+=======================
+
+① Ring ノートパッドは新しいスタイル、およびメインファイルツールバーを搭載しました。
+
+メインファイルツールバーの考えは、プロジェクトに複数のソースコードのファイルがある場合に
+プロジェクトのメインファイルを決定することです。
+
+この機能を使うとプロジェクトでほかのファイルを開いているときに、
+プロジェクトを実行するためにメインファイルを切り替えることなくプロジェクト (メインファイル) を実行できます。
+
+この機能を使うには、プロジェクトのメインファイルを開きます。
+
+現在のソースコードファイルをメインファイルとして設定するには Ctrl+Shift+M を押してください。
+
+プロジェクトで別のソースコードファイルを開いて修正します。
+
+プロジェクト (メインファイル) を実行したいときは Ctrl+Shift+F5 (GUI) または Ctrl+Shift+D (コンソール) を押してください。
+
+スクリーンショット:
+
+.. image:: rnote15shot1.png
+	:alt: Ring ノートパッド
+
+
+.. image:: rnote15shot2.png
+	:alt: Ring ノートパッド
+
+
+.. image:: rnote15shot3.png
+	:alt: Ring ノートパッド
+
+② 改行の正確な表示、および “Clear” ボタンを実装するために実行結果ウィンドウを更新しました。
+
+スクリーンショット: 
+
+.. image:: rnote15output.png
+	:alt: 実行結果ウィンドウ
+
+③ バックグラウンド処理で関数、クラスのリストを準備している間に、
+大規模ファイルをすばやく開いて切り替えることができるようにするために Ring ノートパッドを更新しました。
+
+スクリーンショット: 
+
+.. image:: rnote15events.png
+	:alt: Ring ノートパッド - 大規模ファイル
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; StdLib の改善
+
+StdLib の改善
+=============
+
+新しい関数
+
+* Print2Str()
+* ListAllFiles()
+* SystemCmd()
+
+① 新しい関数 Print2Str() を StdLib へ追加しました。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	world = "World!"
+	mystring = print2str("Hello, #{world} \nIn Year \n#{2000+17} \n")
+
+	see mystring + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	Hello, World!
+	In Year
+	2017
+
+② 新しい関数 ListAllFiles() を StdLib へ追加しました。
+
+この関数を使うとフォルダにあるファイルのグループ、およびそのサブフォルダを手軽に処理できます。
+
+用例:
+
+.. code-block:: ring
+
+            load "stdlib.ring"
+            aList = ListAllFiles("c:/ring/ringlibs","ring") # *.ring のみ
+            aList = sort(aList)
+            see aList
+
+用例:
+
+.. code-block:: ring
+
+            load "stdlib.ring"
+            see listallfiles("b:/ring/ringlibs/weblib","") # 全ファイル
+
+
+③ 新しい関数 SystemCmd() を StdLib へ追加しました。
+
+この関数は System() 関数と同じくシステムコマンドを実行できますが、
+実行結果は文字列で返されます。
+
+用例:
+
+.. code-block:: ring
+
+	cYou = SystemCmd("whoami")
+	See "SystemCmd: whoami ====="+ nl + cYou +nl
+
+実行結果:
+
+.. code-block:: ring
+
+	SystemCmd: whoami =====
+	desktop-umberto\umberto
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; WebLib の改善
+
+WebLib の改善
+=============
+
+HTMLPage クラスを搭載するために WebLib を更新しました。
+
+このクラスは標準出力を経由せずに HTML ドキュメントを作成します。
+
+ウェブアプリケーションだけで WebLib を使うときの代用になります。
+
+また、コンソール、 GUI、モバイル用のアプリケーションでも使えます。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+	load "weblib.ring"
+
+	import System.Web
+
+	func main
+
+		mypage = new HtmlPage {
+			h1 { text("Customers Report") }
+			Table
+		        {
+        		          style = stylewidth("100%") + stylegradient(4)
+                		  TR
+	                	  {
+        	                	TD { WIDTH="10%" text("Customers Count : " )  }
+	                	        TD { text (100) }
+		                  }
+        		}
+	
+			Table
+        		{
+	                	  style = stylewidth("100%") + stylegradient(26)
+		                  TR
+        		          {
+					style = stylewidth("100%") + stylegradient(24)
+        	                	TD { text("Name " )  }
+	        	                TD { text("Age" ) }
+					TD { text("Country" ) }
+					TD { text("Job" ) }	
+					TD { text("Company" ) }
+        		          }
+				  for x =  1 to 100
+	        	          	TR
+                		  	{
+                    			    	TD { text("Test" )  }
+                    				TD { text("30" ) }
+						TD { text("Egypt" ) }
+						TD { text("Sales" ) }	
+						TD { text("Future" ) }
+        	          		}
+				  next
+		        }
+
+		}
+
+		write("report.html",mypage.output())
+
+このクラスにより WebLib と GUILib で手軽にレポートを作成できます。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+	load "weblib.ring"
+	load "guilib.ring"
+
+	import System.Web
+	import System.GUI
+
+	new qApp {
+		open_window(:CustomersReportController)
+		exec()
+	}
+
+	class CustomersReportController
+
+		oView = new CustomersReportView
+
+		func Start
+			CreateReport()
+
+		func CreateReport
+			mypage = new HtmlPage {
+				h1 { text("Customers Report") }
+				Table
+				{
+					style = stylewidth("100%") + stylegradient(4)
+					TR
+					{
+						TD { WIDTH="10%" 
+							text("Customers Count : " )  }
+						TD { text (100) }
+					}
+				}
+				Table
+				{
+					style = stylewidth("100%") + stylegradient(26)
+					TR
+					{
+						style = stylewidth("100%") +
+							stylegradient(24)
+						TD { text("Name " )  }
+						TD { text("Age" ) }
+						TD { text("Country" ) }
+						TD { text("Job" ) }	
+						TD { text("Company" ) }
+					}
+					for x =  1 to 100
+						TR
+						{
+							TD { text("Test" )  }
+							TD { text("30" ) }
+							TD { text("Egypt" ) }
+							TD { text("Sales" ) }	
+							TD { text("Future" ) }
+						}
+					next
+				}
+			}
+			write("report.html",mypage.output())
+
+		func PrintEvent
+			printer1 = new qPrinter(0) {
+				setoutputformat(1)
+				setoutputfilename("report.pdf")
+			}
+			oView {
+				web.print(printer1)
+				web.show()
+			}
+			system ("report.pdf")
+
+	class CustomersReportView
+
+			win = new window() {
+					setwindowtitle("Report Window")
+					setgeometry(100,100,500,500)
+					web = new webview(win) {
+						setgeometry(100,100,1000,500)
+						loadpage(new qurl("file:///"+
+						currentdir()+"/report.html"))
+					}
+					new pushbutton(win) {
+							setGeometry(100,20,100,30)
+							settext("Print")
+							setclickevent(Method(:PrintEvent))
+					}
+					showMaximized()
+				}
+
+スクリーンショット:
+
+.. image:: ring15reportshot.png
+	:alt: 顧客報告書
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; RingQt の改善
+
+RingQt の改善
+=============
+
+新しいクラスを RingQt へ追加しました:
+
+* QStringRef
+* QMutex
+* QMutexLocker
+* QBuffer
+* QBluetoothAddress
+* QBluetoothDeviceDiscoveryAgent
+* QBluetoothDeviceInfo
+* QBluetoothHostInfo
+* QBluetoothLocalDevice
+* QBluetoothServer
+* QBluetoothServiceDiscoveryAgent
+* QBluetoothServiceInfo
+* QBluetoothSocket
+* QBluetoothTransferManager
+* QBluetoothTransferReply
+* QBluetoothTransferRequest
+* QBluetoothUuid
+
+用例:
+
+.. code-block:: ring
+
+	### ウェブサイト - vpic.nhtsa.dot.gov - へ VIN (Vehicle Id Number : 車両識別番号) を提出します。
+	### 返された XML データを解析します。
+	### 車両情報の結果を表示します
+
+	load "libcurl.ring"
+	load "guilib.ring"
+	load "stdlib.ring"
+
+	curl = curl_easy_init()
+
+	# request = "3G1JC5248YS251015?format=xml"  ### VIN - シボレー
+	  request = "3GYFK62847G247323?format=xml"  ### VIN - キャデラック
+
+	call_type   = "decodevinvalues/"
+	url         = "https://vpic.nhtsa.dot.gov/api/vehicles/"
+	url_request = url + call_type + request
+
+		See "URL Request: "+ url_request +nl
+
+	curl_easy_setopt(curl, curlopt_url, url_request)
+	response = curl_easy_perform_silent(curl);
+		
+		See nl +"Response Raw: "+ response +nl +nl
+
+	curl_easy_cleanup(curl)
+
+	xml = new qxmlstreamreader()
+	xml.adddata_2(response)
+
+	x = new qstringref()
+	while not xml.atend()
+		   if xml.error()
+				   see xml.errorstring() see nl
+				   exit loop
+		   ok
+
+		   x = xml.text()
+		   if not x.length() = 0
+				   see "Length: " see x.length() +" --- "
+				   see "Value: " see x.tostring() see nl
+		   ok
+
+		   xml.readnext()
+	end
+
+	get x
+
+	###------------------------------------------
+	### 実行結果:
+	#
+	# ==>Value: 115
+	# ==>Value: Results returned successfully
+	# ==>Value: VIN(s): 3G1JC5248YS251015
+	# ==>Value: 3G1JC5248YS251015
+	# ==>Value: Sedan/Saloon
+	# ==>Value: 4
+	# ==>Value: 2200.0
+	# ==>Value: 134.25223700841
+	# ==>Value: 2.2
+	# ==>Value: 4
+	# ==>Value: LN2
+	# ==>Value: CHEVROLET
+	# ==>Value: GENERAL MOTORS LLC
+	# ==>Value: Cavalier
+	# ==>Value: 2000
+	# ==>Value: Ramos Arzipe
+	# ==>Value: PASSENGER CAR
+	# ==>Value: 4
+	# ==>Value: In-Line
+	# ==>Value: 1st Row (Driver & Passenger)
+	# ==>Value: Sequential Fuel Injection (SFI)
+	# ==>Value: Mexico
+	# ==>Value: NA
+	# ==>Value: Manual
+	# ==>Value: Body Type: Sedan, 4-6 Window, Notchback (GM codes: 19, 69)
+	# ==>Value:  Name Plate: Chevrolet, Pontiac
+	# ==>Value: 0 - VIN decoded clean. Check Digit (9th position) is correct
+	# ==>Value: LAN
+	# ==>Value: 984
+	#
+	###-----------------------------------------
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; オブジェクトライブラリの改善
+
+オブジェクトライブラリの改善
+============================
+
+オブジェクトライブラリに Open_WindowInPackages() 関数を追加しました。
+
+Open_WindowInPackages() 関数は Open_Window() と同じですが、
+ウィンドウを開く前にインポートを行うパッケージの
+追加リストを決定します。
+
+文法:
+
+.. code-block:: ring
+
+	Open_WindowInPackages(cClassName,aPackagesList)
+
+用例:
+
+この用例はフォームデザイナーのソースコードから引用したものです。
+open_windowInPackages() 関数でウィンドウフラグのウィンドウを開きます。
+
+クラス名 “WindowFlagsController” とパッケージ名を決定します。
+
+ウィンドウフラグのウィンドウでは FormDesigner および System.GUI パッケージを使用しています。
+
+.. code-block:: ring
+
+	open_windowInPackages(:WindowFlagsController,[
+		"formdesigner",
+		"System.GUI"
+	])
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; RingFreeGLUT 拡張機能
+
+RingFreeGLUT 拡張機能
+=====================
+
+Ring 1.5 には FreeGLUT ライブラリへ対応するために RingFreeGLUT 拡張機能があります。
+
+用例:
+
+.. code-block:: ring
+
+	/*
+		このサンプルは C チュートリアルを元にしています。
+		出典元 : http://www.lighthouse3d.com/tutorials/glut-tutorial/
+	*/
+
+	load "freeglut.ring"
+	load "opengl21lib.ring"
+
+
+	// カメラ方向の回転角度
+	angle = 0.0
+
+	// 実際のベクトルはカメラ方向を表しています。
+	lx=0.0 lz=-1.0
+
+	// カメラの XZ 位置
+	x=0.0  z=5.0
+
+	// キーの状態
+	// キーを押していない時の変数は 0 です。
+	deltaAngle = 0.0
+	deltaMove = 0
+	xOrigin = -1
+
+	// メニューを定義するための定数
+	C_RED  = 1
+	C_GREEN = 2
+	C_BLUE = 3
+	C_ORANGE = 4
+
+	C_FILL = 5
+	C_LINE = 6
+
+	// ポップアップメニューの定義
+	fillMenu=NULL
+	fontMenu=NULL
+	mainMenu=NULL
+	colorMenu=NULL
+
+	// 鼻の配色
+	red = 1.0
+	blue=0.5
+	green=0.5
+
+	// 雪だるまの大きさ
+	scale = 1.0
+
+	// メニューの状態
+	menuFlag = 0
+
+	// デフォルトのフォント
+	font = GLUT_BITMAP_TIMES_ROMAN_24
+
+	C_INT_GLUT_BITMAP_8_BY_13 = 7
+	C_INT_GLUT_BITMAP_9_BY_15 = 8
+	C_INT_GLUT_BITMAP_TIMES_ROMAN_10  = 9
+	C_INT_GLUT_BITMAP_TIMES_ROMAN_24  = 10
+	C_INT_GLUT_BITMAP_HELVETICA_10  = 11
+	C_INT_GLUT_BITMAP_HELVETICA_12  = 12
+	C_INT_GLUT_BITMAP_HELVETICA_18  = 13
+
+	// ウィンドウの幅と高さ
+	h = 0
+	w = 0
+
+	// 一秒あたりのフレーム数を計算するための変数
+	frame=0
+	time=0
+	timebase=0
+	s = ""
+
+	func changeSize
+		w = glutEventWidth()
+		h = glutEventHeight()
+
+		// ウィンドウの大きさが小さすぎる場合に、ゼロ除算エラーになるのを防ぎます。
+		// (幅 0 のウィンドウは作成できません)
+		if h = 0
+			h = 1
+		ok
+
+		ratio =  w * 1.0 / h
+
+		// 投射行列の使用
+		glMatrixMode(GL_PROJECTION)
+
+		// 行列のリセット
+		glLoadIdentity()
+
+		// ウィンドウ全体のビューポートを設定します。
+		glViewport(0, 0, w, h)
+
+		// 正しい遠近法の設定。
+		gluPerspective(45.0, ratio, 0.1, 100.0)
+
+		// Modelview の復帰
+		glMatrixMode(GL_MODELVIEW)
+
+	func drawSnowMan
+
+		glScalef(scale, scale, scale)
+		glColor3f(1.0, 1.0, 1.0)
+
+	// 体の描画
+		glTranslatef(0.0 ,0.75, 0.0)
+		glutSolidSphere(0.75,20,20)
+
+	// 頭の描画
+		glTranslatef(0.0, 1.0, 0.0)
+		glutSolidSphere(0.25,20,20)
+
+	// 目の描画
+		glPushMatrix()
+		glColor3f(0.0,0.0,0.0)
+		glTranslatef(0.05, 0.10, 0.18)
+		glutSolidSphere(0.05,10,10)
+		glTranslatef(-0.1, 0.0, 0.0)
+		glutSolidSphere(0.05,10,10)
+		glPopMatrix()
+
+	// 鼻の描画
+		glColor3f(red, green, blue)
+		glRotatef(0.0,1.0, 0.0, 0.0)
+		glutSolidCone(0.08,0.5,10,2)
+
+		glColor3f(1.0, 1.0, 1.0)
+
+	func renderBitmapString x,y,z,font,string
+		glRasterPos3f(x, y,z)
+		for c in string
+			glutBitmapCharacter(font,ascii(c))
+		next
+
+	func renderStrokeFontString x,y,z,font,string
+		glPushMatrix()
+		glTranslatef(x, y,z)
+		glScalef(0.002, 0.002, 0.002)
+		for c in string
+			glutStrokeCharacter(font, Ascii(c));
+		next
+		glPopMatrix()
+
+
+	func restorePerspectiveProjection
+
+		glMatrixMode(GL_PROJECTION)
+		// 以前の投射行列へ復帰
+		glPopMatrix()
+
+		// modelview モードへ復帰
+		glMatrixMode(GL_MODELVIEW)
+
+
+	func setOrthographicProjection
+
+		// 投射モードの切り替え
+		glMatrixMode(GL_PROJECTION)
+
+		// 透視図の設定を有する
+		// 以前の行列を保存します。
+		glPushMatrix()
+
+		// 行列のリセット
+		glLoadIdentity()
+
+		// 2D 正投射の設定
+		gluOrtho2D(0, w, h, 0)
+
+		// modelview モードへ復帰切り替え
+		glMatrixMode(GL_MODELVIEW)
+
+
+
+	func computePos deltaMove
+
+		x += deltaMove * lx * 0.1
+		z += deltaMove * lz * 0.1
+
+
+	func renderScene
+
+		if  deltaMove
+			computePos(deltaMove)
+		ok
+
+		// 配色と深度バッファの消去
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+		// 変換のリセット
+		glLoadIdentity()
+
+		// カメラの設定
+		gluLookAt(	x, 1.0, z,
+				x+lx, 1.0,  z+lz,
+				0.0, 1.0,  0.0)
+
+		// 地面の描画
+
+		glColor3f(0.9, 0.9, 0.9)
+		glBegin(GL_QUADS)
+			glVertex3f(-100.0, 0.0, -100.0)
+			glVertex3f(-100.0, 0.0,  100.0)
+			glVertex3f( 100.0, 0.0,  100.0)
+			glVertex3f( 100.0, 0.0, -100.0)
+		glEnd()
+
+	// 9 体の雪だるまを描画
+		for i = -3 to -1
+			for j = -3 to -1
+				glPushMatrix()
+				glTranslatef(i*10.0, 0.0, j * 10.0)
+				drawSnowMan()
+				number = (i+3)*3+(j+3)
+				renderBitmapString(0.0, 0.5, 0.0,font ,""+number)
+				glPopMatrix()
+			next
+		next
+
+		// 一秒あたりのフレーム数を計算するためのコード
+		frame++
+
+		time=glutGet(GLUT_ELAPSED_TIME)
+		if time - timebase > 1000 
+			s = "RingFreeGLUT - FPS: " + (frame*1000.0/(time-timebase))
+			timebase = time
+			frame = 0
+		ok
+
+		// ビットマップフォントで文字列 (fps) を表示するためのコード
+		setOrthographicProjection()
+
+		glPushMatrix()
+		glLoadIdentity()
+		renderBitmapString(5,30,0,GLUT_BITMAP_HELVETICA_18,s)
+		glPopMatrix()
+
+		restorePerspectiveProjection()
+
+		glutSwapBuffers()
+
+
+	// -----------------------------------
+	//             キーボード
+	// -----------------------------------
+
+	func processNormalKeys
+		key = glutEventKey()
+		xx = glutEventX()
+		yy = glutEventY() 
+
+		switch key
+			on 27
+				glutDestroyMenu(mainMenu)
+				glutDestroyMenu(fillMenu)
+				glutDestroyMenu(colorMenu)
+				glutDestroyMenu(fontMenu)
+				Shutdown()
+		off
+
+
+	func pressKey 
+
+		key = glutEventKey()
+		xx = glutEventX()
+		yy = glutEventY()
+
+		switch key
+			on GLUT_KEY_UP 
+				 deltaMove = 0.5
+			on GLUT_KEY_DOWN 
+				deltaMove = -0.5
+		off
+
+
+	func releaseKey
+
+		key = glutEventKey()
+
+		switch key
+			on GLUT_KEY_UP 
+				deltaMove = 0 
+			on GLUT_KEY_DOWN
+				deltaMove = 0  
+		off
+
+
+	// -----------------------------------
+	//             マウス
+	// -----------------------------------
+
+	func mouseMove
+		xx = glutEventX()
+		yy = glutEventY()
+
+		// これは左ボタンを押したときのみ true になります。
+		if xOrigin >= 0
+
+			// deltaAngle の更新
+			deltaAngle = (xx - xOrigin) * 0.001
+
+			// カメラの方向を更新
+			lx = sin(angle + deltaAngle)
+			lz = -cos(angle + deltaAngle)
+		ok
+
+
+	func mouseButton
+
+		button = glutEventButton()
+		state = glutEventState()
+		xx = glutEventX()
+		yy = glutEventY()
+
+		// これは左ボタンを押したときのみ true になります。
+		if button = GLUT_LEFT_BUTTON
+			// ボタンを離したとき
+			if state = GLUT_UP
+				angle += deltaAngle
+				xOrigin = -1
+			else  
+				// state = GLUT_DOWN
+				xOrigin = xx
+			ok
+		ok
+
+
+	// -----------------------------------
+	//             メニュー
+	// -----------------------------------
+
+	func processMenuStatus
+
+		status = glutEventStatus()
+
+		if status = GLUT_MENU_IN_USE
+			menuFlag = 1
+		else
+			menuFlag = 0
+		ok
+
+
+	func processMainMenu 
+
+		// ここにはなにもありません。
+		// 動作は全てサブメニューから行います。
+
+
+	func processFillMenu
+
+		option = glutEventValue()
+
+		switch option
+
+			on C_FILL
+				glPolygonMode(GL_FRONT, GL_FILL)
+			on C_LINE
+				 glPolygonMode(GL_FRONT, GL_LINE)
+		off
+
+
+	func processFontMenu 
+
+		option = glutEventValue()
+
+		switch (option) {
+			on C_INT_GLUT_BITMAP_8_BY_13
+				font = GLUT_BITMAP_8_BY_13
+			on C_INT_GLUT_BITMAP_9_BY_15
+				font = GLUT_BITMAP_9_BY_15
+			on C_INT_GLUT_BITMAP_TIMES_ROMAN_10
+				font = GLUT_BITMAP_TIMES_ROMAN_10
+			on C_INT_GLUT_BITMAP_TIMES_ROMAN_24
+				font = GLUT_BITMAP_TIMES_ROMAN_24
+			on C_INT_GLUT_BITMAP_HELVETICA_10
+				font = GLUT_BITMAP_HELVETICA_10
+			on C_INT_GLUT_BITMAP_HELVETICA_12
+				font = GLUT_BITMAP_HELVETICA_12
+			on C_INT_GLUT_BITMAP_HELVETICA_18
+				font = GLUT_BITMAP_HELVETICA_18
+		off
+	 
+	func processColorMenu
+
+		option = glutEventValue()
+
+		switch option 
+			on C_RED 
+				red = 1.0
+				green = 0.0
+				blue = 0.0
+			on C_GREEN 
+				red = 0.0
+				green = 1.0
+				blue = 0.0
+			on C_BLUE 
+				red = 0.0
+				green = 0.0
+				blue = 1.0
+			on C_ORANGE 
+				red = 1.0
+				green = 0.5
+				blue = 0.5
+		off
+
+
+	func createPopupMenus
+
+		fontMenu = glutCreateMenu(:processFontMenu)
+
+		glutAddMenuEntry("BITMAP_8_BY_13 ",C_INT_GLUT_BITMAP_8_BY_13 )
+		glutAddMenuEntry("BITMAP_9_BY_15",C_INT_GLUT_BITMAP_9_BY_15 )
+		glutAddMenuEntry("BITMAP_TIMES_ROMAN_10 ",C_INT_GLUT_BITMAP_TIMES_ROMAN_10  )
+		glutAddMenuEntry("BITMAP_TIMES_ROMAN_24",C_INT_GLUT_BITMAP_TIMES_ROMAN_24  )
+		glutAddMenuEntry("BITMAP_HELVETICA_10 ",C_INT_GLUT_BITMAP_HELVETICA_10  )
+		glutAddMenuEntry("BITMAP_HELVETICA_12",C_INT_GLUT_BITMAP_HELVETICA_12  )
+		glutAddMenuEntry("BITMAP_HELVETICA_18",C_INT_GLUT_BITMAP_HELVETICA_18  )
+
+		fillMenu = glutCreateMenu(:processFillMenu)
+
+		glutAddMenuEntry("Fill",C_FILL)
+		glutAddMenuEntry("Line",C_LINE)
+
+		colorMenu = glutCreateMenu(:processColorMenu)
+		glutAddMenuEntry("Red",C_RED);
+		glutAddMenuEntry("Blue",C_BLUE);
+		glutAddMenuEntry("Green",C_GREEN);
+		glutAddMenuEntry("Orange",C_ORANGE);
+
+		mainMenu = glutCreateMenu(:processMainMenu)
+
+		glutAddSubMenu("Polygon Mode", fillMenu)
+		glutAddSubMenu("Color", colorMenu)
+		glutAddSubMenu("Font",fontMenu)
+		 // 右ボタンでメニューへ接続
+		glutAttachMenu(GLUT_RIGHT_BUTTON)
+
+		// これでアクティブなメニューか検知できるようにします。
+		glutMenuStatusFunc(:processMenuStatus)
+
+
+	// -----------------------------------
+	//             メイン
+	// -----------------------------------
+
+	func main
+
+		// GLUT の初期化とウィンドウの作成
+		glutInit()
+		glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
+		glutInitWindowPosition(100,100)
+		glutInitWindowSize(320,320)
+		glutCreateWindow("RingFreeGLUT - Test - 9 SnowMan")
+
+		// コールバックの登録
+		glutDisplayFunc(:renderScene)
+		glutReshapeFunc(:changeSize)
+		glutIdleFunc(:renderScene)
+
+		glutIgnoreKeyRepeat(1)
+		glutKeyboardFunc(:processNormalKeys)
+		glutSpecialFunc(:pressKey)
+		glutSpecialUpFunc(:releaseKey)
+
+		 // ここには二つの新しい関数があります。
+		glutMouseFunc(:mouseButton)
+		glutMotionFunc(:mouseMove)
+
+		// OpenGL の初期化
+		glEnable(GL_DEPTH_TEST)
+		glEnable(GL_CULL_FACE)
+
+		// メニューの初期化
+		createPopupMenus()
+
+		// GLUT のイベント処理サイクルへ入ります。
+		glutMainLoop()
+
+
+スクリーンショット:
+
+.. image:: ring15freeglut.png
+	:alt: RingFreeGLUT
+
+
+.. image:: ring15freeglut2.png
+	:alt: RingFreeGLUT
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; RingOpenGL 拡張機能
+
+RingOpenGL 拡張機能
+===================
+
+Ring 1.5 の RingOpenGL は下記のバージョンに対応しています。
+
+* OpenGL 1.1 ～ 1.5
+* OpenGL 2.0, 2.1
+* OpenGL 3.0, 3.2, 3.3
+* OpenGL 4.0 ～ 4.6
+
+用例:
+
+.. code-block:: ring
+
+	/*
+		このサンプルは C チュートリアルを元にしています。
+		出典元 : 
+			http://www.wikihow.com/Make-a-Cube-in-OpenGL
+	*/
+
+	load "freeglut.ring"
+	load "opengl21lib.ring"
+
+	// ----------------------------------------------------------
+	// グローバル変数
+	// ----------------------------------------------------------
+	rotate_y=0 
+	rotate_x=0
+	 
+	// ----------------------------------------------------------
+	// display() コールバック関数
+	// ----------------------------------------------------------
+	func display
+	 
+	  //  画面と Z バッファの消去
+	  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+	 
+	  // 変換のリセット
+	  glLoadIdentity()
+	 
+	  // rotate_x および rotate_y のユーザによる変更をリセットします。
+	  glRotatef( rotate_x, 1.0, 0.0, 0.0 )
+	  glRotatef( rotate_y, 0.0, 1.0, 0.0 )
+	 
+	  // 多色面 - 前
+	  glBegin(GL_POLYGON)
+	 
+	  glColor3f( 1.0, 0.0, 0.0 )     glVertex3f(  0.5, -0.5, -0.5 )      # P1 は赤
+	  glColor3f( 0.0, 1.0, 0.0 )     glVertex3f(  0.5,  0.5, -0.5 )      # P2 は緑
+	  glColor3f( 0.0, 0.0, 1.0 )     glVertex3f( -0.5,  0.5, -0.5 )      # P3 は青
+	  glColor3f( 1.0, 0.0, 1.0 )     glVertex3f( -0.5, -0.5, -0.5 )      # P4 は紫
+	 
+	  glEnd()
+	 
+	  // 白面 - 後
+	  glBegin(GL_POLYGON)
+	  glColor3f(   1.0,  1.0, 1.0 )
+	  glVertex3f(  0.5, -0.5, 0.5 )
+	  glVertex3f(  0.5,  0.5, 0.5 )
+	  glVertex3f( -0.5,  0.5, 0.5 )
+	  glVertex3f( -0.5, -0.5, 0.5 )
+	  glEnd()
+	 
+	  // 紫面 - 右
+	  glBegin(GL_POLYGON)
+	  glColor3f(  1.0,  0.0,  1.0 )
+	  glVertex3f( 0.5, -0.5, -0.5 )
+	  glVertex3f( 0.5,  0.5, -0.5 )
+	  glVertex3f( 0.5,  0.5,  0.5 )
+	  glVertex3f( 0.5, -0.5,  0.5 )
+	  glEnd()
+	 
+	  // 緑面 - 左
+	  glBegin(GL_POLYGON)
+	  glColor3f(   0.0,  1.0,  0.0 )
+	  glVertex3f( -0.5, -0.5,  0.5 )
+	  glVertex3f( -0.5,  0.5,  0.5 )
+	  glVertex3f( -0.5,  0.5, -0.5 )
+	  glVertex3f( -0.5, -0.5, -0.5 )
+	  glEnd()
+	 
+	  // 青面 - 上
+	  glBegin(GL_POLYGON)
+	  glColor3f(   0.0,  0.0,  1.0 )
+	  glVertex3f(  0.5,  0.5,  0.5 )
+	  glVertex3f(  0.5,  0.5, -0.5 )
+	  glVertex3f( -0.5,  0.5, -0.5 )
+	  glVertex3f( -0.5,  0.5,  0.5 )
+	  glEnd()
+	 
+	  // 赤面 - 下
+	  glBegin(GL_POLYGON)
+	  glColor3f(   1.0,  0.0,  0.0 )
+	  glVertex3f(  0.5, -0.5, -0.5 )
+	  glVertex3f(  0.5, -0.5,  0.5 )
+	  glVertex3f( -0.5, -0.5,  0.5 )
+	  glVertex3f( -0.5, -0.5, -0.5 )
+	  glEnd()
+	 
+	  glFlush()
+	  glutSwapBuffers()
+	 
+	 
+	// ----------------------------------------------------------
+	// specialKeys() コールバック関数
+	// ----------------------------------------------------------
+	func specialKeys
+
+		key = glutEventKey()
+	 
+	  //  右矢印 - 回転を五度増分します。
+		switch Key
+
+		on GLUT_KEY_RIGHT
+			rotate_y += 5
+	 
+		//  左矢印 - 回転を五度減分します。
+		on GLUT_KEY_LEFT
+			rotate_y -= 5
+	 
+		on GLUT_KEY_UP
+			rotate_x += 5
+	 
+		on GLUT_KEY_DOWN
+			rotate_x -= 5
+	 
+		off
+
+	  //  更新の要求
+	  glutPostRedisplay()
+	 
+
+	 
+	// ----------------------------------------------------------
+	// main() 関数
+	// ----------------------------------------------------------
+	func main
+	 
+	  //  GLUT の初期化とユーザ仮引数の処理
+	  glutInit()
+	 
+	  //  トゥルーカラーのウィンドウのためにZ-バッファによるダブルバッファを要求します。
+	  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+	 
+	  // ウィンドウの作成
+	  glutCreateWindow("Awesome Cube")
+	 
+	  //  Z-バッファの深度テストを有効にします。
+	  glEnable(GL_DEPTH_TEST)
+	 
+	  // コールバック関数
+	  glutDisplayFunc(:display)
+	  glutSpecialFunc(:specialKeys)
+	 
+	  // GLUT へイベントの制御を渡します。
+	  glutMainLoop()
+	 
+	  // OS へ戻ります。
+
+
+スクリーンショット:
+
+.. image:: ring15opengl.png
+	:alt: RingOpenGL
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; 拡張機能用のコード生成器の改善
+
+拡張機能用のコード生成器の改善
+==============================
+
+\<constant> 型へ対応しました。
+また、数値以外にも定数を扱うことができます。例えば: 文字列とポインタです。
+
+ポインタのときはポインタ型を決定できます。
+この機能は <constant> ～ </constant> の前に使えます。
+
+.. code-block:: ring
+
+	$nDefaultConstantType = C_CONSTANT_TYPE_POINTER
+	$cDefaultConstantPointerType = "void *"
+
+この用例は RingFreeGLUT 拡張機能からの引用です。
+
+.. code-block:: ring
+
+	<runcode>
+		$nDefaultConstantType = C_CONSTANT_TYPE_POINTER	
+		$cDefaultConstantPointerType = "void"
+	</runcode>
+	<constant>
+		GLUT_STROKE_ROMAN  
+		GLUT_STROKE_MONO_ROMAN
+		GLUT_BITMAP_9_BY_15   
+		GLUT_BITMAP_8_BY_13   
+		GLUT_BITMAP_TIMES_ROMAN_10
+		GLUT_BITMAP_TIMES_ROMAN_24 
+		GLUT_BITMAP_HELVETICA_10   
+		GLUT_BITMAP_HELVETICA_12   
+		GLUT_BITMAP_HELVETICA_18   
+	</constant>
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; 拡張機能用のドキュメント生成器の改善
+
+拡張機能用のドキュメント生成器の改善
+====================================
+
+生成した定数のリストをドキュメントへ出力できるようになりました。
+
+以前の公開版では関数プロトタイプのみありましたが、
+今回は定数のリストもあります。
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Ring VM - トレース関数
+
+Ring VM - トレース関数
+======================
+
+Ring 1.5 では Ring VM に次の関数追加しました。
+
+* RingVM_SetTrace(cCode)
+* RingVM_TraceData() --> aDataList
+* RingVM_TraceEvent() --> nTraceEvent
+* RingVM_TraceFunc() --> cCode
+* RingVM_ScopesCount() --> nScopes
+* RingVM_EvalInScope(nScope,cCode) 
+* RingVM_PassError()
+* RingVM_HideErrorMsg(lStatus)
+* RingVM_CallFunc(cFuncName)
+
+用例:
+
+.. code-block:: ring
+
+	load "tracelib.ring"
+
+	ringvm_settrace("mytrace()")
+
+	see "Hello, world!" + nl
+	see "Welcome" + nl
+	see "How are you?" +nl
+	mytest()
+	new myclass { mymethod() }
+
+	func mytest
+		see "Message from mytest" + nl
+
+	func mytrace
+		see "====== The Trace function is Active ======" + nl +
+			"Trace Function Name : " + ringvm_TraceFunc() + nl +
+			"Trace Event : " 
+		switch ringvm_TraceEvent()
+			on TRACEEVENT_NEWLINE 		see "New Line" 
+			on TRACEEVENT_NEWFUNC		see "New Function"
+			on TRACEEVENT_RETURN		see "Return"
+			on TRACEEVENT_ERROR		see "Error"
+			on TRACEEVENT_BEFORECFUNC	see "Before C Function"
+			on TRACEEVENT_AFTERCFUNC	see "After C Function"
+		off
+		see nl +
+			"Line Number : " + ringvm_tracedata()[TRACEDATA_LINENUMBER] + nl +
+			"File Name   : " + ringvm_tracedata()[TRACEDATA_FILENAME] + nl +
+			"Function Name : " + ringvm_tracedata()[TRACEDATA_FUNCNAME] + nl +
+			"Method or Function : " 
+			if ringvm_tracedata()[TRACEDATA_METHODORFUNC] =
+					 TRACEDATA_METHODORFUNC_METHOD
+				see "Method"
+			else
+				if ringvm_tracedata()[TRACEDATA_FUNCNAME] = NULL
+					see "Command"
+				else
+					see "Function"
+				ok
+			ok		
+			see nl + Copy("=",42) + nl
+
+	class myclass
+		func mymethod
+			see "Message from mymethod" + nl
+
+実行結果:
+
+.. code-block:: none
+
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 3
+	File Name   : test1.ring
+	Function Name : ringvm_settrace
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 5
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	Hello, world!
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 6
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	Welcome
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 7
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	How are you?
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 8
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Function
+	Line Number : 8
+	File Name   : test1.ring
+	Function Name : mytest
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 12
+	File Name   : test1.ring
+	Function Name : mytest
+	Method or Function : Function
+	==========================================
+	Message from mytest
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 14
+	File Name   : test1.ring
+	Function Name : mytest
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Return
+	Line Number : 8
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 43
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Before C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : mymethod
+	Method or Function : Method
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 44
+	File Name   : test1.ring
+	Function Name : mymethod
+	Method or Function : Method
+	==========================================
+	Message from mymethod
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Return
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Before C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Before C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 11
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; トレースライブラリとインタラクティブデバッガ
+
+トレースライブラリとインタラクティブデバッガ
+============================================
+
+Ring 1.5 にはトレースライブラリとインタラクティブデバッガがあります。
+
+このライブラリはイベントのトレース、プログラムを一行ずつ実行、
+エラー発生またはブレークポイントに到達したときインタラクティブデバッガを開きます。
+
+用例:
+
+この用例はブレークポイントをインタラクティブデバッガで開きます！
+
+.. code-block:: ring
+
+	load "tracelib.ring"
+
+	test1()
+
+	func test1
+		x = 10
+		see :test1 + nl
+		t = 12
+		BreakPoint()
+		see "After breakpoint!" +nl
+		see "t = " + t + nl
+		see "End of program!" + nl
+
+
+スクリーンショット:
+
+ブレークポイントに関してはインタラクティブデバッガがあります！
+
+.. image:: debugshot1.png
+	:alt: インタラクティブデバッガ
+
+変数の値を表示できます。
+
+.. image:: debugshot2.png
+	:alt: インタラクティブデバッガ
+
+変数値の変更後に実行を継続できます。
+
+.. image:: debugshot3.png
+	:alt: インタラクティブデバッガ
+
+実行結果ウィンドウでもインタラクティブデバッガを実行できます。
+
+.. image:: debugshot4.png
+	:alt: インタラクティブデバッガ
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; シンタックスの柔軟性を向上
+
+シンタックスの柔軟性を向上
+==========================
+
+クラス、パッケージ、関数で括弧 { } を使うには
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	import mypackage
+
+	new myclass {
+		myfunc() 
+	}
+
+	package mypackage 
+	{
+		class myclass 
+		{
+			func myfunc 
+			{
+				print("Hello, World!\n")
+			}
+		}
+	}
+
+クラス、パッケージ、関数の後に‘end’キーワードを使うには
+
+用例:
+
+.. code-block:: ring
+
+	import mypackage
+
+	new myclass {
+		myfunc() 
+	}
+
+	package mypackage 
+		class myclass 
+			def myfunc 
+				put "Hello, World!"
+			end
+		end
+	end
+
+クラス、パッケージ、関数の後に‘endpackage’/’endclass’/’endfunc’キーワードを使うには
+
+用例:
+
+.. code-block:: ring
+
+	import mypackage
+
+	new myclass { myfunc() }
+
+	package mypackage
+		class myclass
+			func myfunc			
+				see "welcome"  + nl
+			endfunc
+		endclass
+	endpackage
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; 型ヒントライブラリ
+
+型ヒントライブラリ
+==================
+
+Ring 1.5 から型ヒントライブラリがあります。
+
+このライブラリにより、ソースコードへ型情報を追加できます。
+このようなツールで非常に便利です。
+
+
+* コードエディタ
+* 静的解析
+
+
+用例:
+
+.. code-block:: ring
+
+	load "typehints.ring"
+
+	see sum(3,4) + nl ;
+	see sayHello("Mahmoud");
+
+	int func sum(int x,int y) {
+		return x+y ;
+	}
+
+	string func sayHello(string name) {
+		return "Hello " + name ;
+	}
+
+ライブラリは非常に強力であり、自動的にユーザ型 (クラス) へ対応します！
+
+用例:
+
+.. code-block:: ring
+
+	load "typehints.ring"
+
+	import mypackage 
+
+	test()  { main([:one,:two,:three]) }
+
+	myclass func test() {
+		see "Testing User Types!" + nl
+		return new myclass
+	}
+
+	package mypackage {
+		public class myclass {
+			public static void func main(list args) {
+				see "welcome" + nl
+				see args
+			}
+		}
+	}
+
+また、コードの内側で型も使えます (関数プロトタイプだけに限定されません)。
+
+用例:
+
+.. code-block:: ring
+
+	load "typehints.ring"
+
+	int 	sum = sum(3,4)
+	string 	msg = sayHello("Mahmoud")
+
+	see "Sum = " + sum + nl + msg + nl
+
+
+	int func sum(int x,int y) {
+		return x+y ;
+	}
+
+	string func sayHello(string name) {
+		return "Hello " + name ;
+	}
+
+規則:
+
+* 関数プロトタイプ : 型を使うには、引数の前後を ‘(‘ と ‘)’ で必ず囲んでください。
+* 関数のコード : 型を使うには、必ず変数の値を設定してください (代入)。
+
+
+.. note:: Ring は動的言語であり、コンパイラによる型検査は行われません。
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; 品質の改善
+
+品質の改善
+==========
+
+日々の実務プロジェクトで Ring を利用した成果により
+
+Ring 1.5 では、安定性と生産性が向上しました！
+
+明確な目標と実用性で求められるものを機能を追加していきます。
+
+また、取扱説明書の改訂も行いました。
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Ring 1.5.1 の変更履歴
+
+Ring 1.5.1 の変更履歴
+=====================
+
+Ring 1.5.1 の新機能と変更点です。
+
+* 取扱説明書の改訂
+* StdLib - Factorial() 関数の更新
+* Ring 仮想計算機 - クラス範囲でスタックの消去処理に関するコードの改善。
+* サンプル : 3D Cube (OpenGL) + GameLib (RingAllegro) によるテクスチャ画像
+
+ソースコード:
+
+.. code-block:: ring
+
+	load "gamelib.ring"
+	load "opengl21lib.ring"
+
+	func main
+
+		new GraphicsApp {
+			start()
+		}
+
+
+	class GraphicsApp from GraphicsAppBase
+
+		TITLE = "Ring Cube"
+
+		bitmap texture
+
+		xrot = 0.0
+		yrot = 0.0
+		zrot = 0.0
+
+		func loadresources
+
+			bitmap = al_load_bitmap("ring.bmp")
+			texture = al_get_opengl_texture(bitmap)
+
+		func destroyResources
+
+			al_destroy_bitmap(bitmap)
+
+		func drawScene
+
+			w = 800 h = 600
+			ratio =  w / h
+
+			glViewport(0, 0, w, h)
+			glMatrixMode(GL_PROJECTION)
+			glLoadIdentity()
+
+			gluPerspective(45,ratio,1,100)
+			glMatrixMode(GL_MODELVIEW)
+			glLoadIdentity()
+
+			glEnable(GL_TEXTURE_2D)							
+			glShadeModel(GL_SMOOTH)							
+			glClearColor(0.0, 0.0, 0.0, 0.5)
+			glClearDepth(1.0)			
+			glEnable(GL_DEPTH_TEST)	
+			glEnable(GL_CULL_FACE)
+			glDepthFunc(GL_LEQUAL)
+			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+			glLoadIdentity();									
+			glTranslatef(0.0,0.0,-5.0);
+
+			glRotatef(xrot,1.0,0.0,0.0);
+			glRotatef(yrot,0.0,1.0,0.0);
+			glRotatef(zrot,0.0,0.0,1.0);
+
+			glBindTexture(GL_TEXTURE_2D, texture)
+
+			glBegin(GL_QUADS)
+				// 前面
+				glTexCoord2f(0.0, 0.0) glVertex3f(-1.0, -1.0,  1.0)
+				glTexCoord2f(1.0, 0.0) glVertex3f( 1.0, -1.0,  1.0)
+				glTexCoord2f(1.0, 1.0) glVertex3f( 1.0,  1.0,  1.0)
+				glTexCoord2f(0.0, 1.0) glVertex3f(-1.0,  1.0,  1.0)
+				// 背面
+				glTexCoord2f(1.0, 0.0) glVertex3f(-1.0, -1.0, -1.0)
+				glTexCoord2f(1.0, 1.0) glVertex3f(-1.0,  1.0, -1.0)
+				glTexCoord2f(0.0, 1.0) glVertex3f( 1.0,  1.0, -1.0)
+				glTexCoord2f(0.0, 0.0) glVertex3f( 1.0, -1.0, -1.0)
+				// 上面
+				glTexCoord2f(0.0, 1.0) glVertex3f(-1.0,  1.0, -1.0)
+				glTexCoord2f(0.0, 0.0) glVertex3f(-1.0,  1.0,  1.0)
+				glTexCoord2f(1.0, 0.0) glVertex3f( 1.0,  1.0,  1.0)
+				glTexCoord2f(1.0, 1.0) glVertex3f( 1.0,  1.0, -1.0)
+				// 下面
+				glTexCoord2f(1.0, 1.0) glVertex3f(-1.0, -1.0, -1.0)
+				glTexCoord2f(0.0, 1.0) glVertex3f( 1.0, -1.0, -1.0)
+				glTexCoord2f(0.0, 0.0) glVertex3f( 1.0, -1.0,  1.0)
+				glTexCoord2f(1.0, 0.0) glVertex3f(-1.0, -1.0,  1.0)
+				// 右面
+				glTexCoord2f(1.0, 0.0) glVertex3f( 1.0, -1.0, -1.0)
+				glTexCoord2f(1.0, 1.0) glVertex3f( 1.0,  1.0, -1.0)
+				glTexCoord2f(0.0, 1.0) glVertex3f( 1.0,  1.0,  1.0)
+				glTexCoord2f(0.0, 0.0) glVertex3f( 1.0, -1.0,  1.0)
+				// 左面
+				glTexCoord2f(0.0, 0.0) glVertex3f(-1.0, -1.0, -1.0)
+				glTexCoord2f(1.0, 0.0) glVertex3f(-1.0, -1.0,  1.0)
+				glTexCoord2f(1.0, 1.0) glVertex3f(-1.0,  1.0,  1.0)
+				glTexCoord2f(0.0, 1.0) glVertex3f(-1.0,  1.0, -1.0)
+			glEnd()
+
+			xrot += 0.3
+			yrot += 0.2
+			zrot += 0.4
+
+
+	class GraphicsAppBase
+
+		display event_queue ev timeout 
+		timer  redraw 	= true
+
+		FPS 		= 60 
+
+		SCREEN_W 	= 800
+		SCREEN_H 	= 600
+
+		KEY_UP		= 1
+		KEY_DOWN 	= 2
+		KEY_LEFT 	= 3
+		KEY_RIGHT 	= 4
+
+		Key = [false,false,false,false]
+
+		TITLE = "Graphics Application"
+
+		func start
+
+			SetUp()
+			loadResources()
+			eventsLoop()
+			destroy()
+
+		func setup
+
+			al_init()
+			al_init_image_addon()
+			al_set_new_display_flags(ALLEGRO_OPENGL) 
+			display = al_create_display(SCREEN_W,SCREEN_H)
+			al_set_Window_title(display,TITLE)
+			al_clear_to_color(al_map_rgb(0,0,0))
+			event_queue = al_create_event_queue()
+			al_register_event_source(event_queue, 
+				al_get_display_event_source(display))
+			ev = al_new_allegro_event()
+			timeout = al_new_allegro_timeout()
+			al_init_timeout(timeout, 0.06)
+			timer = al_create_timer(1.0 / FPS)
+			al_register_event_source(event_queue, 
+				al_get_timer_event_source(timer))
+			al_start_timer(timer)
+			al_install_mouse()
+			al_register_event_source(event_queue, 
+				al_get_mouse_event_source())
+			al_install_keyboard()
+			al_register_event_source(event_queue, 
+				al_get_keyboard_event_source())
+
+		func eventsLoop
+
+			while true
+				al_wait_for_event_until(event_queue, ev, timeout)
+				switch al_get_allegro_event_type(ev)
+				on ALLEGRO_EVENT_DISPLAY_CLOSE
+					exit
+				on ALLEGRO_EVENT_TIMER
+					redraw = true
+				on ALLEGRO_EVENT_MOUSE_AXES
+					mouse_x = al_get_allegro_event_mouse_x(ev)
+					mouse_y = al_get_allegro_event_mouse_y(ev)
+				on ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY
+					mouse_x = al_get_allegro_event_mouse_x(ev)
+					mouse_y = al_get_allegro_event_mouse_y(ev)
+				on ALLEGRO_EVENT_MOUSE_BUTTON_UP
+					exit
+				on ALLEGRO_EVENT_KEY_DOWN
+					switch al_get_allegro_event_keyboard_keycode(ev)
+						on ALLEGRO_KEY_UP
+							key[KEY_UP] = true
+						on ALLEGRO_KEY_DOWN
+							key[KEY_DOWN] = true
+						on ALLEGRO_KEY_LEFT
+							key[KEY_LEFT] = true
+						on ALLEGRO_KEY_RIGHT
+							key[KEY_RIGHT] = true
+					off
+				on ALLEGRO_EVENT_KEY_UP
+					switch al_get_allegro_event_keyboard_keycode(ev)
+						on ALLEGRO_KEY_UP
+							key[KEY_UP] = false
+						on ALLEGRO_KEY_DOWN
+							key[KEY_DOWN] = false
+						on ALLEGRO_KEY_LEFT
+							key[KEY_LEFT] = false
+						on ALLEGRO_KEY_RIGHT
+							key[KEY_RIGHT] = false
+						on ALLEGRO_KEY_ESCAPE
+							exit
+					off
+				off
+				if redraw and al_is_event_queue_empty(event_queue)
+					redraw = false
+					drawScene()
+					al_flip_display()
+				ok
+				callgc()
+			end
+
+		func destroy
+
+			destroyResources()
+			al_destroy_timer(timer)
+			al_destroy_allegro_event(ev)
+			al_destroy_allegro_timeout(timeout)
+			al_destroy_event_queue(event_queue)
+			al_destroy_display(display)
+
+		func loadresources
+
+		func drawScene
+
+		func destroyResources
+
+スクリーンショット:
+
+.. image:: ringcube3d.png
+	:alt: Ring Cube
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Ring 1.5.2 の変更履歴
+
+Ring 1.5.2 の変更履歴
+=====================
+
+Ring 1.5.2 の新機能と変更点です。
+
+* 取扱説明書 - “時速でデキるアプリケーション開発” の章を更新しました。
+* Ring ノートパッド - 全てのプラットフォームで実行結果ウィンドウへプログラムの実行結果を表示するようになりました。
+* フォームデザイナー - Help メニュー - コンソールウィンドウを表示せずに CHM/PDF ファイルを開けるようになりました。
+* フォームデザイナー - マウスをすばやく動かしたときに Resize/Move イベントの応答性を改善
+* フォームデザイナー - 「新規、開く、名前を付けて保存」で Controller クラスを Ring ノートパッドで開くようにしました。
+* フォームデザイナー - ファイルメニューへ “フォームを閉じる” オプションを追加。
+* Ring ノートパッド - 実行に、現在のファイル (開いているフォームも) 自動的に保存するようになりました。
+* GetQuotesHistory アプリケーション - macOS および Qt 5.2 で動作するために更新
+* Calculator アプリケーション - 様々な機能を搭載するために更新しました！
+* Ring VM - 環境エラーの分類 (この章をご確認ください : 言語リファレンス)
+* RingQt - イベント実行の高速化のために QAllEvents へ新しいメソッドを追加
+* RingQt - スタイル「フュージョン : 黒」 - 無効なコントロールに最適な配色
+* スクリプト - Fedora Linux での Ring ビルド用 (この章を参照してください : ソースコードからのビルド方法)
+
+
+スクリーンショット:
+
+.. image:: fedora.png
+	:alt: Ring (Fedora 1 で実行)
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Ring 1.5.3 の変更履歴
+
+Ring 1.5.3 の変更履歴
+=====================
+
+Ring 1.5.3 の新機能と変更点です。
+
+* フォームデザイナー : 再びフォームを開くことを可能にするために、アクションが閉じられると Ring ノートパッドへ通知するようになりました。
+* フォームデザイナー : Ring ノートパッドで Controller クラスを開くときにアクションを保存するようになりました。
+* フォームデザイナー : CTRL キーで複数のコントロールを選択時に現在のコントロールを保持するようになりました。
+* フォームデザイナー : Ring ノートパッドでの使用時に素敵な背景色に対応 (スタイル - モダン : 黒)
+* RingOpenSSL : OpenSSL 1.1 など新しいバージョンへ対応
+* ビルドスクリプト : Fedora 26 (64bit) での動作に対応
+* OpenGL : 新しいサンプル - 複数の立方体 (samples/3D/manycubes)
+
+
+スクリーンショット:
+
+.. image:: manycubes.png
+	:alt: 複数の立方体
+
+* RingQt : QDateTime クラスの追加
+* RingQt : QMenu および QCursor クラスへ新しいメソッドを追加
+
+用例:
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	new qApp {
+		win = new qwidget() {
+			setwindowtitle("Context Menu")
+			resize(400,400)
+			myfilter = new qAllEvents(win) {
+				setContextmenuEvent("mymenu()")
+			}
+			installeventfilter(myfilter)
+			show()
+		}
+		exec()
+	}
+
+
+	func mymenu 
+
+		new qMenu(win) {
+			oAction = new qAction(win) {
+				settext("new")
+				SetCLickevent("See :New")
+			}
+			addaction(oAction)
+			oAction = new qAction(win) {
+				settext("open")
+				SetCLickevent("See :Open")
+			}
+			addaction(oAction)
+			oAction = new qAction(win) {
+				settext("save")
+				SetCLickevent("See :Save")
+			}
+			addaction(oAction)
+			oAction = new qAction(win) {
+				settext("close")
+				SetCLickevent("See :Close")
+			}
+			addaction(oAction)
+			oCursor  = new qCursor()
+			exec(oCursor.pos())
+		}
+	
+
+コンパイラ : 数値内で _ の使用に対応
+
+用例:
+
+.. code-block:: ring
+
+	x = 1_000_000
+	see type(x)+nl
+	see x+1+nl
+
+実行結果:
+
+.. code-block:: ring
+
+	NUMBER
+	100000001
+
+コンパイラ : 数値の後に f の使用に対応
+
+用例:
+
+.. code-block:: ring
+
+	x = 19.99f
+	see type(x) + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	NUMBER
+
+Google API Shortener アプリケーション
+
+スクリーンショット:
+
+.. image:: urlappshot1.png
+	:alt: URLShortener - スクリーンショット 1
+
+TicTacToe 3D ゲーム
+
+スクリーンショット:
+
+.. image:: tictactoe3d.png
+	:alt: TicTacToe 3D ゲーム
+
+
+.. index:: 
+	pair: Ring 1.5 の変更履歴; Ring 1.5.4 の変更履歴
+
+Ring 1.5.4 の変更履歴
+=====================
+
+Ring 1.5.4 の新機能と変更点です。
+
+* CalmoSoft Fifteen Puzzle ゲーム 3D
+* Ring ノートパッド - 新しいスタイル
+* Ring ノートパッド - ツールバーのスタイルを改善
+* Ring ノートパッド - View モード
+* Ring ノートパッド - QPlainTextEdit - スクロールバーの背景色の設定を行わないようにしました。
+* Ring ノートパッド - スタイル - フュージョン (白) - コメントに銀色を使用
+* Ring ノートパッド - Tab と Shift-Tab - 複数行インデント
+* フォームデザイナー - ツールバーのスタイルを改善
+* フォームデザイナー - ウィンドウフラグとメニュバーデザイナー用の素敵な背景色
+* フォームデザイナー - コントロールのデフォルト背景色
+* RingQt - QWidget クラスへgrab() および windowHandle() メソッドを追加
+* RingQt - QPixmap クラスへ新しいメソッドを追加
+* RingQt - クラスの追加:
+	* QScreen
+	* QWindow
+	* QGuiApplication
+	* QTextBrowser
+* 拡張機能用のコード生成器 - Nonew オプション - 親クラスへの対応
+* Ring VM - 内部実装 - 文字列とリストオブジェクトをステートへ渡せるようになりました。
+* Ring VM - ガベージコレクター - 小規模オブジェクトをメモリへプールできるようになりました。
+* Ring VM - ステートの保存と復元に関するコードの改善
+

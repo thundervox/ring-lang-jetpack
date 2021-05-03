@@ -1,0 +1,293 @@
+.. index:: 
+	single: 制御構造 - 第三形式; はじめに
+
+================================
+制御構造 - 第三形式
+================================
+
+第三形式による制御構造の用法です。
+
+.. index:: 
+	pair: 制御構造 - 第三形式; 分岐処理
+
+
+分岐処理
+========
+
+.. index:: 
+	pair: 制御構造 - 第三形式; If ステートメント
+
+* If ステートメント
+
+文法:
+
+.. code-block:: ring
+
+	if 式 {
+		ステートメント・ブロック
+	elseif 式
+		ステートメント・ブロック
+	else
+		ステートメント・ブロック
+	}
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	print(" 
+		Main Menu
+		---------
+		(1) Say Hello
+		(2) About
+		(3) Exit
+	    ")
+
+	nOption = getnumber()
+
+	if nOption = 1	{
+		print("Enter your name : ") 
+		name = getstring() 	
+		print("Hello #{name}\n")
+	elseif nOption = 2 
+		print("Sample : using if statement\n")
+	elseif nOption = 3 
+		bye
+	else 
+		print("bad option...\n")
+	}
+
+.. index:: 
+	pair: 制御構造 - 第三形式; Switch ステートメント
+
+* Switch ステートメント
+
+文法:
+
+.. code-block:: ring
+
+	switch 式 {
+	case 式
+		ステートメント・ブロック
+	else
+		ステートメント・ブロック
+	}	
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	print(" 
+		Main Menu
+		---------
+		(1) Say Hello
+		(2) About
+		(3) Exit
+
+ 	      ")
+
+	nOption = GetString()
+
+	switch nOption {
+	case 1 
+		print("Enter your name : ")
+		name = getstring()
+		print("Hello #{name}\n")
+	case 2 
+		print("Sample : using switch statement\n")
+	case 3 
+		Bye
+	else 
+		print("bad option...\n")
+	}
+
+
+.. index:: 
+	pair: 制御構造 - 第三形式; ループ処理
+
+ループ処理
+==========
+
+.. index:: 
+	pair: 制御構造 - 第三形式; While ループ
+
+* While ループ
+
+文法:
+
+.. code-block:: ring
+
+	while 式 {
+		ステートメント・ブロック
+	}
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	While True {
+
+		print(" 
+			Main Menu
+			---------
+			(1) Say Hello
+			(2) About
+			(3) Exit
+
+			  ")
+
+		nOption = GetString()
+
+		switch nOption {
+		case 1 
+			print("Enter your name : ")
+			name = getstring()
+			print("Hello #{name}\n")
+		case 2 
+			print("Sample : using switch statement\n")
+		case 3 
+			Bye
+		else 
+			print("bad option...\n")
+		}
+
+	}
+
+.. index:: 
+	pair: 制御構造 - 第三形式; For ループ
+
+* For ループ
+
+文法:
+
+.. code-block:: ring
+
+	for 識別子=式 to 式 [step 式] {
+		ステートメント・ブロック
+	}
+
+用例:
+
+.. code-block:: ring
+
+	# 1 ～ 10 までの数値を表示します。
+	load "stdlib.ring"
+	for x = 1 to 10	 { 
+		print("#{x}\n") 
+	}
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	# 動的ループ
+	print("Start : ") nStart = getnumber()
+	print("End   : ") nEnd = getnumber()
+	print("Step  : ") nStep = getnumber()
+	for x = nStart to nEnd step nStep {
+		print("#{x}\n") 
+	}
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	# 0 ～ 10 までの偶数値を表示します。
+	for x = 0 to 10 step 2 {
+		print("#{x}\n") 
+	}
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	# 10 ～ 0 までの偶数値を表示します。
+	for x = 10 to 0 step -2 {
+		print("#{x}\n") 
+	}
+
+
+.. index:: 
+	pair: 制御構造 - 第三形式; For In ループ
+
+* For in ループ
+
+文法:
+
+.. code-block:: ring
+
+	for 識別子 in リストまたは文字列  [step 式] {
+		ステートメント・ブロック
+	}
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	aList = 1:10	# 1 ～ 10 までの数値を有するリストを作成します。
+	for x in aList { print("#{x}\n") }	# 1 ～ 10 までの数値を表示します。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	aList = 1:10	# 1 ～ 10 までの数値を有するリストを作成します。
+	# print リスト内にある奇数の項目を表示します。
+	for x in aList step 2 {
+		print("#{x}\n") 
+	}
+
+(For in) は項目を参照で取得します。
+
+つまり、ループの内側で項目の読み取りと編集ができます。
+	
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	aList = 1:5		# 1 ～ 5 までの数値を有するリストを作成します。
+	# リストの数値を文字列へ置換します。
+	for x in aList {
+		switch x {
+		case 1  x = "one"
+		case 2  x = "two"
+		case 3  x = "three"
+		case 4  x = "four"
+		case 5  x = "five"
+		}
+	}
+	print(aList)	# リストの項目を表示します。
+
+
+.. index:: 
+	pair: 制御構造 - 第三形式; 例外処理
+
+例外処理
+========
+
+.. code-block:: ring
+
+	try {
+		ステートメント・ブロック
+	catch
+		ステートメント・ブロック
+	}
+

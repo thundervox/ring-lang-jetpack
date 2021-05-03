@@ -1,0 +1,375 @@
+.. index:: 
+	single: 算術関数; はじめに
+
+========
+算術関数
+========
+
+算術関数の用法です。
+
+.. index:: 
+	pair: 算術関数; 関数のリスト
+
+関数のリスト
+============
+
+このような算術関数が Ring にあります。
+
+=============== ============================================================================================
+関数            説明
+=============== ============================================================================================
+sin(x)          ラジアン x のサイン角度を返します。
+cos(x)          ラジアン x のコサイン角度を返します。
+tan(x)          ラジアン x のタンジェント角度を返します。
+asin(x)         ラジアン表記によるアークサインの x の主値を返します。
+acos(x)         ラジアン表記によるアークコサインの x の主値を返します。
+atan(x)         ラジアン表記によるアークタンジェントの x の主値を返します。
+atan2(y,x)      ラジアン [-pi,+pi] の区間にある、ラジアン表記によるアークタンジェントの x の主値を返します。
+sinh(x)         ラジアン x の双曲線サインを返します。
+cosh(x)         ラジアン x の双曲線コサインを返します。
+tanh(x)         ラジアン x の双曲線タンジェントを返します。
+exp(x)          e の x 乗値を返します。
+log(x)          x の自然対数を返します (e を底とする)。
+log(x,b)		b を底とする x の対数を返します
+log10(x)        x の常用対数を返します (10 を底とする対数)。
+ceil(x)         x 以上の最小整数値を返します。
+floor(x)        x 以下の最大整数値を返します。
+fabs(x)         x の絶対値を返します。
+pow(x,y)        x に対する y の累乗を返します。
+sqrt(x)         x の平方根を返します。
+random(x)       [0,x] の範囲による乱数を返します。
+srandom(x)		乱数生成器を初期化します。
+unsigned(n,n,c) 符号なし数値で演算を実行します。
+decimals(n)     浮動小数点数、倍精度数の小数点の後にある小数点以下の数値を決定します。
+=============== ============================================================================================
+
+.. index:: 
+	pair: 算術関数; 用例
+
+用例
+====
+
+.. code-block:: ring
+
+	See "Mathematical Functions" + nl
+	See "Sin(0) = " + sin(0) + nl
+	See "Sin(90) radians = " + sin(90) + nl
+	See "Sin(90) degree = " + sin(90*3.14/180) + nl
+
+	See "Cos(0) = " + cos(0) + nl
+	See "Cos(90) radians = " + cos(90) + nl
+	See "Cos(90) degree = " + cos(90*3.14/180) + nl
+
+	See "Tan(0) = " + tan(0) + nl
+	See "Tan(90) radians = " + tan(90) + nl
+	See "Tan(90) degree = " + tan(90*3.14/180) + nl
+
+	See "asin(0) = " + asin(0) + nl
+	See "acos(0) = " + acos(0) + nl
+	See "atan(0) = " + atan(0) + nl
+	See "atan2(1,1) = " + atan2(1,1) + nl
+
+	See "sinh(0) = " + sinh(0) + nl
+	See "sinh(1) = " + sinh(1) + nl
+	See "cosh(0) = " + cosh(0) + nl
+	See "cosh(1) = " + cosh(1) + nl
+	See "tanh(0) = " + tanh(0) + nl
+	See "tanh(1) = " + tanh(1) + nl
+
+	See "exp(0) = " + exp(0) + nl
+	See "exp(1) = " + exp(1) + nl
+	See "log(1) = " + log(1) + nl
+	See "log(2) = " + log(2) + nl
+	See "log10(1) = " + log10(1) + nl
+	See "log10(2) = " + log10(2) + nl
+	See "log10(10) = " + log10(10) + nl
+
+	See "Ceil(1.12) = " + Ceil(1.12) + nl
+	See "Ceil(1.72) = " + Ceil(1.72) + nl
+
+	See "Floor(1.12) = " + floor(1.12) + nl
+	See "Floor(1.72) = " + floor(1.72) + nl
+
+	See "fabs(1.12) = " + fabs(1.12) + nl
+	See "fabs(1.72) = " + fabs(1.72) + nl
+
+	See "pow(2,3) = " + pow(2,3) + nl
+
+	see "sqrt(16) = " + sqrt(16) + nl
+
+
+実行結果:
+
+.. code-block:: ring
+
+	Mathematical Functions
+	Sin(0) = 0
+	Sin(90) radians = 0.89
+	Sin(90) degree = 1.00
+	Cos(0) = 1
+	Cos(90) radians = -0.45
+	Cos(90) degree = 0.00
+	Tan(0) = 0
+	Tan(90) radians = -2.00
+	Tan(90) degree = 1255.77
+	asin(0) = 0
+	acos(0) = 1.57
+	atan(0) = 0
+	atan2(1,1) = 0.79
+	sinh(0) = 0
+	sinh(1) = 1.18
+	cosh(0) = 1
+	cosh(1) = 1.54
+	tanh(0) = 0
+	tanh(1) = 0.76
+	exp(0) = 1
+	exp(1) = 2.72
+	log(1) = 0
+	log(2) = 0.69
+	log10(1) = 0
+	log10(2) = 0.30
+	log10(10) = 1
+	Ceil(1.12) = 2
+	Ceil(1.72) = 2
+	Floor(1.12) = 1
+	Floor(1.72) = 1
+	fabs(1.12) = 1.12
+	fabs(1.72) = 1.72
+	pow(2,3) = 8
+	sqrt(16) = 4
+
+.. index:: 
+	pair: 算術関数; Random()
+
+Random() 関数
+=============
+
+Random() 関数は乱数を生成します。また最大値の指定もできます (オプション扱い)。
+
+文法:
+
+.. code-block:: ring
+
+	Random(x) ---> [0,x] の範囲による乱数。
+
+用例:
+
+.. code-block:: ring
+
+	for x = 1 to 20
+		see  "Random number : " + random() + nl +
+		     "Random number Max (100) : " + random(100) + nl
+	next
+
+実行結果:
+
+.. code-block:: ring
+
+	Random number : 31881
+	Random number Max (100) : 80
+	Random number : 5573
+	Random number Max (100) : 63
+	Random number : 2231
+	Random number Max (100) : 43
+	Random number : 12946
+	Random number Max (100) : 39
+	Random number : 22934
+	Random number Max (100) : 48
+	Random number : 4690
+	Random number Max (100) : 52
+	Random number : 13196
+	Random number Max (100) : 65
+	Random number : 30390
+	Random number Max (100) : 87
+	Random number : 4327
+	Random number Max (100) : 77
+	Random number : 12456
+	Random number Max (100) : 17
+	Random number : 28438
+	Random number Max (100) : 13
+	Random number : 30503
+	Random number Max (100) : 6
+	Random number : 31769
+	Random number Max (100) : 94
+	Random number : 8274
+	Random number Max (100) : 65
+	Random number : 14390
+	Random number Max (100) : 90
+	Random number : 28866
+	Random number Max (100) : 12
+	Random number : 24558
+	Random number Max (100) : 70
+	Random number : 29981
+	Random number Max (100) : 77
+	Random number : 12847
+	Random number Max (100) : 63
+	Random number : 6632
+	Random number Max (100) : 60
+
+.. index:: 
+	pair: 算術関数; SRandom()
+
+SRandom() 関数
+==============
+
+SRandom() 関数は乱数生成器を初期化します。
+
+文法:
+
+.. code-block:: ring
+
+	SRandom(x) 
+
+.. index:: 
+	pair: 算術関数; Unsigned()
+
+Unsigned() 関数
+===============
+
+Unsigned() 関数により符号なし整数を使えます。
+
+文法:
+
+.. code-block:: ring
+
+	Unsigned(nNum1,nNum2,cOperator)
+		--> nNum1,nNum2 における cOperator の演算結果。
+
+用例:
+
+.. code-block:: ring
+
+	see oat_hash("hello") + nl
+
+	# ジェンキンス法によるハッシュ関数 - https://en.wikipedia.org/wiki/Jenkins_hash_function
+	func oat_hash cKey	
+		h = 0
+		for x in cKey
+			h = unsigned(h,ascii(x),"+")
+			h = unsigned(h,unsigned(h,10,"<<"),"+")
+			r = unsigned(h,6,">>")
+			h = unsigned(h, r,"^")
+		next
+		h = unsigned(h,unsigned(h,3,"<<"),"+")
+		h = unsigned(h,unsigned(h,11,">>"),"^")
+		h = unsigned(h,unsigned(h,15,"<<"),"+")
+		return h  
+
+実行結果:
+
+.. code-block:: ring
+
+	3372029979.00
+
+.. index:: 
+	pair: 算術関数; Decimals()
+
+Decimals() 関数
+===============
+
+Decimals() により浮動小数点数、倍精度数の小数点の後にある小数点以下の数値を決定できます。
+
+文法:
+
+.. code-block:: ring
+
+	Decimals(nDecimalsCount)
+
+用例:
+
+.. code-block:: ring
+
+	x = 1.1234567890123
+	for d = 0 to 14
+		decimals(d)
+		see x + nl
+	next
+
+
+実行結果:
+
+.. code-block:: ring
+
+
+	1
+	1.1
+	1.12
+	1.123
+	1.1235
+	1.12346
+	1.123457
+	1.1234568
+	1.12345679
+	1.123456789
+	1.1234567890
+	1.12345678901
+	1.123456789012
+	1.1234567890123
+	1.12345678901230
+
+
+.. index:: 
+	pair: 算術関数; 数値の桁間に _ を使うには
+
+数値の桁間に _ を使うには
+=========================
+
+数値の桁間に‘_’を使うことができます。
+
+用例:
+
+.. code-block:: ring
+
+	x = 1_000_000
+	see type(x)+nl
+	see x+1+nl
+
+実行結果:
+
+.. code-block:: ring
+
+	NUMBER
+	100000001
+
+.. index:: 
+	pair: 算術関数; 数値の末尾に f を使うには
+
+数値の末尾に f を使うには
+=========================
+
+数値の末尾に‘f’を使うことができます。
+
+用例:
+
+.. code-block:: ring
+
+	x = 19.99f
+	see type(x) + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	NUMBER
+
+.. index:: 
+	pair: 算術関数; 十六進数を使うには
+
+十六進数を使うには
+==================
+
+十六進数は接頭辞に "0x" または "0X" を付けて記述します。
+
+用例:
+
+.. code-block:: ring
+
+	x = 0x10
+	? x             # 16
+	x = 0xff
+	? x             # 255
+	x = 0x0A
+	? x             # 10
+	? 0xFFFF        # 65535
+	? 0x0A + 1      # 10+1 = 11
+

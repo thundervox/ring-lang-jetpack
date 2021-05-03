@@ -1,0 +1,122 @@
+﻿.. index:: 
+     single: 多国語アプリケーション; はじめに
+
+======================
+多国語アプリケーション
+======================
+
+多国語 Ring アプリケーションの実装方法は多種多様です！
+
+String2Constant ツールの用法です。
+
+.. index:: 
+     pair: 多国語アプリケーション; String2Constant の用法
+
+String2Constant の用法
+======================
+
+Ring 1.8 より String2Constant アプリケーションがあります。
+
+このツールは ring/tools/string2constant フォルダにあります。
+
+このツールは文字列リテラルではなく、定数を用いたソースコードへ変換します。
+
+これにより、定数を様々な言語を翻訳して言語ごとにソースコードのファイルへ格納できます。
+
+Arabic.ring, English.ring, Japanese.ring など言語ごとに特殊なファイルを扱うことができます。
+
+このツールの採用事例としては、アラビア語へ翻訳したフォームデザイナーがあります。
+
+.. image:: string2constant.png
+	:alt: String2Constant 
+
+.. index:: 
+     pair: 多国語アプリケーション; フォームデザイナーの翻訳
+
+フォームデザイナーの翻訳
+========================
+
+フォームデザイナーのアプリケーションは ring/applications/formdesigner フォルダにあります。
+
+翻訳用のファイルは ring/applications/formdesinger/translation フォルダにあります。
+
+三種類のファイルがあります。
+
+* Arabic.ring
+* English.ring
+* Japanese.ring
+
+定数定義の考えかたを理解するには前述のファイルを確認します。
+
+これは Japanese.ring ファイルからの引用です。
+
+.. code-block:: ring
+
+	T_LANGUAGE = "english"
+	T_LAYOUTDIRECTION = 0			# 左から右へ
+
+	T_FORMDESIGNER_FORMDESIGNER 	= "フォームデザイナー"
+	T_FORMDESIGNER_FORMTITLE 		= "Form1"
+
+	T_FORMDESIGNER_FILE 			= "ファイル(&F)"
+	T_FORMDESIGNER_NEW 				= "新規作成(&N)"
+	T_FORMDESIGNER_OPEN 			= "開く(&O)"
+	T_FORMDESIGNER_SAVE 			= "保存(&S)"
+	T_FORMDESIGNER_SAVEAS 			= "名前を付けて保存(&A)"
+	T_FORMDESIGNER_CLOSE 			= "閉じる(&C)"
+
+フォームデザイナーのソースコードのファイルでは、文字列リテラル型ではなく定数を使用しています。
+
+これは formdesigner/mainwindow/formdesignerview.ring ファイルからの引用です。
+
+.. code-block:: ring
+
+		# メインウィンドウの作成と MDI 領域の使用
+			win = new qMainwindow() {
+				setWindowTitle(T_FORMDESIGNER_FORMDESIGNER) # "Form Designer"
+				setcentralWidget(this.oArea)
+				setLayoutDirection(T_LAYOUTDIRECTION)
+			}
+
+* コメントで文字列リテラルを記述すると、コードの可読性向上になります。
+
+* setLayoutDirection() メソッドで、ウィンドウの方向を左から右へ設定できます。
+
+* 使用する翻訳ファイルをLoad 命令で指定します。
+
+.. index:: 
+     pair: 多国語アプリケーション; フォームの翻訳
+
+フォームの翻訳
+==============
+
+フォームデザイナーでフォームを作成した後に View クラスが生成されます。
+
+View クラスの修正は行わずに Controller クラスから翻訳を追加します。
+
+例えば、このようなフォームファイルがあります : ring/formdesigner/selobjects/selobjects.rform
+
+.. image:: formtranslation1.png
+	:alt: フォームの翻訳
+
+
+このコードを使って Controller クラスから翻訳を追加します。
+
+そして、定数は Arabic.ring, English.ring と Japanese.ring で定義します。
+
+.. code-block:: ring 
+
+	class selobjectsController from windowsControllerParent
+
+		oView = new selobjectsView  {
+			ListObjects.setselectionmode(QAbstractItemView_MultiSelection)
+			win.setwindowmodality(2)
+			# 翻訳
+				win.setWindowTitle(T_FORMDESIGNER_SELOBJECTS_TITLE)
+				win.setLayoutDirection(T_LAYOUTDIRECTION)
+				labelobjects.setText(T_FORMDESIGNER_SELOBJECTS_OBJECTS)
+				btnSelect.setText(T_FORMDESIGNER_SELOBJECTS_SELECT)
+				btnClose.setText(T_FORMDESIGNER_SELOBJECTS_CLOSE)
+		}
+
+

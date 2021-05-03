@@ -1,0 +1,1050 @@
+.. index:: 
+	single: オブジェクト指向プログラミング (OOP); はじめに
+
+====================================
+オブジェクト指向プログラミング (OOP)
+====================================
+
+Ring でオブジェクト指向プログラミングのパラダイムを扱う方法です。
+
+* クラスとオブジェクト
+* 括弧を用いたオブジェクトへのアクセス
+* コンポジション
+* Setter と Getter
+* プライベート属性とメソッド
+* 演算子のオーバーロード
+* 継承
+* 動的属性
+* パッケージ
+* オブジェクトの表示
+* Find() とオブジェクトのリスト
+* Sort() とオブジェクトのリスト
+* Self.属性 および Self.メソッド() の用法
+* This.属性 および This.メソッド() の用法
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); クラスとオブジェクト
+
+
+クラスとオブジェクト
+====================
+
+このシンタックスで新しいクラスを定義できます。
+
+文法:
+
+.. code-block:: ring
+
+	Class <クラス名> [From|<|: <親クラス名>]
+		[属性]
+		[メソッド]
+		[Private
+ 		  [属性]
+		  [メソッド]
+                ]
+
+また、このシンタックスでオブジェクトを作成できます。
+
+文法:
+
+.. code-block:: ring
+
+	New <オブジェクト名> [ (init メソッドの仮引数) ] |
+	[ { オブジェクトのデータ、およびメソッドへのアクセス } ]   ---> オブジェクト
+
+用例:
+
+.. code-block:: ring
+
+	New point { x=10  y=20  z=30  print() }
+	Class Point x y z func print see x + nl + y + nl + z + nl 
+
+.. note:: { } でオブジェクトのデータとメソッドへアクセスできます。
+
+.. tip:: クラス名の直後にクラスの属性を宣言できます。
+
+実行結果:
+
+.. code-block:: ring
+
+	10
+	20
+	30
+
+別の記法で同じプログラムを書き直せます。
+
+.. code-block:: ring
+
+	New point                       # point クラスで新しいオブジェクトを作成
+	{                               # 新しいオブジェクトの属性、およびメソッドへのアクセス
+		x = 10                  # 属性 x へ 10 を設定
+		y = 20                  # 属性 y へ 20 を設定
+		z = 30                  # 属性 z へ 30 を設定
+		print()                 # print メソッドの呼び出し
+	}                               # オブジェクトのアクセスを終了
+	
+	
+	Class Point                    # Point クラスの定義
+		x y z                   # クラスには属性 x, y および z があります。
+		func print             # print メソッドの定義
+			see x + nl +   # 属性 x の表示
+			y + nl +       # 属性 y の表示
+			z + nl         # 属性 z の表示
+
+
+また、別の方法で同じプログラムを書くことができます。
+
+.. code-block:: ring
+
+	P1 = New Point
+	P1.x = 10
+	P1.y = 20
+	P1.z = 30
+	P1.Print()
+	Class Point x y z func print see x + nl + y + nl + z + nl 	
+
+.. note:: オブジェクト名の直後にドット演算子を用いるとオブジェクトのメンバへアクセスできます。
+
+また、別の方法で同じプログラムを書くことができます。
+
+.. code-block:: ring
+
+	new point { print() } 	
+	Class Point
+		x = 10  y = 20  z = 30
+		func print see x + nl + y + nl + z + nl
+
+.. note:: クラスの属性を宣言する時にクラスの属性へデフォルトの値を設定できます。
+
+また、別の方法で同じプログラムを書くことができます。
+
+.. code-block:: ring
+
+	new point(10,20,30)
+	Class Point
+		x y z 
+		func init p1,p2,p3 x=p1 y=p2 z=p3 print()
+		func print see x + nl + y + nl + z + nl
+
+.. note:: 新しいオブジェクトの作成時に () を使うと init メソッドを呼び出せます。
+
+また、別の方法で同じプログラムを書くことができます。
+
+.. code-block:: ring
+
+	new point( [ :x = 10 , :y = 20 , :z = 30 ] )
+	Class Point x y z
+	      func init aPara x = aPara[:x] y = aPara[:y] z = aPara[:z] print()
+     	      func print see x + nl + y + nl + z + nl
+
+.. tip:: メソッドの仮引数を渡すためにハッシュを使用する場合は、
+         オプションの仮引数の作成時、およびハッシュへ追加時は仮引数の順序を変更できます。
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); 括弧を用いたオブジェクトへのアクセス
+
+括弧を用いたオブジェクトへのアクセス
+====================================
+
+括弧 { } で、いつでもオブジェクトへアクセスできます。
+
+括弧内ではオブジェクトの属性とメソッドを使えます。
+
+これは New キーワードによるオブジェクトの作成、またはこのシンタックスを必要なときに使えます。
+
+.. code-block:: ring
+
+	オブジェクト名 { オブジェクトのデータ、およびメソッドへのアクセス }
+
+用例:
+
+.. code-block:: ring
+
+	See "Creating the Object" + nl
+	o1 = new Point
+	See "Using the Object" + nl
+	o1 {
+		x=5 	
+		y=15
+		z=25	
+		print()
+	}
+	Class Point x y z func print see x + nl + y + nl + z 
+
+括弧は関数、またはメソッドの呼び出し時にオブジェクトへアクセスするために使えます。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new Point
+
+	print( o1 { x=10 y=20 z=30 } )
+	
+	func print object
+		see object.x + nl + 
+		    object.y + nl + 
+		    object.z 
+
+	Class Point x y z
+
+括弧とドット演算子を併用して同じ式のオブジェクトへアクセスできます。
+
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new Point
+
+	O1 { x=10 y=20 z=30 }.print()
+	
+	Class Point x y z
+		func print see x + nl + y + nl + z
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); コンポジション
+
+コンポジション
+==============
+
+オブジェクトでは、ほかのオブジェクトの属性を所有できます。
+
+アクセスしたいオブジェクトを多重括弧にすることで実現できます。
+
+用例:
+
+.. code-block:: ring
+
+	R1 = New Rectangle 
+	{
+
+		Name = "Rectangle 1"
+
+		P1 
+		{
+			X = 10
+			Y = 20
+		}
+
+		P2 
+		{
+			X = 200
+			Y = 300
+		}	
+
+	        Color = "Blue"
+
+	}
+	
+	see "Name : " + R1.Name + nl +
+	    "Color: " + R1.Color + nl +
+	    "P1   : (" + R1.P1.X + "," + R1.P1.Y + ")" + nl + 
+	    "P2   : (" + R1.P2.X + "," + R1.P2.Y + ")"  
+
+	Class Rectangle
+		name  color
+		p1 = new Point
+		p2 = new Point
+
+	Class Point x y 
+
+実行結果:
+
+.. code-block:: ring
+
+	Name : Rectangle 1
+	Color: Blue
+	P1   : (10,20)
+	P2   : (200,300)
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); Setter と Getter
+
+Setter と Getter
+=================
+
+オブジェクトの属性を設定 (Setter)、または取得 (Getter) 時に用いるメソッドを定義できます。
+
+文法:
+
+.. code-block:: ring
+
+	Class [クラス名]
+
+		[属性名]
+		...
+
+		Func Set[属性名]
+			...
+
+		Func Get[属性名]
+			...
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new person
+
+	o1.name = "Mahmoud"  see o1.name + nl
+
+	o1 { name = "Ahmed"  see name }
+
+	Class Person
+
+		name family = "Fayed"
+
+		func setname value
+			see "Message from SetName() Function!" + nl
+			name = value + " " + family
+
+		func getname
+			see "Message from GetName() Function!" + nl
+			return "Mr. " + name
+
+実行結果:
+
+.. code-block:: ring
+
+	Message from SetName() Function!
+	Message from GetName() Function!
+	Mr. Mahmoud Fayed
+	Message from SetName() Function!
+	Message from GetName() Function!
+	Mr. Ahmed Fayed
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); プライベート属性とメソッド
+
+プライベート属性とメソッド
+==========================
+
+クラスの本体内では private キーワードの後にプライベートな属性とメソッドを定義できます。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new person {
+		name = "Test"
+		age = 20
+		print()
+		o1.printsalary()
+	}
+
+	try
+		see o1.salary
+	catch
+		see cCatchError + nl
+	done
+
+	try
+		o1.increasesalary(1000)
+	catch
+		see cCatchError + nl
+	done
+
+	Class Person
+
+		name age 
+
+		func print
+			see "Name   : " + name + nl + 
+			    "Age    : " + age + nl 
+
+		func printsalary
+		  	see "Salary : " + salary + nl 
+
+		private
+
+		salary = 15000
+
+		func increasesalary x
+			salary += x
+
+実行結果:
+
+.. code-block:: ring
+
+	Name   : Test
+	Age    : 20
+	Salary : 15000
+	Error (R27) : Using private attribute from outside the class : salary
+	Error (R26) : Calling private method from outside the class : increasesalary
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); 演算子のオーバーロード
+
+演算子のオーバーロード
+======================
+
+クラスオブジェクトで演算子を使用可能にするには、クラスへ **operator** メソッドを追加します。
+
+文法:
+
+.. code-block:: ring
+
+	Class ClassName
+
+		...
+
+		Func operator cOperator,Para
+
+			...
+
+関数の演算子は二種類の仮引数を扱います。一つ目は演算子を、二つ目は演算子の後にある第二仮引数を意味します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point { x = 10 y = 10 print("P1    : ") }
+	o2 = new point { x = 20 y = 40 print("P2    : ") }
+
+	o3 = o1 + o2
+	o3.print("P1+P2 : ")
+
+	class point x y
+
+		func operator cOperator,Para
+			result = new point	
+			switch cOperator
+			on "+"
+				result.x = x + Para.x
+				result.y = y + Para.y
+			on "-"
+				result.x = x - Para.x
+				result.y = y - Para.y
+			off
+			return result
+
+		func print cPoint
+			see cPoint + "X : " + x + " Y : " + y + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	P1    : X : 10 Y : 10
+	P2    : X : 20 Y : 40
+	P1+P2 : X : 30 Y : 50
+
+
+この用例は stdlib.ring にある List クラスからの引用です。
+
+.. code-block:: ring
+
+	Func operator cOperator,Para
+		result = new list
+		switch cOperator
+			on "+"
+				if isobject(para)
+					for t in Para.vValue
+						vValue + t
+					next
+				but islist(para)
+					for t in Para
+						vValue + t
+					next
+				ok
+			on "len"
+				return len( vValue )
+			on "[]"
+				return &vValue[para]
+		off
+		return result
+
+“len” 演算子は制御構造 (for in) で使用されます。
+
+“[]” 演算子はリスト項目のアクセスをするときに使用されます。
+この場合、 & 演算子は数値による参照で文字列などの項目の値を返すときに使用します。
+よって、項目へアクセスするときに項目の更新ができます。
+
+
+用例(2)
+
+.. code-block:: ring
+
+	func main 
+
+	See "----1"+nl
+	    a1 = new BigNumber( "123" )
+	    a2 = new BigNumber( "456" )
+	    a3 = new BigNumber( "789" )
+	See nl+"----2"+nl  
+		a1.print()
+		a2.print()
+		a3.print()
+	See nl+"----3"+nl      
+	    a2 = a1 + "45"  
+	See nl+"----4"+nl  
+	    a2.print()      
+	See nl+"----5"+nl  
+	    a3 = a1 + a2    
+	See nl+"----6"+nl  
+	    a3.print()      
+	See nl+"----7"+nl
+
+	###==================================
+	Func FuncAdd( num1, num2)
+	   Sum = 0 + num1 + num2    ### Para.aData isNumber
+	   Sum = "" +Sum            ### Para.adata isString
+	return Sum                  ### クラスからの返値
+	###===================================
+
+	class BigNumber 
+
+	    ### 変数
+	    aData = "468"
+
+	    ### INIT 関数のデフォルト値
+	    func init aPara 
+		? "INIT aPara: " ? aPara
+		if isString(aPara)
+		    aData = aPara 
+		else 
+		    aData = "" + aPara
+		ok
+
+	    ### そのほかの関数
+	    func operator cOperator, Para
+		    whatType = Type(Para)
+		    ? nl+"WhatType-PARA: "+ whatType ? Para 
+		    ? nl+"Operator: " ? cOperator  ? nl+"PARA: " ? Para ? "    ______" ? nl
+				    if whatType = "STRING"
+				       dataInfo = Para
+				       ? "dataInfo String: " ? dataInfo
+				    but whatType = "NUMBER"
+				       datinfo  = "" + Para
+				       ? "dataInfo Number: " ? dataInfo
+				    else whatType = "OBJECT"
+				       dataInfo = "" + para.aData  
+				       ? "dataInfo OBJECT: " ? dataInfo
+				    ok
+				  ? "dataInfo USING: " ? dataInfo  
+		    ### Para.aData は初めて渡されたときには存在しません (メンバのオブジェクト)。
+		    ### "self" が代入されたときの結果は isObject です。
+		    result = self   
+		    switch cOperator
+			on "+"
+			     answer = FuncAdd( aData, dataInfo )
+			     ? nl+"AnswerString - FunAdd aData, dataInfo: " ? answer  
+			     ### result = Self はオブジェクトであるため、 aData メンバへオブジェクトを代入します
+			     result.aData = answer
+			off
+		    ### Result = Self はオブジェクトです
+		    return result   
+
+	    func print 
+		? nl+"ClassPrint aData: " ? aData 	
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); 継承
+
+継承
+====
+
+From キーワードを使用したクラスの定義で別のクラスからクラスを作成できます。
+
+文法:
+
+.. code-block:: ring
+
+	Class <クラス名> [From <親クラスの名前>]
+
+super オブジェクトで子クラスから親クラスのメソッドを呼び出せます。
+
+文法:
+
+.. code-block:: ring
+
+	func methodname
+		...
+		super.methodname()
+		...
+
+用例:
+
+.. code-block:: ring
+
+	Func main
+		e1 = new Employee {
+			Name = "test"
+			age = 20
+			job = "programmer"
+			salary = 20000000
+			print()
+		}
+	
+
+	Class Human 
+		Name Age
+		func print
+			see "Name : " + name + nl + "Age  : " + age + nl
+
+	Class Employee from Human
+		Job Salary
+		func print
+			super.print()
+			see "Job  : " + job + nl + "Salary : " + salary + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	Name : test
+	Age  : 20
+	Job  : programmer
+	Salary : 20000000
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); 動的属性
+
+動的属性
+========
+
+クラス名末尾に命令を記述すると、新しいオブジェクトが作成されたときに実行します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new dynamicClass
+	see o1.var5 + nl	# 5 を出力
+
+	Class DynamicClass
+		for x = 1 to 10
+			cStr = "var" + x + " = " + x
+			eval(cStr)
+		next
+
+.. tip:: 前述の用例では var1, var2, ..., var10 は属性として定義されています。
+
+.. tip:: 前述の用例における問題は x および cStr が同じ属性として定義されていることです！
+
+.. note:: 文字列内にクラスの定義を記述できます。
+          また、 eval() 関数で文字列を実行するとクラスを定義できます。
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); パッケージ
+
+パッケージ
+==========
+
+このシンタックスでパッケージ (共通の名前によるクラスのグループ) を作成できます。
+
+.. code-block:: ring
+
+	package PackageName
+		Class Class1
+			...
+		Class Class2
+			...
+		Class Class3
+			...
+		...
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new System.output.console
+	o1.print("Hello World")
+	
+	Package System.Output
+		Class Console
+			Func Print cText
+				see cText + nl
+
+.. note:: パッケージ名にドット演算子を使えます。
+
+パッケージ.クラス名 (PackageName.ClassName) という長い名前を入力する代わりに import 命令を使えます。
+
+パッケージをインポートする場合は、このパッケージを指定のクラスで使えます。 
+
+用例:
+
+.. code-block:: ring
+
+	import system.output
+	o1 = new console {
+		print("Hello World")
+	}
+	Package System.Output
+		Class Console
+			Func Print cText
+				see cText + nl
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); オブジェクトの表示
+
+オブジェクトの表示
+==================
+
+see 命令はオブジェクトの状態 (属性と値) を表示します。
+
+用例:
+
+.. code-block:: ring
+
+	see new point { x=10 y=20 z=30 }
+	class point x y z
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 10.000000
+	y: 20.000000
+	z: 30.000000
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); Find() とオブジェクトのリスト
+
+Find() とオブジェクトのリスト
+=============================
+
+Find() 関数はオブジェクトのリスト内部を検索します。
+
+文法:
+
+.. code-block:: ring
+
+	Find(List,ItemValue,nColumn,cAttribute) ---> 項目のインデックス
+
+用例:
+
+.. code-block:: ring
+
+	myList1 = [new Company {position=3 name="Mahmoud" symbol="MHD"},
+  		   new Company {position=2 name="Bert" symbol="BRT"},
+		   new Company {position=1 name="Ring" symbol="RNG"}
+		  ]
+
+	see find(mylist1,"Bert",1,"name") + nl
+	see find(mylist1,"Ring",1,"name") + nl
+	see find(mylist1,"Mahmoud",1,"name") + nl
+	see find(mylist1,"RNG",1,"symbol") + nl
+	see find(mylist1,"MHD",1,"symbol") + nl
+	see find(mylist1,"BRT",1,"symbol") + nl
+	see find(mylist1,3,1,"position") + nl
+	see find(mylist1,1,1,"position") + nl
+	see "Other" + nl
+	see find(mylist1,"test",1,"name") + nl
+	see find(mylist1,"test",0,"name") + nl
+	see find(mylist1,"test",5,"name") + nl
+
+	class company position name symbol
+
+実行結果:
+
+.. code-block:: ring
+
+	2
+	3
+	1
+	3
+	1
+	2
+	1
+	3
+	Other
+	0
+	0
+	0
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); Sort() とオブジェクトのリスト
+
+Sort() とオブジェクトのリスト
+=============================
+
+Sort() 関数はオブジェクトの属性に基づきオブジェクトのリストを整列します。
+
+文法:
+
+.. code-block:: ring
+
+	Sort(List,nColumn,cAttribute) ---> オブジェクトの属性に基づいて整列されたリスト
+
+用例:
+
+.. code-block:: ring
+
+	myList1 = [
+			new Company {position=3 name="Mahmoud" symbol="MHD"},
+			new Company {position=2 name="Bert" symbol="BRT"},
+			new Company {position=8 name="Charlie" symbol="CHR"},
+			new Company {position=6 name="Easy" symbol="FEAS"},
+			new Company {position=7 name="Fox" symbol="EFOX"},
+			new Company {position=5 name="Dog" symbol="GDOG"},
+			new Company {position=4 name="George" symbol="DGRG"},
+			new Company {position=1 name="Ring" symbol="RNG"}
+		  ]
+
+	see sort(mylist1,1,"name")
+	see copy("*",70) + nl
+	see sort(mylist1,1,"symbol")
+	see copy("*",70) + nl
+	see sort(mylist1,1,"position")
+
+	class company position name symbol
+
+実行結果:
+
+.. code-block:: ring
+
+
+	position: 2.000000
+	name: Bert
+	symbol: BRT
+	position: 8.000000
+	name: Charlie
+	symbol: CHR
+	position: 5.000000
+	name: Dog
+	symbol: GDOG
+	position: 6.000000
+	name: Easy
+	symbol: FEAS
+	position: 7.000000
+	name: Fox
+	symbol: EFOX
+	position: 4.000000
+	name: George
+	symbol: DGRG
+	position: 3.000000
+	name: Mahmoud
+	symbol: MHD
+	position: 1.000000
+	name: Ring
+	symbol: RNG
+	**********************************************************************
+	position: 2.000000
+	name: Bert
+	symbol: BRT
+	position: 8.000000
+	name: Charlie
+	symbol: CHR
+	position: 4.000000
+	name: George
+	symbol: DGRG
+	position: 7.000000
+	name: Fox
+	symbol: EFOX
+	position: 6.000000
+	name: Easy
+	symbol: FEAS
+	position: 5.000000
+	name: Dog
+	symbol: GDOG
+	position: 3.000000
+	name: Mahmoud
+	symbol: MHD
+	position: 1.000000
+	name: Ring
+	symbol: RNG
+	**********************************************************************
+	position: 1.000000
+	name: Ring
+	symbol: RNG
+	position: 2.000000
+	name: Bert
+	symbol: BRT
+	position: 3.000000
+	name: Mahmoud
+	symbol: MHD
+	position: 4.000000
+	name: George
+	symbol: DGRG
+	position: 5.000000
+	name: Dog
+	symbol: GDOG
+	position: 6.000000
+	name: Easy
+	symbol: FEAS
+	position: 7.000000
+	name: Fox
+	symbol: EFOX
+	position: 8.000000
+	name: Charlie
+	symbol: CHR
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); Self.属性 と Self.メソッド() の用法
+
+Self.属性 と Self.メソッド() の用法
+==============================================
+
+クラスの範囲内 (クラス名末尾、およびメソッドの前) ならびに、クラスのメソッドは Self.属性 と Self.メソッド() を使えます。
+
+.. code-block:: ring
+
+	Class Point
+		self.x = 10
+		self.y = 20
+		self.z = 30
+		func print
+			see self.x + nl + self.y + nl + self.z + nl
+
+.. note:: クラスの属性を定義するために、クラスの範囲内で Self.属性 を使うとクラスの属性はグローバル変数との名前衝突から保護されます。
+
+.. tip:: Self.属性 でクラスの属性を定義するときに、同名のグローバル変数が存在する場合は属性の定義は行われずにグローバル変数が使用されます。
+
+グローバル変数名と属性名の間で起こる名前衝突については「スコープの規則」を参照してください。
+
+これは何が起きているのですか？
+
+理由
+
+* クラスの範囲内ではグローバル変数へアクセスできます。
+* 変数定義前に Ring は変数の検索を行い、見つかれば使用します。
+
+.. note:: グローバル変数を避けるために Main 関数の使用、および名前を $ から始めてください。
+
+.. tip:: 大規模プログラムでは Self.属性 でクラスの保護、およびメンバの定義してください。
+
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); This.属性 と This.メソッド() の用法
+
+This.属性 と This.メソッド() の用法
+=======================================
+
+クラス内にあるメソッドはオブジェクトのスコープへアクセスできます。
+属性の読み書き、またはメソッドの呼び出しでは Self.属性 あるいは Self.メソッド() の使用は不要です。
+
+また、括弧 { } でメソッドの内側から別のオブジェクトへアクセスできます。
+この場合は、現在のオブジェクトの有効範囲は括弧内へ変更されます。
+
+括弧内のクラスの属性、およびメソッドへのアクセスする方法はありますか？
+
+これは This.属性 と This.メソッド() で実現できます。
+
+用例:
+
+.. code-block:: ring
+
+	new point  
+
+	class point 
+		x=10 y=20 z=30
+		print()
+		func print
+			new UI {
+				display(this.x,this.y,this.z)
+			}
+
+	Class UI
+		func display x,y,z
+			see x + nl + y + nl + z + nl
+
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); クラス範囲で This を Self として使用
+
+クラス範囲で This を Self として使用
+====================================
+
+クラス範囲とはクラス名の後、およびすべてのメソッドの前に出現する範囲のことです。
+
+クラス範囲で This を Self として使えます。
+
+用例:
+
+.. code-block:: ring
+
+	func main
+
+		o1 = new program {
+			test()
+		}
+
+		? o1
+
+	class program 
+
+		this.name = "My Application"
+		this.version = "1.0"
+		? name ? version	
+
+		func test
+			? "Name    = " + name 
+			? "Version = " + version
+
+実行結果:
+
+.. code-block:: none
+
+	My Application
+	1.0
+	Name    = My Application
+	Version = 1.0
+	name: My Application
+	version: 1.0
+
+.. note:: 弓括弧は現在の有効なオブジェクトを変更しますが、This はクラスを指したままにできます。
+
+.. tip:: This と Self には違いがあります。 Self が指している現在の有効なオブジェクトは弓括弧で変更できます。
+
+ほとんどの場合、クラス範囲で This あるいは Self を使う必要はないことを覚えていてください。
+
+このように記述することもできます。
+
+
+.. code-block:: ring
+
+	class program name version
+
+または、
+
+.. code-block:: ring
+
+	class program name="My Application" version="1.0"
+
+.. note:: 同名で定義されたグローバル変数との衝突を回避するために、クラス範囲で This あるいは Self を使用します。
+
+
+.. index:: 
+	pair: オブジェクト指向プログラミング (OOP); オブジェクト属性のデフォルト値
+
+オブジェクト属性のデフォルト値
+==============================
+
+オブジェクト属性のデフォルト値は NULL です。
+
+Ring では、 NULL 値は空文字列または "NULL" を有する文字列です。
+
+isNULL() 関数で NULL 値を確認できます。
+
+用例:
+
+.. code-block:: ring
+
+	oProgram = new Program
+	? oProgram.name
+	? oProgram.version
+	? isNULL(oProgram.name)
+	? isNULL(oProgram.version)
+	oProgram { name="My Application" version="1.0" }
+	? isNULL(oProgram.name)
+	? isNULL(oProgram.version)
+	? oProgram
+
+	class program
+		name 
+		version
+
+実行結果:
+
+.. code-block:: none
+
+	NULL
+	NULL
+	1
+	1
+	0
+	0
+	name: My Application
+	version: 1.0

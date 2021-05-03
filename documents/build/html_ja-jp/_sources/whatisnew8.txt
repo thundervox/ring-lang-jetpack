@@ -1,0 +1,568 @@
+.. index:: 
+	single: Ring 1.8 の変更履歴; はじめに
+
+=======================
+Ring 1.8 の変更履歴
+=======================
+
+Ring 1.8 (2018年06月25日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.8 の新機能！
+
+* 実行性能の改善
+* Find in files アプリケーション
+* String2Constant アプリケーション
+* StopWatch アプリケーション
+* そのほかの 3D サンプル
+* Manjaro Linux でのコンパイル
+* クラス範囲で This を Self として使用
+* オブジェクト属性のデフォルト値は NULL
+* For ループでローカルスコープを使用
+* バイナリ文字の統合
+* FoxRing ライブラリ
+* フォームデザイナーの改善
+* Cards ゲームの改善
+* RingQt の改善
+* 拡張機能用コード生成器の改善
+* Ring コンパイラと VM の改善
+* 拡張機能開発者への告知
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; 実行性能の改善
+
+実行性能の改善
+==============
+
+Ring 1.8 は Ring 1.7 よりも高速化されました。
+
+実行性能の利得はアプリケーションによりますが 10 ～ 100% ほどです。
+
+この公開版において、現在の実行性能の関する考えかたを理解するには、 3D サンプルを参照してください。
+
+詳しくは「性能改善に関する情報」を参照してください。
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; Find in files アプリケーション
+
+Find in files アプリケーション
+==============================
+
+Ring 1.8 より Find in files (ファイルの検索) アプリケーションがあります。
+
+.. image:: findinfiles.png
+	:alt: ファイルの検索
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; String2Constant アプリケーション
+
+String2Constant アプリケーション
+================================
+
+Ring 1.8 より String2Constant アプリケーションがあります。
+
+このツールは文字列リテラルではなく、定数を使用したソースコードへ変換します。
+
+これにより、定数を様々な言語を翻訳して言語ごとにソースコードのファイルへ格納できます。
+
+Arabic.ring, English.ring, Japanese.ring など言語ごとに特殊なファイルを扱えます。
+
+このツールの採用事例としては、アラビア語へ翻訳したフォームデザイナーがあります。
+
+詳しくは「多国語アプリケーション」を参照してください。
+
+.. image:: string2constant.png
+	:alt: String2Constant 
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; StopWatch アプリケーション
+
+StopWatch アプリケーション
+==========================
+
+Ring 1.8 より StopWatch アプリケーションがあります。
+
+.. image:: stopwatch.png
+	:alt: StopWatch
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; そのほかの 3D サンプル
+
+そのほかの 3D サンプル
+======================
+
+サンプルは ring/samples/3D フォルダにあります。
+
+このスクリーンショットはトップダウン - 多層立方体のサンプルです。
+
+.. image:: more3dsamples.jpg
+	:alt: 3D サンプル
+
+このスクリーンショットはカメラのサンプルです。
+
+.. image:: more3dsamples2.jpg
+	:alt: カメラ
+
+このスクリーンショットはカメラと背景のサンプルです。
+
+開発者 : アズディン・レマル
+
+.. image:: cameraandbackground.png
+	:alt: カメラと背景のサンプル
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; Manjaro Linux でのコンパイル
+
+Manjaro Linux でのコンパイル
+============================
+
+Manjaro Linux での Ring 1.8 の動作確認を行いました。
+
+検証者 : アイップ・リファイ
+
+.. image:: ringonmanjarolinux.png
+	:alt: Manjaro Linux での Ring
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; クラス範囲で This を Self として使用
+
+クラス範囲で This を Self として使用
+====================================
+
+クラス範囲とはクラス名の後、およびすべてのメソッドの前に出現する範囲のことです。
+
+クラス範囲で This を Self として使えます。
+
+用例:
+
+.. code-block:: ring
+
+	func main
+
+		o1 = new program {
+			test()
+		}
+
+		? o1
+
+	class program 
+
+		this.name = "My Application"
+		this.version = "1.0"
+		? name ? version	
+
+		func test
+			? "Name    = " + name 
+			? "Version = " + version
+
+実行結果:
+
+.. code-block:: none
+
+	My Application
+	1.0
+	Name    = My Application
+	Version = 1.0
+	name: My Application
+	version: 1.0
+
+.. note:: 弓括弧は現在の有効なオブジェクトを変更しますが、This はクラスを指したままにできます。
+
+.. tip:: This と Self には違いがあります。 Self が指している現在の有効なオブジェクトは弓括弧で変更できます。
+
+ほとんどの場合、クラス範囲で This あるいは Self を使う必要はないことを覚えていてください。
+
+このように記述することもできます。
+
+
+.. code-block:: ring
+
+	class program name version
+
+または
+
+.. code-block:: ring
+
+	class program name="My Application" version="1.0"
+
+.. note:: 同名で定義されたグローバル変数との衝突を回避するために、クラス範囲で This あるいは Self を使用します。
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; オブジェクト属性のデフォルト値
+
+オブジェクト属性のデフォルト値
+==============================
+
+オブジェクト属性のデフォルト値は NULL です。
+
+Ring では、 NULL 値は空文字列または "NULL" を有する文字列です。
+
+NULL 値の検査には isNULL() 関数を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	oProgram = new Program
+	? oProgram.name
+	? oProgram.version
+	? isNULL(oProgram.name)
+	? isNULL(oProgram.version)
+	oProgram { name="My Application" version="1.0" }
+	? isNULL(oProgram.name)
+	? isNULL(oProgram.version)
+	? oProgram
+
+	class program
+		name 
+		version
+
+実行結果:
+
+.. code-block:: none
+
+	NULL
+	NULL
+	1
+	1
+	0
+	0
+	name: My Application
+	version: 1.0
+
+以前の Ring バージョンでは、値の割り当て前にオブジェクトの属性へアクセスしていました。
+
+これはランタイムエラーとなり isNULL() でも検出できません。
+
+唯一の方法は値の割り当て、または try/catch/end を使うことです。
+
+この挙動を変更しており、つなぎ目のない完全な制御を扱うことができます。
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; For ループでローカルスコープを使用
+
+For ループでローカルスコープを使用
+==================================
+
+Ring 1.8 より、 For ループでの新規識別子 (変数) を定義するときは、ローカルスコープで定義します。
+
+用例:
+
+.. code-block:: ring
+
+	x = 10
+	? x		# 10 の表示
+	test1()
+	? x		# 10 の表示
+	test2()
+	? x		# 10 の表示
+
+	func test1
+		for x = 1 to 5
+		next
+		? x	# 6 の表示
+
+	func test2
+		list = 1:5
+		for x in list
+		next
+		? x	# NULL の表示 ("For In" ループでは、ループ完了後に参照を破棄します)
+
+実行結果:
+
+.. code-block:: ring
+
+	10
+	6
+	10
+	NULL
+	10	
+		
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; バイナリ文字の統合
+
+バイナリ文字の統合
+==================
+
+Ring 1.0 からバイナリ文字列の作成と操作に対応しました。
+
+Ring 1.8 より文字列から個別に文字を取得したり、
+'+' 演算子でまとめて統合できます。
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome"
+	? cstr[1] + cstr[2] + cStr[5]
+	v = cstr[1] + cstr[2] + cStr[5]
+	? v
+	? len(v)
+	c1 = cStr[1]
+	? c1
+	aList = [1,2,3]
+	cStr = ""
+	for item in aList 
+		cStr += int2bytes(item)
+	next 
+	? "All String"
+	? len(cStr)
+	? "First Part"
+	n1 = cStr[1] + cStr[2] + cStr[3] + cStr[4]
+	? len(n1)
+	? "Second Part"
+	n2 = cStr[5] + cStr[6] + cStr[7] + cStr[8]
+	? len(n2)
+	? "Third Part"
+	n3 = cStr[9] + cStr[10] + cStr[11] + cStr[12]
+	? len(n3)
+	? "All String"
+	cString = cStr[1] + cStr[2] + cStr[3] + cStr[4] + 
+		  cStr[5] + cStr[6] + cStr[7] + cStr[8] + 
+		  cStr[9] + cStr[10] + cStr[11] + cStr[12]
+	? len(cString)
+	? ascii(cStr[1])
+	? len(cStr[2])
+
+実行結果:
+
+.. code-block:: ring
+
+	Weo
+	Weo
+	3
+	W
+	All String
+	12
+	First Part
+	4
+	Second Part
+	4
+	Third Part
+	4
+	All String
+	12
+	1
+	1
+	
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; FoxRing ライブラリ
+
+FoxRing ライブラリ
+==================
+
+開発者: ホセ・ロサード
+
+FoxPro の関数を使用したクラスです。
+
+用例:
+
+.. code-block:: ring
+
+	Load "foxring.ring"
+
+	mf = new frFunctions
+	? mf.frAbs(-45)      
+	? mf.frAbs(10-30)    
+	? mf.frAbs(30-10)   
+
+	? mf.frTransform("    Ring is a good language    ",
+			 "@! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+	? mf.frAllTrim("    Ring is a good language    ", Null) 
+
+実行結果:
+
+.. code-block:: ring
+
+	45
+	20
+	20
+	    RING IS A GOOD LANGUAGE
+	Ring is a good language
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; フォームデザイナーの改善
+
+フォームデザイナーの改善
+========================
+
+(1) Layout コントロール - フォームの読み込み時にコントロール名を表示。
+(2) Button コントロール - 相対パスで記述された画像ボタンを表示。
+(3) Table  コントロール - フォームの読み込み時にコントロール名を表示。
+(4) "Bring to front" (前面へ移動) と "Send to back" (背面へ移動) 操作の挙動を改善。
+(5) 新しいボタンをツールバーへ追加 (複製、前面へ移動、背面へ移動、削除)。
+(6) 「メニューバーデザイナー、ウィンドウフラグのウィンドウ、オブジェクトウィンドウの選択」でのレイアウトを使用。
+(7) 選択されたオブジェクトを変更するときにプロパティウィンドウの表示挙動を改善。
+(8) オブジェクトの複数選択で移動と寸法変更の新しいボタンを追加。
+(9) オブジェクトのプロパティ - レイアウト選択ボタンの追加。
+(10) フォームを開く、およびファイルの切り換えを高速化。
+(11) オブジェクトの順序ウィンドウ。
+(12) オブジェクトのウィンドウを選択。
+(13) コントロール名を変更するとき、名前はレイアウトオブジェクトを更新します。
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; Cards ゲームの改善
+
+Cards ゲームの改善
+==================
+
+Cards ゲームはコンピュータと対戦できるようになりました。
+
+.. image:: cardsmainmenu.png
+	:alt: Cards メインメニュー
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; RingQt の改善
+
+RingQt の改善
+=============
+
+* このクラスを RingQt へ追加しました。
+
+(1) QTabBar
+(2) QFile
+(3) QFileDevice
+(4) QStandardPaths
+(5) QDir
+(6) QQuickWidget
+(7) QQmlError
+(8) QScrollBar
+
+* 現行版の Qt へ対応するために Android 版 RingQt を更新をしました。
+
+検証済み:
+
+(1) Qt 5.5.1
+(2) Qt 5.9.5
+(3) Qt 5.11.0
+
+* Android 版 RingQt では、リソースから Ring オブジェクトファイル (\*.ringo) を実行できます。
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; 拡張機能用コード生成器の改善
+
+拡張機能用コード生成器の改善
+============================
+
+新しいオプション: StaticMethods
+
+Ring 1.8 からコード生成器は staticmethods オプションに対応しました。
+
+これにより、コード生成器はクラスでメソッドを呼び出すためのオブジェクトの準備は不要であることを検出できるようになりました。
+
+用例:
+
+.. code-block:: none
+
+	<class>
+	name: QStandardPaths
+	para: void
+	nonew
+	staticmethods
+	</class>
+
+	QString displayName(QStandardPaths::StandardLocation type)
+	QString findExecutable(QString executableName, QStringList paths))
+
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; Ring コンパイラと VM の改善
+
+Ring コンパイラと VM の改善
+=============================
+
+(1) 相対パス指定のファイル読み込みを改善
+(2) eval() 関数関連のコードを最適化
+(3) メモリプールの改善
+(4) Ring へ Ring を組み込んだときに、ゲスト環境でエラーが発生してもホストは異常終了しなくなりました。
+
+用例:
+
+.. code-block:: ring
+
+	? "Start the test!" 
+
+	pState = ring_state_init()
+
+	ring_state_runcode(pState," ? 'Let us try having an error' ? x")
+
+	ring_state_delete(pState)
+
+	? ""
+	? "End of test!"
+
+実行結果:
+
+.. code-block:: none
+
+	Start the test!
+	Let us try having an error
+
+	Line 1 Error (R24) : Using uninitialized variable : x
+	in file Ring_EmbeddedCode
+	End of test!
+	
+(5) コンパイラは、キーワードの後にくる行をトークンとみなして無視するようになりました。
+
+用例:
+
+.. code-block:: ring
+
+	see 
+	"
+		Hello, World!
+	"
+	test()
+
+	func 
+	#======================#
+		Test
+	#======================#
+
+		?
+		"
+	
+		Hello from the Test function
+
+		"
+
+実行結果:
+
+.. code-block:: none
+
+
+	        Hello, World!
+
+
+	        Hello from the Test function
+
+(6) メインループ、 eval() 関数の特殊なループに関するコードの改善 (高速化)
+(7) NULL ポインタの使用回避用の追跡用 C ポインタの改善 (高速化)
+(8) 弓括弧による Self オブジェクトの取得を改善 (高速化)
+
+.. index:: 
+	pair: Ring 1.8 の変更履歴; 拡張機能開発者への告知
+
+拡張機能開発者への告知
+======================
+
+新たに Ring の拡張機能を C/C++ 言語で作成したときは
+
+Ring 1.8 での使用前に拡張機能を再ビルドしてください (Ring 1.8 添付のヘッダファイルで DLL ファイルを再生成)。
+
+これは仮想計算機の内部構造変更による影響です。再ビルドのみ必要であり、コードの変更は一切不要です。

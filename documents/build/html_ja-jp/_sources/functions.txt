@@ -1,0 +1,230 @@
+.. index:: 
+	single: 関数 - 第一形式; はじめに
+
+===============
+関数 - 第一形式
+===============
+
+第一形式による関数の用法です。
+
+* 関数の定義
+
+* 関数の呼び出し
+
+* 仮引数の宣言
+
+* 仮引数の送信
+
+* メイン関数
+
+* 変数のスコープ
+
+* 返値
+
+* 再帰処理
+
+.. index:: 
+	pair: 関数 - 第一形式; 関数の定義
+
+
+関数の定義
+==========
+
+新しい関数を定義するには
+
+文法:
+
+.. code-block:: ring
+
+	func <関数名> [仮引数]
+		ステートメント・ブロック
+	[end]
+
+.. note:: 関数の定義において end キーワードはオプション扱いです。
+
+
+用例:
+
+.. code-block:: ring
+
+	func hello
+		see "Hello from function" + nl
+
+
+.. index:: 
+	pair: 関数 - 第一形式; 関数の呼び出し
+
+関数の呼び出し
+==============
+
+仮引数を指定せずに関数を呼び出すには、関数名末尾に () を入力します。
+
+.. tip:: 関数の定義、および関数のコードの記述前に関数を呼び出せます。
+
+用例:
+
+.. code-block:: ring
+
+	hello()
+
+	func hello
+		see "Hello from function" + nl
+
+
+用例:
+
+.. code-block:: ring
+
+	first()  second()
+
+	func first   see "message from the first function" + nl
+
+	func second  see "message from the second function" + nl
+
+.. index:: 
+	pair: 関数 - 第一形式; 仮引数の宣言
+
+仮引数の宣言
+============
+
+関数へ仮引数を宣言するには、関数名末尾に仮引数リストとしてカンマで区切った
+識別子のグループを記述します。
+
+用例:
+
+.. code-block:: ring
+
+	func sum x,y
+		see x+y+nl
+
+.. index:: 
+	pair: 関数 - 第一形式; 仮引数の送信
+
+仮引数の送信
+============
+
+関数へ仮引数を送信するには、関数名末尾に () の内側で仮引数を入力します。
+
+文法:
+
+.. code-block:: ring
+
+	関数名(仮引数)
+
+用例:
+
+.. code-block:: ring
+
+	/* 実行結果
+	** 8
+	** 3000
+	*/
+
+	sum(3,5) sum(1000,2000)
+
+	func sum x,y see x+y+nl
+
+.. index:: 
+	pair: 関数 - 第一形式; Main 関数
+
+Main 関数
+=========
+
+Ring では、 Main (メイン) 関数はオプション扱いです。 Main 関数が定義された場合は、
+ほかのステートメント実行後にメイン関数が実行されます。
+
+ほかのステートメントが存在しない場合に限り、メイン関数は最初の `エントリーポイント <https://ja.wikipedia.org/wiki/エントリーポイント>`_ となります。
+
+用例:
+
+.. code-block:: ring
+
+	# このプログラムは、 Hello World メッセージを表示した後にメイン関数を実行します。
+
+	See "Hello World!" + nl
+
+	func main
+		see "Message from the main function" + nl
+
+.. index:: 
+	pair: 関数 - 第一形式; 変数のスコープ
+
+変数のスコープ
+==============
+
+Ring は変数のスコープの決定で `静的スコープ <https://ja.wikipedia.org/wiki/静的スコープ>`_ を使用します。
+ 
+関数内定義の変数は、ローカル変数になります (関数の仮引数も該当します)。
+関数外定義の変数は、グローバル変数になります (関数の前にあるのは全て該当します)。
+
+この関数内で定義されたグローバル変数は、別の関数内にある変数としてもアクセスできます。
+
+用例:
+
+.. code-block:: ring
+
+	# このプログラムでは 1 ～ 10 までの数値を表示します。
+
+	x = 10 				# x はグローバル変数です。
+
+	func main
+
+		for t = 1 to 10		# t はローカル変数です。
+			mycounter()	# 関数の呼び出し
+		next
+
+	func mycounter
+		see x + nl		# グローバル変数の値を表示します。
+		x--			# 減分します。
+
+
+.. note:: for ループの変数 t をローカル変数として宣言する前に、 Main 関数を使用してください。
+	  つまり、新しい変数のスコープをローカルとして設定するために、命令を記入するのではなく、
+	  Main 関数では自動的にローカルとして設定することが推奨されます。
+
+.. index:: 
+	pair: 関数 - 第一形式; 返値
+
+返値
+====
+
+Return 命令は、関数の値を返します。
+
+文法:
+
+.. code-block:: ring
+
+	Return [式]
+
+.. tip:: Return 命令の後にある式はオプションであり、
+	  Return 命令で値を返さずに関数の実行を終了することもできます。
+	 
+.. note:: 関数が明示的な値を返さない場合は、 NULL (空の文字列 = \"\") を返します。
+
+用例:
+
+.. code-block:: ring
+
+	if novalue() = NULL	
+		See "the function doesn't return a value" + nl
+	ok
+
+	func novalue
+
+.. index:: 
+	pair: 関数 - 第一形式; 再帰処理
+
+再帰処理
+=========
+
+Ring は `再帰 <https://ja.wikipedia.org/wiki/再帰>`_
+に対応しており、異なる引数を使用して関数が関数自身を再帰的に呼び出せます。
+
+用例:
+
+.. code-block:: ring
+
+	see fact(5)  	# 実行結果 = 120
+
+	func fact x if x = 0 return 1 else return x * fact(x-1) ok
+

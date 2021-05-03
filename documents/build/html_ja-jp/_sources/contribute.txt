@@ -1,0 +1,166 @@
+.. index:: 
+	single: 開発への参戦について; はじめに
+
+====================
+開発への参戦について
+====================
+
+Ring は、自由なオープンソースプロジェクトです。どなたさまでも Ring の開発参戦は歓迎します。
+
+プロジェクトの本拠地 : https://github.com/ring-lang/ring
+
+多種多様な才能を発揮していただくことにより、プロジェクトの支援へとつながります。
+
+参加前に GitHub の用法の学習、環境構築を各自にお願いしております (不明点がございましたらグループ、またはフォーラムまでお気軽に質問をお願いします)。
+
+なお、外出先などで Git クライアントをインストールせずにウェブブラウザで編集するには、 GitHub へログイン後に作業対象のファイルを表示してから鉛筆アイコンをクリックします。編集作業後に pull リクエストを送るのをお忘れなく。
+
+
+* 取扱説明書
+* ウェブサイト
+* 動作検証
+* サンプル
+* アプリケーション
+* エディタの対応
+* Ring のライブラリ
+* C/C++ による拡張機能
+* コンパイラと仮想計算機 (VM)
+* 意見と提案
+
+
+.. index:: 
+	pair: 開発への参戦について; 戦士たちへ心からの敬意を
+
+戦士たちへ心からの敬意を
+========================
+
+このプロジェクトの開発では、学生ならびに専門家からの参戦が非常に頼りになりました。
+
+勇敢なる戦士たちの戦果は非常に貴重なものでした。我々は感謝の意を表して、すべての熱い戦いに表彰したいと思います。
+
+* Ring チーム: http://ring-lang.sf.net/team.html
+* Ring チーム(日本非公式): http://ring-lang-081.osdn.jp/team.html
+
+.. index:: 
+	pair: 開発への参戦について; 取扱説明書
+
+
+取扱説明書
+==========
+
+このフォルダにあるテキストファイル (\*.txt) を更新することにより、取扱説明書の内容を変更できます。
+
+	https://github.com/ring-lang/ring/tree/master/documents/source
+
+
+取扱説明書は Sphinx で生成しています : http://www.sphinx-doc.org/ja/stable/
+
+また、日本語版の翻訳には OmegaT を使用しています : https://omegat.org/
+
+英語や日本語以外の翻訳、記事の加筆や寄稿に限らず、誤字脱字、
+スペルミスなど些細なものであっても改善や修正は歓迎します。ご遠慮なくお気軽にご参戦ください。
+
+
+.. index:: 
+	pair: 開発への参戦について; ウェブサイト
+
+ウェブサイト
+============
+
+このフォルダにあるファイル (\*.template, \*.data) を更新することにより、ウェブサイトの内容を変更できます。
+
+	https://github.com/ring-lang/ring/tree/master/marketing/website
+
+Ring を世界に広めるべく、我々はもっと格好良くて訴求力が高く、さらに軽くて快適な公式サイトを求めています。
+
+「世界よ。これがウェブデザインだ」と名を知らしめたいかたはお気軽にご参戦ください。
+
+
+.. index:: 
+	pair: 開発への参戦について; 動作検証
+
+動作検証
+========
+
+このフォルダには新しい動作検証を記述できます : 
+
+	https://github.com/ring-lang/ring/tree/master/language/tests/scripts
+
+
+.. index:: 
+	pair: 開発への参戦について; サンプル
+
+
+サンプル
+========
+
+このフォルダには新しいサンプルを追加できます :
+
+	https://github.com/ring-lang/ring/tree/master/samples
+
+.. index:: 
+	pair: 開発への参戦について; アプリケーション
+
+
+アプリケーション
+================
+
+このフォルダには新しいアプリケーションを追加できます :
+
+	https://github.com/ring-lang/ring/tree/master/applications
+
+.. index:: 
+	pair: 開発への参戦について; エディタの対応
+
+
+エディタの対応
+==============
+
+あなたのご助力で様々なコードエディタを Ring へ対応させることができます。
+
+このフォルダをご確認ください : 
+
+	https://github.com/ring-lang/ring/tree/master/tools/editors
+
+.. index:: 
+	pair: 開発への参戦について; Ring のライブラリ
+
+Ring のライブラリ
+=================
+
+このフォルダへライブラリの追加と更新ができます。
+
+	https://github.com/ring-lang/ring/tree/master/libraries
+
+.. index:: 
+	pair: 開発への参戦について; C/C++ による拡張機能
+
+
+C/C++ による拡張機能
+====================
+
+このフォルダへ拡張機能の追加と更新ができます。
+
+	https://github.com/ring-lang/ring/tree/master/extensions
+
+.. index:: 
+	pair: 開発への参戦について; コンパイラと仮想計算機 (VM)
+
+コンパイラと仮想計算機 (VM)
+===========================
+
+* ソースコード (C 言語) : https://github.com/ring-lang/ring/tree/master/language/src
+* ビジュアルソース (PWCT) : https://github.com/ring-lang/ring/tree/master/language/visualsrc
+
+.. index:: 
+	pair: 開発への参戦について; アイディアと提案
+
+
+アイディアと提案
+=====================
+
+このグループでアイディア、提案と質問を共有できます。
+
+	https://groups.google.com/forum/#!forum/ring-lang
+
+

@@ -1,0 +1,161 @@
+.. index:: 
+	single: bignumber; はじめに
+
+====================
+BigNumber ライブラリ
+====================
+
+Big Number ライブラリの用法です。
+
+.. index:: 
+	pair: bignumber; ライブラリの読み込み
+
+ライブラリの読み込み
+====================
+
+この関数の使用前に bignumber.ring ライブラリを読み込みます。
+
+.. code-block:: ring
+
+	load "bignumber.ring"
+	# BigNumber ライブラリ関数の使用
+
+.. index:: 
+	pair: bignumber; 用例
+
+用例
+====
+
+BigNumber ライブラリは非常に大きい数の算術演算で使用します。
+
+用例:
+
+.. code-block:: ring
+
+	load "bignumber.ring"
+
+	num1 = "62345678901234567891678345123456789"    ### 大なり
+	num2 =  "1237894567890123419871236545"          ### 小なり
+	num3 =     "64"                                 ### 小なりを割る
+	num4 = "765432"                 
+	num5 =      "3"                                 ### 累乗            
+    
+	? "Add big numbers:" 
+	a1 = new BigNumber(num1)        a1.Print()
+	a2 = new BigNumber(num2)        a2.Print()
+	a3 = a1 + a2                    a3.Print() ? nl
+
+	? "Substract big numbers:" 
+	a1 = new BigNumber(num1)        a1.Print()
+	a2 = new BigNumber(num2)        a2.Print()
+	a3 = a1 - a2                    a3.Print() ? nl
+
+	? "Multiply big numbers:" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num2)        a2.print()      
+	a3 = a1 * a2                    a3.print() ? nl
+
+	? "Divide big numbers:" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num2)        a2.print()
+	a3 = a1 / a2                    a3.print() ? nl
+    
+	? "Divide big numbers: by very small number" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num3)        a2.print()
+	a3 = a1 / a2                    a3.print() ? nl
+
+	? "Power of big number:" 
+	a1 = new BigNumber(num1)        a1.print()
+	a2 = new BigNumber(num5)        a2.print()
+	a3 = a1 ^ a2                    a3.print() ? nl
+    
+実行結果:
+
+.. code-block:: none
+
+	Add big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	62345680139129135781801764994693334
+
+
+	Substract big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	52345687663340000001554925252220244
+
+
+	Multiply big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	77177377243260150103462178714197454736432472780119682305154005
+
+
+	Divide big numbers:
+	62345678901234567891678345123456789
+	1237894567890123419871236545
+	50364288
+
+
+	Divide big numbers: by very small number
+	62345678901234567891678345123456789
+	64
+	974151232831790123307474142554012
+
+
+	Power of big number:
+	62345678901234567891678345123456789
+	3
+	242336636261471172092347146031727004 (実行結果は次行へ続きます)
+	371698195628343934238988256152289508 (実行結果は次行へ続きます)
+	493964611043228971692389860897069
+
+
+.. index:: 
+	pair: bignumber; BigNumber 関数
+
+BigNumber 関数
+==============
+
+このライブラリの関数一覧です。
+
+.. code-block:: none
+
+	FuncAdd(num1,num2)
+	FuncSubtract(num1,num2)
+	FuncCompare(num1,num2)
+	FuncDivide(num1,num2)
+	FuncMultiply(num1,num2)
+	FuncPower(num1,num2)
+	FuncBinaryToDecimal(num1)
+	FuncDecimalToBinary(num1)
+	printBinaryDigits(binList)
+	printDecimalDigits(decList)
+
+.. index:: 
+	pair: bignumber; BigNumber クラス
+
+BigNumber クラス
+================
+
+このライブラリで使えるクラスのリストです。
+
+.. code-block:: ring
+
+	class BigNumber 
+		func init aPara 
+		func operator cOperator, Para
+		func print 
+		func value
+
+.. index:: 
+	pair: bignumber; ライブラリのソースコード
+
+ライブラリのソースコード
+========================
+
+ライブラリのソースコードは ring/libraries/bignumber フォルダにあります。
+
+ソースコード : https://github.com/ring-lang/ring/blob/master/libraries/bignumber/bignumber.ring
+

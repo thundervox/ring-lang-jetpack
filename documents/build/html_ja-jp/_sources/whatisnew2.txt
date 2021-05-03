@@ -1,0 +1,340 @@
+.. index:: 
+	single: Ring 1.2 の変更履歴; はじめに
+
+===================
+Ring 1.2 の変更履歴
+===================
+
+Ring 1.2 (2017年01月25日) の変更点と新機能です。
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.2 の新機能！
+
+* 新しい関数
+* 関数の改良
+* Ring ノートパッドの改良
+* RingQt の改良
+* RingQt 用のオブジェクトライブラリ
+* RingLibCurl
+* Call 命令の改良
+* NULLPointer() の代わりに NULL を使用
+* 警告表示のオプション
+* 品質の改善
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; 新しい関数
+
+新しい関数
+==========
+
+* PtrCmp() 関数は GUI オブジェクトなどの C ポインタ間で比較を行う新しい関数です。
+* PrevFileName() 関数は以前に使用していたソースファイル名を返すために追加されました。
+* RingVM_CFunctionsList() 関数は C で記述された関数のリストを返すために追加されました。
+* RingVM_FunctionsList() 関数は Ring で記述された関数のリストを返すために追加されました。
+* RingVM_ClassesList() 関数はクラスのリストを返すために追加されました。
+* RingVM_PackagesList() 関数はパッケージのリストを返すために追加されました。
+* RingVM_MemoryList() 関数はメモリスコープと変数のリストを返すために追加されました。
+* RingVM_CallList() 関数は関数の呼び出しリストのリストを返すために追加されました。
+* RingVM_FilesList() 関数は Ring ファイルのリストを返すために追加されました。
+
+
+用例:
+
+.. code-block:: ring
+
+	fp = fopen("ptrcmp.ring","r")
+	fp2 = fp
+	fp3 = fopen("ptrcmp.ring","r")
+
+	see ptrcmp(fp,fp2) + nl
+	see ptrcmp(fp,fp3) + nl
+
+	fclose(fp)
+	fclose(fp3)
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	0
+
+また ‘=’ 演算子で比較することもできます。
+
+用例:
+
+.. code-block:: ring
+
+	fp = fopen("ptrcmp2.ring","r")
+	fp2 = fopen("ptrcmp2.ring","r")
+	fp3 = fp
+	see fp = fp2
+	see nl
+	see fp = fp3
+	fclose(fp)
+	fclose(fp2)
+
+実行結果:
+
+.. code-block:: ring
+
+	0
+	1
+
+
+用例:
+
+stdlib.ring にある PrevFileName() は呼び出し元にある関数のファイルが、プログラムのメインソースファイルか確認します。
+
+.. code-block:: ring
+
+	Func IsMainSourceFile
+		if PrevFileName() = sysargv[2]
+			return true
+		ok
+		return false
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; 関数の改良
+
+関数の改良
+==========
+
+* find() 関数は GUI オブジェクトなどの検索に対応するために更新されました。
+* type() 関数 C ポインタ型を表示するために更新されました (GUI オブジェクトのクラス名など)。
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; Ring ノートパッドの改良
+
+Ring ノートパッドの改良
+=======================
+
+Ring ノートパッドはファイル切り替え時に行番号を復元するために、
+現在開いているファイルの行番号を保存します。
+
+また Ring ノートパッドはユーザによりファイルが切り替えられたときに、
+ファイルの内容が変更された場合は保存するかユーザに問い合わせます。
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; RingQt の改良
+
+RingQt の改良
+=============
+
+RingQt クラスはイベントを取得するためのメソッドを実装するために更新されました
+(イベントが発行されるときにコード実行されます)。これは特定時間内にイベントの
+有効・無効化、またはイベントの情報を取得に必要なものです。
+
+このコードの用例では、イベントを無効にしてからメソッドの呼び出し後にイベントを再度有効にします。
+
+.. code-block:: ring
+
+	cEvent = oView.oListResult.getCurrentItemChangedEvent()
+	oView.oListResult.setCurrentItemChangedEvent("")
+	FindValueAction()	# メソッドを呼び出すまではイベントを無効にします。
+	oView.oListResult.setCurrentItemChangedEvent(cEvent)
+
+また出力の true または false をイベント関数から設定可能にする新しいメソッドを使用する
+setEventOutput クラスの追加に伴い QAllEvents クラスを更新しました。
+
+.. code-block:: ring
+
+	Load "guilib.ring"
+
+	MyApp = New qApp {
+			win = new qWidget() {
+					setwindowtitle("Hello World")
+					setGeometry(100,100,370,250)
+					lineedit1 = new qlineedit(win) {
+						setGeometry(10,100,350,30)
+						setinputmask("9999;_") 
+						oFilter = new qallevents(lineedit1)
+						oFilter.setfocusoutEvent("pMove()")
+						installeventfilter(oFilter)
+					}
+					lineedit2 = new qlineedit(win) {
+							setGeometry(10,150,350,30)
+					}
+					show()
+			}
+			exec()
+	}
+	
+	func pMove
+		   win.setWindowTitle("xxxx")
+		   oFilter.setEventOutput(False)
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; RingQt 用のオブジェクトライブラリ
+
+RingQt 用のオブジェクトライブラリ
+=================================
+
+Ring 1.2 には RingQt アプリケーション用のオブジェクトライブラリが付属しています。
+ウィンドウオブジェクトへのグローバル変数の使用、およびオブジェクト名でイベントをオブジェクトへ接続するのではなく、オブジェクトライブラリは GUI オブジェクトの管理を行います。また、同一クラスから複数ウィンドウを手軽に作成するために、普遍的な API を実装しています。
+さらにライブラリでは、イベントが発行されたときに実行されるメソッドを手軽に設定する方法があります。同じく子またはサブウィンドウから親または呼び出し元のウィンドウを手軽に使うための自然言語インタフェースもあります。
+
+オブジェクトライブラリは MVC デザインパターンで設計しています。
+
+オブジェクトライブラリは RingQt へ統合されており RingQt から使えます。
+
+用例:
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	new qApp {
+		open_window( :MainWindowController )
+		exec()
+	}
+
+	class MainWindowController from WindowsControllerParent
+		oView = new MainWindowView
+		func SubWindowAction
+			Open_window( :SubWindowController )
+			Last_Window().SetParentObject(self)
+
+	class MainWindowView from WindowsViewParent
+		win = new qWidget() {
+			SetWindowTitle("Main Window")
+			btnSub = new qPushButton(win) {
+				setText("Sub Window")
+				setClickEvent( Method( :SubWindowAction ) )
+			}
+			resize(400,400)
+		}
+
+	class SubWindowController from WindowsControllerParent
+		oView = new SubWindowView
+		func SetMainWindowTitleAction
+			Parent().oView.win.SetWindowTitle("Message from the Sub Window")
+			oView.win.SetWindowTitle("Click Event Done!")
+
+	class SubWindowView from WindowsViewParent
+		win = new qWidget() {
+			SetWindowTitle("Sub Window")
+			btnMsg = new qPushButton(win) {
+				setText("Set Main Window Title")
+				setClickEvent( Method( :SetMainWindowTitleAction ) )
+			}
+			btnClose = new qPushButton(win) {
+				Move(200,0)
+				setText("Close")
+				setClickEvent( Method( :CloseAction ) )
+			}
+			resize(400,400)
+		}
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; RingLibCurl
+
+RingLibCurl
+===========
+
+LibCurl ライブラリは Ring 1.0 から実装されており、 Download() および SendEmail() 関数を使えます。
+Ring 1.2 では 強力なライブラリである RingLibCurl (LibCurl) 用の関数を追加しました。
+
+用例:
+
+.. code-block:: ring
+
+	load "libcurl.ring"
+
+	curl = curl_easy_init()
+
+	cPostThis = "page=4&Number1=4&Number2=5"
+	curl_easy_setopt(curl, CURLOPT_URL, "http://localhost/ringapp/index.ring?page=3")
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, cPostThis)
+
+	curl_easy_perform(curl)
+
+	curl_easy_cleanup(curl)
+
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; Call 命令の改良
+
+Call 命令の改良
+===============
+
+Call 命令はオブジェクトの属性からの関数呼び出しへ対応するために更新されました
+(これは変数に限りません)。
+
+このコードの用例は Stars Fighter ゲームからの引用です。
+
+.. code-block:: ring
+
+	cFunc = oself.keypress
+	call cFunc(oGame,oSelf,Key_Space)
+
+一行で記述できます。
+
+.. code-block:: ring
+
+	call oself.keypress(oGame,oSelf,Key_Space)
+
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; NULLPointer() の代わりに NULL を使用
+
+NULLPointer() の代わりに NULL を使用
+====================================
+
+NULLPointer() 関数の代わりに NULL を仮引数として渡せます。
+
+このコードの用例は RingLibSDL からの引用です。
+
+.. code-block:: ring
+
+	SDL_RenderCopy(SDL_ren,tex,NULLPointer(),rect)
+
+この行のように書くことができます。
+
+.. code-block:: ring
+
+	SDL_RenderCopy(SDL_ren,tex,NULL,rect)
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; 警告表示のオプション
+
+警告表示のオプション
+====================
+
+Ring 1.2 では Ring コンパイラに警告表示のオプション (-w) を実装しました。
+
+用例:
+
+.. code-block:: ring
+	
+	load "stdlib.ring"
+	load "stdlib.ring"
+
+警告表示のオプションでプログラムをコンパイルすると、ファイルの重複エラーが表示されますが、
+オプションを指定しない場合はエラーが非表示となります。
+
+これは警告であり、大規模プロジェクトでは同じファイルが一回以上使用されるためです。
+このコードの用例がある各ファイルを開始することは普通です。
+IsMainSourceFile() 関数は stdlib.ring の一部です。
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+	if IsMainSourceFile() 
+		// 動作検証
+	ok 
+
+.. index:: 
+	pair: Ring 1.2 の変更履歴; 品質の改善
+
+品質の改善
+==========
+
+Ring 1.2 では動作安定性を向上させました。日々の実務プロジェクトで Ring を利用した成果により、大量の不具合を修正しました。
+高速化のために SubStr() などの関数を最適化しました。
+取扱説明書についても、さらに改善しました。

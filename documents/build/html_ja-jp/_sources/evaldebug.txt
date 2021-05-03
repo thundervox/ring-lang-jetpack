@@ -1,0 +1,204 @@
+.. index:: 
+	single: Eval() とデバッグ; はじめに
+
+=================
+Eval() とデバッグ
+=================
+
+下記の用法です。
+
+* Try/Catch/Done によるエラー処理
+
+* Eval() 関数
+
+* Raise() 関数
+
+* Assert() 関数
+
+.. index:: 
+	pair: Eval() とデバッグ; Try/Carch/Done
+
+Try/Catch/Done
+==============
+
+文法:
+
+.. code-block:: ring
+
+	Try
+		ステートメント...
+	Catch
+		ステートメント...
+	Done
+
+まず Try ブロックのステートメントが実行されます。
+そしてエラーが発生すると catch ブロックのステートメントが実行されます。
+
+catch ブロックの内側では変数 cCatchError でエラーメッセージを取得できます。
+
+用例:
+
+.. code-block:: ring
+
+	Try
+		see 5/0
+	Catch
+		see "Catch!" + nl + cCatchError
+	Done
+
+実行結果:
+
+.. code-block:: ring
+
+	Catch!
+	Error (R1) : Cann't divide by zero !
+
+
+.. index:: 
+	pair: Eval() とデバッグ; Eval()
+
+Eval() 関数
+===========
+
+Eval() 関数は実行時に文字列からコードを実行します。
+
+文法:
+
+.. code-block:: ring
+
+	Eval(cCode)
+
+用例:
+
+.. code-block:: ring
+
+	Eval("nOutput = 5+2*5 " )
+	See "5+2*5 = " + nOutput + nl			 
+	Eval("for x = 1 to 10 see x + nl next")		 
+	Eval("func test see 'message from test!' ")	 
+	test()
+
+実行結果:
+
+.. code-block:: ring
+
+	5+2*5 = 15
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+	message from test!
+
+
+Return 命令で値を返せます。
+
+用例:
+
+.. code-block:: ring
+
+	see Eval("return 5*5")
+
+実行結果:
+
+.. code-block:: ring
+
+	25
+
+.. index:: 
+	pair: Eval() とデバッグ; Raise()
+
+Raise() 関数
+============
+
+Raise() 関数は例外を発生します。
+
+文法:
+
+.. code-block:: ring
+
+	Raise(cErrorMessage)
+
+この関数はエラーメッセージを表示した後にプログラムを終了します。
+
+raise() 関数で生成された例外は Try/Catch/Done により回避できます。
+
+用例:
+
+.. code-block:: ring
+
+	nMode = 10
+
+	if nMode < 0 or nMode > 5
+		raise("Error : nMode not in the range 1:4")
+	ok
+
+実行結果:
+
+.. code-block:: ring
+
+	Line 4 Error : nMode not in the range 1:4
+	In raise in file tests\raise.ring
+
+用例:
+
+.. code-block:: ring
+
+	try 
+		testmode(6)
+	catch
+		see "avoid raise!"
+	done
+
+	testmode(-1)
+
+	func testmode nMode
+
+		if nMode < 0 or nMode > 5
+			raise("Error : nMode not in the range 1:4")
+		ok
+
+実行結果:
+
+.. code-block:: ring
+
+	avoid raise!
+	Line 12 Error : nMode not in the range 1:4
+	In raise In function testmode() in file tests\raise2.ring
+	called from line 7  in file tests\raise2.ring
+
+.. index:: 
+	pair: Eval() とデバッグ; Assert()
+
+Assert() 関数
+=============
+
+Assert() 関数はコードの実行前に条件をテストします。
+
+テストに失敗した場合は、アサートの条件を有するエラーメッセージを表示後にプログラムを終了します。
+
+文法:
+
+.. code-block:: ring
+
+	Assert( 条件 )
+
+用例:
+
+.. code-block:: ring
+
+	x = 10
+	assert( x = 10)
+	assert( x = 100 ) 
+
+実行結果:
+
+.. code-block:: ring
+
+	Line 3 Assertion Failed!
+	In assert in file tests\assert.ring

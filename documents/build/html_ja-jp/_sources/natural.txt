@@ -1,0 +1,626 @@
+.. index:: 
+	single: 自然言語プログラミング; はじめに
+
+======================
+自然言語プログラミング
+======================
+
+プログラミング言語 Ring でクラスとオブジェクトを土台にした自然プログラミング言語を作成できます。
+
+.. index:: 
+	pair: 自然言語プログラミング; 沿革
+
+沿革
+====
+
+2010年にプログラミング言語 Supernova の新規開発で Programming Without Coding Technology (PWCT) を使用しました。
+Supernova は自然言語ステートメントと類似の記法によるコードで GUI アプリケーションを簡単に作成できます。 
+五年後、いまでは同様の成果を Ring で得ることができます。さらに好みや必要に応じて、
+どのような問題領域であっても自然言語ステートメントに類似したコードの作成、使用する能力があります。
+
+Ring は Supernova の精神を受け継いでおり、そのほかにも多種様々な汎用プログラミング言語の精神を受け継いでいます。
+
+.. index:: 
+	pair: 自然言語プログラミング; 用例
+
+用例
+====
+
+この用例は、二つの命令を定義するクラスの作成方法です。
+
+最初の命令は : I want window
+
+次の命令は : Window title = <式>
+
+また ‘the’ などのキーワードは無視します。
+
+.. code-block:: ring
+
+	New App 
+	{
+		I want window 	
+		The window title = "hello world"
+	}
+
+	Class App
+
+		# I want window 命令の属性
+			i want window 
+			nIwantwindow = 0
+		# Window title 命令の属性
+		# ここで window 属性の再定義を行いません。
+			title 
+			nWindowTitle = 0
+		# 値を与えると、キーワードを無視します。
+			the=0	
+
+		func geti
+			if nIwantwindow = 0
+				nIwantwindow++
+			ok
+
+		func getwant
+			if nIwantwindow = 1
+				nIwantwindow++
+			ok
+
+		func getwindow
+			if nIwantwindow = 2
+				nIwantwindow= 0
+				see "Instruction : I want window" + nl
+			ok
+			if nWindowTitle = 0
+				nWindowTitle++
+			ok
+	
+		func settitle cValue
+			if nWindowTitle = 1
+				nWindowTitle=0
+				see "Instruction : Window Title = " + cValue + nl
+			ok
+		
+
+実行結果:
+
+.. code-block:: ring
+
+	Instruction : I want window
+	Instruction : Window Title = hello world
+
+
+.. index:: 
+	pair: 自然言語プログラミング; キーワード‘And’の変更'
+
+キーワード‘And’の変更
+=======================
+
+‘and’で二つの命令同士をつなげたい場合があります。
+
+‘and’ は Ring のキーワードであるため、問題がありますが、
+
+ChangeRingKeyword 命令により変更できます。
+
+文法:
+
+.. code-block:: ring
+	
+	ChangeRingKeyword  <変更元のキーワード>  <変更先のキーワード>
+
+.. note:: キーワードの復元をお忘れなく。
+
+.. tip:: ChangeRingKeyword 命令はコンパイラにより、字句解析段階で実行されます (構文解析の前に)。
+	
+用例:
+
+.. code-block:: ring
+
+	ChangeRingKeyword	and  _and
+
+	New App
+	{
+			I want window and the window title = "hello world"
+	}
+
+	Class App
+
+			# I want window 命令の属性
+					i want window
+					nIwantwindow = 0
+			# Window title 命令の属性
+			# ここで window 属性の再定義を行いません。
+					title
+					nWindowTitle = 0
+			# 値を与えると、キーワードは無視されます。
+					the=0  and=0
+
+	ChangeRingKeyword	_and  and
+
+			func geti
+				if nIwantwindow = 0
+					nIwantwindow++
+				ok
+
+			func getwant
+				if nIwantwindow = 1
+					nIwantwindow++
+				ok
+
+			func getwindow
+				if nIwantwindow = 2
+					nIwantwindow= 0
+					see "Instruction : I want window" + nl
+				ok
+				if nWindowTitle = 0
+					nWindowTitle++
+				ok
+
+			func settitle cValue
+				if nWindowTitle = 1
+					nWindowTitle=0
+					see "Instruction : Window Title = " + cValue + nl
+				ok
+
+			func getand
+				see "Using : and" + nl
+
+
+
+実行結果:
+
+.. code-block:: ring
+
+	Instruction : I want window
+	Using : and
+	Instruction : Window Title = hello world
+			
+
+.. index:: 
+	pair: 自然言語プログラミング; 演算子 ‘+’ の変更
+
+演算子 ‘+’ の変更
+===================
+
+“+”演算子などの演算子へ新しい動作を定義したいときがあります。
+
+この変更は、 ChangeRingOperator 命令を使うと演算子を隠せます (名前自体の変更)。
+
+また、演算子を識別子へ変更しても処理で扱えます。
+
+文法:
+
+.. code-block:: ring
+	
+	ChangeRingOperator  <変更前の演算子>  <変更後の演算子>
+
+.. note:: キーワードの復元をお忘れなく。
+
+.. tip:: ChangeRingOperator 命令はコンパイラにより、字句解析段階で実行されます (構文解析の前に)。
+	
+用例:
+
+.. code-block:: ring
+
+	ChangeRingOperator + _+
+
+	New App {
+		+
+	}
+
+	Class App
+		+ 
+	        func get+
+			see "Plus operator" 
+
+	ChangeRingOperator _+ +
+
+実行結果:
+
+.. code-block:: ring
+
+	Plus operator
+
+.. index:: 
+	pair: 自然言語プログラミング; ‘=’ 演算子を ‘is’ へ変更するには
+
+‘=’ 演算子を ‘is’ へ変更するには
+====================================
+	
+用例:
+
+.. code-block:: ring
+
+	ChangeRingKeyword	and  _and
+	ChangeRingOperator	=    is
+
+	New App
+	{
+			I want window and the window title is "hello world"
+	}
+
+	ChangeRingOperator	is    =
+
+	Class App
+
+			# I want window 命令の属性
+					i want window
+					nIwantwindow = 0
+			# Window title 命令の属性
+			# ここで window 属性の再定義を行いません。
+					title
+					nWindowTitle = 0
+			# 値を与えると、キーワードは無視されます。
+					the=0  and=0
+
+	ChangeRingKeyword	_and  and
+
+			func geti
+				if nIwantwindow = 0
+					nIwantwindow++
+				ok
+
+			func getwant
+				if nIwantwindow = 1
+					nIwantwindow++
+				ok
+
+			func getwindow
+				if nIwantwindow = 2
+					nIwantwindow= 0
+					see "Instruction : I want window" + nl
+				ok
+				if nWindowTitle = 0
+					nWindowTitle++
+				ok
+
+			func settitle cValue
+				if nWindowTitle = 1
+					nWindowTitle=0
+					see "Instruction : Window Title = " + cValue + nl
+				ok
+
+
+.. index:: 
+	pair: 自然言語プログラミング; Natural コードで Eval() を使うには
+
+自然言語コードで Eval() を使うには
+==================================
+
+用例:
+
+.. code-block:: ring
+
+	func Main
+
+	  cProgram = ' I want window and the window title is "hello world" '
+
+	  MyLanguage(cProgram)
+
+	Func MyLanguage cCode
+
+	  # キーワードと演算子を変更する命令をコードへ追加します。
+	  # 理由は Eval() はコンパイラの新しいオブジェクトとして使用されるからです (元のキーワードと演算子)。
+	  
+	  cCode = '
+		ChangeRingKeyword  and  _and
+		ChangeRingOperator  =    is
+	  ' + cCode
+
+	  New App
+	  {
+		  eval(cCode)
+	  }
+
+
+	  Class App
+
+		  # I want window 命令の属性
+			  i want window
+			  nIwantwindow = 0
+		  # Window title 命令の属性
+		  # ここで window 属性の再定義を行いません。
+			  title
+			  nWindowTitle = 0
+		  # 値を与えると、キーワードは無視されます。
+			  the=0  
+
+		  ChangeRingKeyword  and  _and
+			  and=0
+		  ChangeRingKeyword  _and  and
+
+		  func geti
+			if nIwantwindow = 0
+			  nIwantwindow++
+			ok
+
+		  func getwant
+			if nIwantwindow = 1
+			  nIwantwindow++
+			ok
+
+		  func getwindow
+			if nIwantwindow = 2
+			  nIwantwindow= 0
+			  see "Instruction : I want window" + nl
+			ok
+			if nWindowTitle = 0
+			  nWindowTitle++
+			ok
+
+		  func settitle cValue
+			if nWindowTitle = 1
+			  nWindowTitle=0
+			  see "Instruction : Window Title = " + cValue + nl
+			ok
+
+		
+.. index:: 
+	pair: 自然言語プログラミング; BraceStart と BraceEnd メソッド
+
+BraceStart と BraceEnd メソッド
+===============================
+
+{ } の使用前後で実行されるコードを記述できます。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new test {
+		see "Hello" + nl
+	}
+
+	o1 {}
+
+	class test
+
+		func bracestart
+			see "start" + nl
+
+		func braceend
+			see "end" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	start
+	Hello
+	end
+	start
+	end
+
+
+.. index:: 
+	pair: 自然言語プログラミング; BraceExprEval メソッド
+
+BraceExprEval メソッド
+======================
+
+この用例は、 “BraceExprEval”メソッドで自然言語コードの式を取得するための用法です。
+
+用例:
+
+.. code-block:: ring
+
+	new natural {
+		create 5
+	}
+
+	class natural
+		create=0
+		lkeyword = false
+		func braceexpreval r		
+			if lkeyword lkeyword=false return ok
+			see "expr eval" + nl
+			see "type: " + type(r) see nl
+			see "value : " see r see nl
+		func getcreate
+			lkeyword = true
+			see "create" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	create
+	expr eval
+	type: NUMBER
+	value : 5
+
+.. index:: 
+	pair: 自然言語プログラミング; 本物の自然言語コード
+
+本物の自然言語コード
+====================
+
+これは一歩進んだ応用例です。
+
+.. code-block:: ring
+
+	# 自然言語コード
+	new program {
+		Accept 2 numbers then print the sum
+	}
+
+	# 自然言語コードの実装
+	class program
+		# キーワード
+			Accept=0 numbers=0 then=0 print=0 the=0 sum=0
+
+		# 実行
+		func braceexpreval x
+			value = x
+		func getnumbers
+			for x=1 to value
+				see "Enter Number ("+x+") :" give nNumber
+				aNumbers + nNumber
+			next
+		func getsum
+			nSUm = 0
+			for x in aNumbers nSum+= x next
+			see "The Sum : " + nSum
+		private
+			value=0	aNumbers=[]
+		
+実行結果: 
+
+.. code-block:: ring
+
+	Enter Number (1) :3
+	Enter Number (2) :4
+	The Sum : 7
+
+.. index:: 
+	pair: 自然言語プログラミング; BraceError() メソッド
+
+BraceError() メソッド
+=====================
+
+この用例は、 “BraceError” メソッドで括弧 { } を用いてオブジェクトへアクセスした時の
+エラー処理の用法です。
+
+用例:
+
+.. code-block:: ring
+
+	func main
+		o1 = new point {
+			x=10 y=20 z=30
+			TEST
+			SEE test
+		}
+
+	class point x y z
+		func braceerror
+			see "Handle Error!" + nl
+			SEE "Message :" + cCatchError + nl
+			if ( left(cCatchError,11) = "Error (R24)" ) and not isattribute(self,"test")
+				see "add attribute" + nl
+				addattribute(self,"test")
+				test = 10
+			ok
+			see "done" + nl
+			return 
+			
+実行結果:
+
+.. code-block:: ring
+
+	Handle Error!
+	Message :Error (R24) : Using uninitialized variable : test
+	add attribute
+	done
+	10
+	
+用例:
+
+.. code-block:: ring
+
+	new point {
+		x=10 y=20 z=30
+		test()
+		see "mmm..." + NL
+	}
+
+	class point x y z
+		func braceerror
+			see "Handle Error!" + nl
+			see "Message :" + cCatchError + nl
+			see self
+			see "Done" + NL
+			
+実行結果:
+
+.. code-block:: ring
+
+	Handle Error!
+	Message :Error (R3) : Calling Function without definition !: test
+	x: 10.000000
+	y: 20.000000
+	z: 30.000000
+	Done
+	mmm...
+	
+.. index:: 
+	pair: 自然言語プログラミング; 美しい自然言語コード
+
+美しい自然言語コード
+====================
+
+“literal”としてリテラルを記入しなくても単語を扱えます。
+
+用例:
+
+この用例では、“hello world”の代わりに hello world を受け入れます。
+
+この用例では、命令の終了を確認するために braceend() を使用しています。
+
+このクラスではリテラルで終了する自然言語命令のみ処理します。
+
+.. code-block:: ring
+
+	ChangeRingKeyword	and  _and
+
+	New App
+	{
+			I want window and the window title is hello world
+	}
+
+	Class App
+
+			# I want window 命令の属性
+					i want window
+					nIwantwindow = 0
+			# Window title 命令の属性
+			# ここで window 属性の再定義を行いません。
+					title is 
+					nWindowTitle = 0
+			# 値を与えると、キーワードは無視されます。
+					the=0  and=0
+			# データ
+					literal = ""
+
+	ChangeRingKeyword	_and  and
+
+			func geti
+				if nIwantwindow = 0
+					nIwantwindow++
+				ok
+
+			func getwant
+				if nIwantwindow = 1
+					nIwantwindow++
+				ok
+
+			func getwindow
+				if nIwantwindow = 2
+					nIwantwindow= 0
+					see "Instruction : I want window" + nl
+				ok
+				if nWindowTitle = 0
+					nWindowTitle++
+				ok
+
+			func gettitle
+				if nWindowTitle = 1
+					nWindowTitle=2
+				ok
+			
+			func getis
+				if nWindowTitle = 2
+					nWindowTitle=3
+				ok			
+
+			func braceend
+				if nWindowTitle = 3
+					see "Instruction : Window Title = " + literal + nl
+					nWindowTitle = 0
+				ok
+
+			func braceerror
+				c= substr(cCatchError,":")
+				while c > 0 
+					c= substr(cCatchError,":") 
+					cCatchError=substr(cCatchError,c+1)  
+				end
+				literal += substr(cCatchError,1)

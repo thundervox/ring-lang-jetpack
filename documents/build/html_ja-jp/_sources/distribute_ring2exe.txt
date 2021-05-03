@@ -1,0 +1,615 @@
+.. index:: 
+	single: Ring2EXE による Ring アプリケーションの配布方法; はじめに
+
+===============================================
+Ring2EXE による Ring アプリケーションの配布方法
+===============================================
+
+Ring2EXE による Ring アプリケーションの配布方法です (Ring 1.6 以降)。
+
+これにより Windows, Linux, macOS, WebAssembly およびモバイル・アプリケーションを手軽に配布できます。
+
+.. note:: Ring ノートパッドの配布メニューも使えます (オススメ)。
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; Ring2EXE の用法
+
+Ring2EXE の用法
+===============
+
+.. code-block:: none
+
+		ring2exe ファイル名.ring [オプション]
+
+プログラムの入力として ファイル名.ring を指定します
+
+このファイルが生成されます。
+
+.. code-block:: none
+
+		ファイル名.ringo          (Ring オブジェクトファイル - コンパイラにより生成)
+		ファイル名.c              (このプログラムにより生成された
+		                               ringo ファイルの内容を有する
+		                               C ソースコードファイルです)
+		ファイル名_buildvc.bat    (Visual C/C++ で filename.c をビルドするために実行します)
+		ファイル名_buildgcc.bat   (GNU C/C++ で filename.c をビルドするために実行します)
+		ファイル名_buildclang.bat (CLang C/C++ で filename.c をビルドするために実行します)
+		ファイル名.obj            (Visual C/C++ コンパイラにより生成されます)
+		ファイル名.exe            (Visual C/C++ リンカにより生成されます)
+		ファイル名                (実行ファイル - Linux および macOS プラットフォームにおいて)
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; Ring2EXE の動作方法
+
+Ring2EXE の動作方法
+===================
+
+最初に Ring コンパイラで Ring オブジェクトファイル (\*.ringo) を生成します。
+
+C コンパイラ (オプション扱い) が存在する場合、このオブジェクトファイルは C ソースコードファイル内部へ埋め込まれます。
+
+その後に、コンパイラと Ring ライブラリ (Ring 仮想計算機も組み込まれます) で実行ファイルを生成します！
+
+C コンパイラが存在しない場合は Ring 実行ファイルのコピーを行い、アプリケーション名へ名称変更されます。
+
+そして Ring オブジェクトファイルは (\*.ringo) 起動時に実行される ring.ringo が実行ファイルとなります。
+
+よって Ring2EXE を使用する電子計算機へ C コンパイラを導入したほうが簡単で良いです。
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; 用例
+
+用例
+====
+
+test.ring の内容は、
+
+.. code-block:: ring
+
+	see "Hello, World!" + nl
+
+Windows, Linux または macOS 用の実行可能ファイルをビルドするには
+
+.. code-block:: none
+	
+		ring2exe test.ring 
+
+プログラムを実行するには (Windows)
+
+.. code-block:: none
+
+		test 
+
+プログラムを実行するには (Linux と macOS)
+
+.. code-block:: none
+
+		./test
+
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; オプション
+
+オプション
+==========
+
+.. code-block:: none
+
+		-keep            : 一時作業用ファイルを削除しない
+		-static          : スタンドアロン形式による実行ファイルのビルド 
+				   (ring.dll/ring.so/ring.dylib を使用しない)
+		-gui             : GUI アプリケーションのビルド (コンソールウィンドウの非表示)
+		-dist            : 配布対象のアプリケーションを準備
+		-allruntime      : 配布物へ全てのライブラリを同梱
+		-mobileqt        : モバイル版 Ring アプリケーションの配布準備で用いる Qt プロジェクトを準備
+		-webassemblyqt   : ウェブ版 Ring アプリケーションの配布準備で用いる Qt プロジェクトを準備 (WebAssembly)
+		-noqt            : 配布物から RingQt を削除
+		-noallegro       : 配布物から RingAllegro を削除
+		-noopenssl       : 配布物から RingOpenSSL を削除
+		-nolibcurl       : 配布物から RingLibCurl を削除
+		-nomysql         : 配布物から RingMySQL を削除
+		-noodbc          : 配布物から RingODBC を削除
+		-nosqlite        : 配布物から RingSQLite を削除
+		-noopengl        : 配布物から RingOpenGL を削除
+		-nofreeglut      : 配布物から RingFreeGLUT を削除
+		-nolibzip        : 配布物から RingLibZip を削除
+		-noconsolecolors : 配布物から RingConsoleColors を削除
+		-nomurmuhash     : 配布物から RingMurmurHash を削除
+		-nocruntime      : 配布物から C ランタイムを削除
+		-qt              : 配布物へ RingQt を追加
+		-allegro         : 配布物へ RingAllegro を追加
+		-openssl         : 配布物へ RingOpenSSL を追加
+		-libcurl         : 配布物へ RingLibCurl を追加
+		-mysql           : 配布物へ RingMySQL を追加
+		-odbc            : 配布物へ RingODBC を追加
+		-sqlite          : 配布物へ RingSQLite を追加
+		-postgresql      : 配布物へ RingPostgreSQL を追加
+		-opengl          : 配布物へ RingOpenGL を追加
+		-freeglut        : 配布物へ RingFreeGLUT を追加
+		-libzip          : 配布物へ RingLibZip を追加
+		-libuv           : 配布物へ RingLibuv  を追加
+		-consolecolors   : 配布物へ RingConsoleColors を追加
+		-murmurhash      : 配布物へ RingMurmurHash を追加
+		-cruntime        : 配布物へ C ランタイムを追加
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; スタンドアロン形式によるコンソールアプリケーションのビルド方法
+
+スタンドアロン形式によるコンソールアプリケーションのビルド方法
+==============================================================
+
+“-static” オプションはコンソールアプリケーションの実行ファイルをビルドします (静的リンク)。
+
+こうすると Ring 動的リンクライブラリ (ring.dll, ring.so または ring.dylib) を使用しません (不要になります)。
+
+ほかのライブラリを使うには、アプリケーションでライブラリをインクルードしてください。 
+
+.. code-block:: none
+
+		ring2exe test.ring -static
+
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; RingAllegro アプリケーションの配布方法
+
+RingAllegro アプリケーションの配布方法
+======================================
+
+この内容のコードが test2.ring にあります。
+
+.. code-block:: ring
+
+
+	# Ring2EXE ツールのテスト用プログラムです！
+	# RingAllegro の用法
+
+	load "gameengine.ring"   # ゲームエンジンへ制御権を渡します。
+
+	func main                # ゲームエンジンから呼び出されます。
+
+	        oGame = New Game # ゲームオブジェクトの作成
+        	{
+                	title = "My First Game"
+        	}     
+
+
+ゲームの配布用に実行可能ファイルのビルドと準備をするには
+
+“-dist” および “-allruntime” オプションで全てのライブラリをインクルードします。
+
+.. code-block:: none
+
+	ring2exe test2.ring -dist -allruntime
+
+前述のコマンドを実行後、出力先は:
+
+* Windows : target/windows フォルダ
+
+* Linux   : target/linux フォルダ
+
+* macOS   : target/macos フォルダ
+
+前述のコマンドは、全ての Ring ランタイムライブラリを配布物へ追加します。
+
+しかし RingAllegro のみ必要な場合は、このコマンドのほうが良いです。
+
+.. code-block:: none
+
+	ring2exe test2.ring -dist -allegro -cruntime
+
+これは、不要なランタイムファイルを除外することで配布物の容量を削減します！
+
+また “-gui” オプションでコンソールウィンドウを非表示にできます。
+
+よって、このコマンドのほうが良いです。
+
+.. code-block:: none
+
+	ring2exe test2.ring -dist -gui -allegro -cruntime
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; RingQt アプリケーションの配布方法
+
+RingQt アプリケーションの配布方法
+=================================
+
+この内容のコードが test3.ring にあります。
+
+.. code-block:: ring
+
+	# Ring2EXE ツールのテスト用プログラムです！
+	# RingQt の用法
+
+	load "guilib.ring"
+
+	new qApp {
+		new qWidget() {
+			setwindowtitle("Hello, World!")
+			resize(400,400)
+			show()
+		}
+		exec()
+	}
+
+
+GUI アプリケーションの配布用に、実行可能ファイルのビルドと準備をするには
+
+“-dist” および “-allruntime” オプションで全てのライブラリをインクルードします。
+
+.. code-block:: none
+
+	ring2exe test3.ring -dist -allruntime
+
+前述のコマンドを実行後、出力先は:
+
+* Windows : target/windows フォルダ
+
+* Linux   : target/linux フォルダ
+
+* macOS   : target/macos フォルダ
+
+前述のコマンドは全ての Ring ランタイムライブラリを配布物へ追加します。
+
+RingQt のみ必要ならば、このコマンドのほうが良いです。
+
+.. code-block:: none
+
+	ring2exe test3.ring -dist -qt -cruntime
+
+これは、不要なランタイムファイルを除外することで配布物の容量を削減します！
+
+また “-gui” オプションによりコンソールウィンドウを非表示にできます。
+
+よって、このコマンドのほうが良いです。
+
+.. code-block:: none
+
+	ring2exe test3.ring -dist -gui -qt -cruntime
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; モバイル用アプリケーションの配布方法 (RingQt)
+
+モバイル用アプリケーションの配布方法 (RingQt)
+=============================================
+
+“-mobileqt” オプションで RingQt アプリケーション (test3.ring) 用の Qt プロジェクトを準備します。
+
+用例 :
+
+.. code-block:: none
+
+	ring2exe test3.ring -dist -mobileqt
+
+前述のコマンドを実行後、 target/mobile/qtproject フォルダに Qt プロジェクトがあります。
+
+メインのプロジェクトファイルは project.pro です。 Qt Creator IDE で開けます。
+
+またリソースファイルもあります : project.qrc
+
+別の重要なファイルは C++ メインファイルです : main.cpp
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; WebAssembly 用アプリケーションの配布方法 (RingQt)
+
+WebAssembly 用アプリケーションの配布方法 (RingQt)
+=================================================
+
+“-webassemblyqt” オプションで RingQt アプリケーション (test3.ring) 用の Qt プロジェクト (WebAssembly) を準備します。
+
+用例 :
+
+.. code-block:: none
+
+	ring2exe myapp.ring -dist -webassemblyqt
+
+前述のコマンドを実行後、 target/webassembly/qtproject フォルダに Qt プロジェクトがあります。
+
+メインのプロジェクトファイルは project.pro です。 Qt Creator IDE で開けます。
+
+またリソースファイルもあります : project.qrc
+
+別の重要なファイルは C++ メインファイルです : main.cpp
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; モバイル版 Cards ゲームのビルド方法 (RingQt)
+
+モバイル版 Cards ゲームのビルド方法 (RingQt)
+============================================
+
+このフォルダにある Cards ゲームは Ring を使用した Android パッケージのビルド方法の良例であると考えられます:
+	ring/application/cards
+
+Cards ゲームのフォルダには三本のファイルがあります
+
+* cards.ring  : ゲームのソースコード
+
+* cards.jpg   : ゲームで使用される画像ファイル
+
+* project.qrc : Qt プロジェクトで使用されるリソースファイル
+
+リソースファイルの内容:
+
+.. code-block:: none
+
+	<RCC>
+    		<qresource>
+        		<file>cards.ringo</file>
+			<file>cards.jpg</file>
+    		</qresource>
+	</RCC>
+
+二本のリソースファイルがあります。
+
+一本目のファイルは cards.ringo (Ring オブジェクトファイル) であり、二本目のファイルは cards.jpg (画像ファイル) です。
+
+まず、 Ring2EXE でリソースファイル (target/mobile/qtproject/project.qrc) を生成します。
+
+しかし、このファイルの内容は cards.ringo のみです (Ring2EXE は Ring コンパイラを呼び出すことにより生成します)。
+
+このリソースファイルへ画像を追加してから必ず更新してください : cards.jpg
+
+更新後にメインのアプリケーションファイルへリソースファイルをコピーします。
+
+Ring2EXE の再実行時に更新済みリソースファイルを使用します！
+
+これでモバイル用の Card ゲームのビルドが行えます。
+
+(1) このコマンドを実行します
+
+.. code-block:: none
+
+	ring2exe cards.ring -dist -mobileqt
+
+(2) Qt Creator で target/mobile/qtproject/project.pro を開きます。
+
+(3) Qt Creator でビルドと実行を行います。
+
+
+Cards ゲームで画像ファイルを検出する方法は？
+
+RingQt にはシンプルな関数があります: AppFile()
+
+関数はデスクトップまたはモバイルプラットフォームでアクセスするファイルを決定するために使えます。
+
+このコードは cards.ring からの引用です。
+
+.. code-block:: ring
+
+	mypic = new QPixmap(AppFile("cards.jpg"))
+
+必要ならば AppFile() 関数を画像ファイルに使用します！
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; モバイル版 Weight History アプリケーションのビルド方法 (RingQt)
+
+モバイル版 Weight History アプリケーションのビルド方法 (RingQt)
+===============================================================
+
+このフォルダにある Weight History アプリケーションは Ring による Android パッケージのビルド方法であり
+Ring2EXE と Qt を使用したモバイル・アプリケーションを配布するための別例であると考えられます:
+
+	ring/application/weighthistory 
+
+Weight History アプリケーションのフォルダには四本のファイルがあります
+
+* weighthistory.ring : アプリケーションのソースコード
+
+* weighthistory.db : SQLite データベース
+
+* project.qrc : Qt プロジェクト用のリソースファイル
+
+* main.cpp : Qt プロジェクト用のメイン C++ ソースファイル
+
+モバイル用の Weight History アプリケーションをビルドするには
+
+(1) このコマンドを実行
+
+.. code-block:: none
+
+	ring2exe weighthistory.ring -dist -mobileqt
+
+(2) Qt Creator で target/mobile/qtproject/project.pro を開きます。
+
+(3) Qt Creator でビルドと実行を行います。
+
+リソースファイル (project.qrc) には二つのファイルがあります。
+
+.. code-block:: none
+
+	<RCC>
+		<qresource>
+			<file>weighthistory.ringo</file>
+			<file>weighthistory.db</file>
+		</qresource>
+	</RCC>
+
+一本目のファイルは weighthistory.ringo (Ring オブジェクトファイル - Ring2EXE が Ring コンパイラを呼び出すことで生成)
+
+データベースファイル : weighthistory.db
+
+main.cpp には次の小規模な更新があるため、モバイル機器の書き込み可能なリソースの場所へデータベースファイルをコピーしてください。
+
+.. code-block:: none
+
+    QString path3 ;
+    path3 = path+"/weighthistory.db";
+    QFile::copy(":/weighthistory.db",path3);
+
+この作業はデータベースファイルのみ行う必要があります！
+
+Ring2EXE 使用時、ツールは project.qrc および main.cpp の確認を行い、存在する場合は更新されたファイルとして
+
+Ring2EXE により生成されたデフォルト版である target/mobile/qtproject を使用します。
+
+よって Ring2EXE でファイルを更新した後に、更新する時にアプリケーションのフォルダへファイルをコピーするために使用してください。
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; フォームデザイナーをモバイル機器用にビルドするには (RingQt)
+
+フォームデザイナーをモバイル機器用にビルドするには (RingQt)
+===========================================================
+
+モバイル用のアプリケーションをフォームデザイナー・アプリケーション (ring/tools/formdesigner) でビルドをするには
+
+(1) このコマンドを実行
+
+.. code-block:: none
+
+	ring2exe formdesigner.ring -dist -mobileqt
+
+(2) Qt Creator で target/mobile/qtproject/project.pro を開きます。
+
+(3) Qt Creator でビルドと実行を行います。
+
+ring/application/formdesigner フォルダにはリソースファイルがあります : project.qrc
+
+Ring2EXE により自動的に使用されます。
+
+.. code-block:: none
+
+	<RCC>
+		<qresource>
+			<file>formdesigner.ringo</file>
+			<file>image/allevents.png</file>
+			<file>image/checkbox.png</file>
+			<file>image/close.png</file>
+			<file>image/combobox.bmp</file>
+			<file>image/datepicker.bmp</file>
+			<file>image/dial.png</file>
+			<file>image/formdesigner.png</file>
+			<file>image/frame.png</file>
+			<file>image/grid.bmp</file>
+			<file>image/hyperlink.png</file>
+			<file>image/image.png</file>
+			<file>image/label.png</file>
+			<file>image/layout.png</file>
+			<file>image/lcdnumber.png</file>
+			<file>image/listview.png</file>
+			<file>image/lock.png</file>
+			<file>image/new.png</file>
+			<file>image/open.png</file>
+			<file>image/progressbar.png</file>
+			<file>image/project.png</file>
+			<file>image/pushbutton.png</file>
+			<file>image/radiobutton.png</file>
+			<file>image/save.png</file>
+			<file>image/saveas.png</file>
+			<file>image/select.png</file>
+			<file>image/slider.png</file>
+			<file>image/spinner.bmp</file>
+			<file>image/statusbar.png</file>
+			<file>image/tab.png</file>
+			<file>image/textarea.png</file>
+			<file>image/textfield.png</file>
+			<file>image/timer.png</file>
+			<file>image/toolbar.png</file>
+			<file>image/tree.bmp</file>
+			<file>image/videowidget.png</file>
+			<file>image/webview.png</file>
+		</qresource>
+	</RCC>
+
+Cards ゲームと同様、フォームデザイナーは AppFile() 関数を画像ファイル名を決定するために使用します。
+
+このコードは ring/tools/formdesigner/mainwindow/formdesignerview.ring からの引用です。
+
+.. code-block:: ring
+
+	func CreateToolBar
+		aBtns = [
+				new qtoolbutton(win) {
+					setbtnimage(self,AppFile("image/new.png"))
+					setclickevent(Method(:NewAction))
+					settooltip("New File")
+				} ,
+				new qtoolbutton(win) {
+					setbtnimage(self,AppFile("image/open.png"))
+					setclickevent(Method(:OpenAction))
+					settooltip("Open File")
+				} ,
+				new qtoolbutton(win) {
+					setbtnimage(self,AppFile("image/save.png"))
+					setclickevent(Method(:SaveAction))
+					settooltip("Save")
+				 } ,
+				new qtoolbutton(win) {
+					setbtnimage(self,AppFile("image/saveas.png"))
+					setclickevent(Method(:SaveAsAction))
+					settooltip("Save As")
+				 } ,
+				new qtoolbutton(win) {
+					setbtnimage(self,AppFile("image/close.png"))
+					setclickevent(Method(:ExitAction))
+					settooltip("Exit")
+				}
+			]
+
+		tool1 = win.addtoolbar("files")  {
+	  		for x in aBtns { addwidget(x) addseparator() }
+		}
+
+この用例でサブフォルダでの画像の用法を理解できます。
+
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; Qt リソースファイルの作成方法 (Folder2qrc)
+
+Qt リソースファイルの作成方法 (Folder2qrc)
+==========================================
+
+大量の画像とファイルから構成される大規模 RingQt プロジェクトでは、モバイル・アプリケーション配布時にリソースファイル (\*.qrc) へファイルを必ず追加してください。
+
+Ring 1.6 以降では Folder2qrc ツールにより、一つずつファイルを追加する必要がなくなるので時間の節約になります。
+
+
+
+用例:
+
+.. code-block:: none
+
+	folder2qrc formdesigner.ring
+
+アプリケーションフォルダに移動している間に、メインソースファイルの決定をするために
+Folder2qrc は現在のフォルダとサブフォルダにある全てのファイルを確認します。
+そして mainfile.ringo の後にリソースファイルを追加します (この用例は formdesigner.ringo です)。
+
+出力ファイル : project.qrc
+
+ファイルを開く、または削除するためにリソースは不要です！
+
+
+.. index:: 
+	pair: Ring2EXE による Ring アプリケーションの配布方法; Ring2EXE に関する重要情報
+
+Ring2EXE に関する重要情報
+=========================
+
+* Ring2EXE で配布物を準備すると、古い配布物にあるファイルを全て削除します。
+
+例えば target/windows が使用される場合は
+
+.. code-block:: none
+
+	ring2exe test3.ring -dist -allruntime
+
+target/windows にあるファイルは再びファイルを追加する前に削除されます。
+
+これは、モバイル機器用の配布物を準備するときに重要となります。
+
+.. code-block:: none
+
+	ring2exe test3.ring -dist -mobileqt
+
+リソースファイルを修正する場合は : project.qrc または、メインファイル main.cpp をアプリケーションフォルダへコピーすることを忘れないように注意してください！
+
+前述のコマンドを再実行すると、 Ring2EXE で更新版を使えます！
+
+* Ring2EXE は Ring 記述しています。こちらからソースコードを読むことができます
+
+	https://github.com/ring-lang/ring/blob/master/tools/ring2exe/ring2exe.ring
+
+* ライブラリの情報は個々の独立したファイルに記録されています。よって将来、新しいライブラリへ対応する場合は、このファイルを自動的に更新できます。
+
+	https://github.com/ring-lang/ring/blob/master/tools/ring2exe/libs
+
+

@@ -1,0 +1,219 @@
+.. index:: 
+	single: 制御構造 - 第二形式; はじめに
+
+===================
+制御構造 - 第二形式
+===================
+
+第二形式による制御構造の用法です。
+
+.. index:: 
+	pair: 制御構造 - 第二形式; 分岐処理
+
+
+分岐処理
+========
+
+.. index:: 
+	pair: 制御構造 - 第二形式; If ステートメント
+
+* If ステートメント
+
+文法:
+
+.. code-block:: ring
+
+	if 式
+		ステートメント・ブロック
+	elseif 式
+		ステートメント・ブロック
+	else
+		ステートメント・ブロック
+	end
+
+用例:
+
+.. code-block:: ring
+
+	put " 
+		Main Menu
+		---------
+		(1) Say Hello
+		(2) About
+		(3) Exit
+
+	    " get nOption
+
+	if nOption = 1	put "Enter your name : " get name put "Hello " + name + nl
+	elseif nOption = 2 put "Sample : using if statement" + nl
+	elseif nOption = 3 bye
+	else put "bad option..." + nl
+	end
+
+.. index:: 
+	pair: 制御構造 - 第二形式; Switch ステートメント
+
+* Switch ステートメント
+
+文法:
+
+.. code-block:: ring
+
+	switch 式
+	case 式
+		ステートメント・ブロック
+	else
+		ステートメント・ブロック
+	end		
+
+用例:
+
+.. code-block:: ring
+
+	Put " 
+		Main Menu
+		---------
+		(1) Say Hello
+		(2) About
+		(3) Exit
+
+	    " Get nOption
+
+	Switch nOption
+	Case 1 Put "Enter your name : " Get name Put "Hello " + name + nl
+	Case 2 Put "Sample : using switch statement" + nl
+	Case 3 Bye
+	Else Put "bad option..." + nl
+	End
+
+.. index:: 
+	pair: 制御構造 - 第二形式; ループ処理
+
+ループ処理
+==========
+
+* While ループ
+
+文法:
+
+.. code-block:: ring
+
+	while 式
+		ステートメント・ブロック
+	end
+
+
+用例:
+
+.. code-block:: ring
+
+	While True
+
+		Put " 
+			Main Menu
+			---------
+			(1) Say Hello
+			(2) About
+			(3) Exit
+
+		    " Get nOption
+
+		Switch nOption
+		Case 1 
+			Put "Enter your name : " 
+			Get name 
+			Put "Hello " + name + nl
+		Case 2 
+			Put "Sample : using while loop" + nl
+		Case 3 
+			Bye
+		Else 
+			Put "bad option..." + nl
+		End
+	End
+.. index:: 
+	pair: 制御構造 - 第二形式; For ループ
+
+
+* For ループ
+
+文法:
+
+.. code-block:: ring
+
+	for 識別子=式 to 式 [step 式]
+		ステートメント・ブロック
+	end
+
+用例:
+
+.. code-block:: ring
+
+	# 1 ～ 10 までの数値を表示します。
+	for x = 1 to 10	 put x + nl  end
+
+用例:
+
+.. code-block:: ring
+
+	# 動的ループ
+	Put "Start : " get nStart       
+	Put "End   : " get nEnd
+	Put "Step  : " get nStep
+	For x = nStart to nEnd Step nStep
+		Put x + nl
+	End
+
+用例:
+
+.. code-block:: ring
+
+	# 0 ～ 10 までの偶数値を表示します。
+	for x = 0 to 10 step 2
+		Put x + nl
+	end
+
+用例:
+
+.. code-block:: ring
+
+	# 10 ～ 0 までの偶数値を表示します。
+	for x = 10 to 0 step -2
+		put x + nl
+	end
+
+
+.. index:: 
+	pair: 制御構造 - 第二形式; For in ループ
+
+* For in ループ
+
+文法:
+
+.. code-block:: ring
+
+	for 識別子 in リストまたは文字列  [step 式]
+		ステートメント・ブロック
+	end
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:10	# 1 ～ 10 までの数値を有するリストを作成します。
+	for x in aList  put x + nl  end	# 1 ～ 10 までの数値を表示します。
+
+.. index:: 
+	pair: 制御構造 - 第二形式; 例外処理
+
+例外処理
+========
+
+.. code-block:: ring
+
+	try
+		ステートメント・ブロック
+	catch
+		ステートメント・ブロック
+	end
+

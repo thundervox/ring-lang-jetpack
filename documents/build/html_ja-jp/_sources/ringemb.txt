@@ -1,0 +1,334 @@
+.. index:: 
+	single: Ring へ Ring を組み込むには; はじめに
+
+===========================
+Ring へ Ring を組み込むには
+===========================
+
+Ring プログラム、またはアプリケーションへ Ring を組み込む方法です。
+
+.. index:: 
+	pair: Ring へ Ring を組み込むには; ステートを共有せずに Ring へ Ring を組み込むには
+
+ステートを共有せずに Ring へ Ring を組み込むには
+================================================
+
+Ring 1.0 より Ring を C へ組み込むための関数は実装されていました。
+また eval() 関数で Ring プログラムにある Ring のコードを実行できます。
+この公開版では、ステートを共有せずに Ring を Ring プログラムへ組み込むための関数があります。
+
+利点:
+
+(1) Ring プログラムとアプリケーションの統合動作環境下で競合が発生しません。
+
+(2) Ring のコードを安全な環境で実行して、トレースを行えます。
+
+用例:
+
+.. code-block:: ring
+
+	pState = ring_state_init()
+	ring_state_runcode(pState,"See 'Hello, World!'+nl")
+	ring_state_runcode(pState,"x = 10")
+
+	pState2 = ring_state_init()
+	ring_state_runcode(pState2,"See 'Hello, World!'+nl")
+	ring_state_runcode(pState2,"x = 20")
+
+	ring_state_runcode(pState,"see x +nl")
+	ring_state_runcode(pState2,"see x +nl")
+
+	v1 = ring_state_findvar(pState,"x")
+	v2 = ring_state_findvar(pState2,"x")
+
+	see v1[3] + nl
+	see V2[3] + nl
+
+	ring_state_delete(pState)
+	ring_state_delete(pState2)
+
+実行結果:
+
+.. code-block:: ring
+
+	Hello, World!
+	Hello, World!
+	10
+	20
+	10
+	20
+
+.. index:: 
+	pair: Ring へ Ring を組み込むには; プログラムの直列実行
+
+プログラムの直列実行
+====================
+
+ring_state_main() 関数はアプリケーションの実行後に、別のアプリケーションを実行します。
+
+用例:
+
+.. code-block:: ring
+
+	chdir(exefolder()+"/../applications/formdesigner")
+	ring_state_main('formdesigner.ring')
+	chdir(exefolder()+"/../applications/cards")
+	ring_state_main('cards.ring')
+
+.. index:: 
+	pair: Ring へ Ring を組み込むには; ring_state_setvar()
+
+ring_state_setvar()
+===================
+
+ring_state_setvar() 関数は変数の値を設定します。
+
+値には「文字列、数値、リスト、または C ポインタ」を指定します。
+
+この関数は下位 Ring 環境へリストと C ポインタを手早く渡すために必要です。
+
+文法:
+
+.. code-block:: none
+
+	ring_state_setvar(oState,cVariableName,Value)
+
+用例:
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	myapp	= null
+	win	= null
+
+	func main
+		myapp = new qApp {
+			win = new qWidget() {
+				setWindowTitle("Advanced Example on using ring_state_setvar()")
+				move(100,100)
+				resize(600,400)
+				new qPushButton(win) {
+					setText("Test")
+					setClickEvent("Test()")
+				}
+				# Qt でタイマーの作成とウィンドウを閉じる動作を行います。
+				# これだけでウィンドウを閉じるには不十分です。
+				# このために下位環境では load 'guilib.ring' を
+				# 必ず使用してください。
+				oFilter = new qAllEvents(win)
+				oFilter.setCloseEvent("myapp.quit()")
+				win.installeventfilter(oFilter)
+				show()
+			}
+			exec()
+		}
+
+	func test
+		pState = ring_state_init()
+		ring_state_runcode(pstate,"load 'guilib.ring'")
+		ring_state_runcode(pState,"x = NULL")
+		# 文字列を渡します。
+			ring_state_setvar(pState,"x","hello")
+			ring_state_runcode(pState,"? x")
+		# 数値を渡します。
+			ring_state_setvar(pState,"x",100)
+			ring_state_runcode(pState,"? x")
+		# Pass List
+			ring_state_setvar(pState,"x",["one","two","three"])
+			ring_state_runcode(pState,"? x")
+		# リストを渡します。
+		# Ring オブジェクトを渡すことはできません (win)。
+		# 理由としてオブジェクトはクラス情報のポインタとして格納されているからです。
+		# またクラスは Ring の親環境と関連付けられています。
+		# しかし、下位 Ring 環境にはアクセスできません。
+		# ですが win.pObject のようにすれば C ポインタを渡せます。
+			ring_state_setvar(pState,"x",win.pObject)
+		# さて、オブジェクトを再作成しましたが同じ C ポインタを使用しています。
+		# したがって親 Ring 環境にある同じウィンドウへアクセスできます。
+			ring_state_runcode(pState,"
+				new qWidget {
+					pObject = x
+					setwindowtitle('Message from the Sub Ring Environment')
+				}
+			")
+		ring_state_delete(pState)
+
+
+.. index:: 
+	pair: Ring へ Ring を組み込むには; ring_state_new() と ring_state_mainfile() 関数
+
+ring_state_new() と ring_state_mainfile() 関数
+==============================================
+
+ring_state_new() と ring_state_mainfile() 関数は Ring プログラムから別の Ring プログラムを実行します。
+
+ring_state_main() 関数とは異なり、こちらは Ring ステートの削除時に制御できます！
+
+これは GUI プログラムから別の GUI プログラムを実行するときに重要です。
+
+この場合の理由は GUI ライブラリ (RingQt) を共有しており、
+
+呼び出し元は qApp.Exec() を呼び出すからです。
+
+よって、下位プログラムを停止せずにメインプログラムへ戻ります。
+
+ここで下位プログラムのステートを削除してしまうと、下位プログラムのイベント実行時に問題が発生します。
+
+ステートを保持することは、下位 GUI プログラムの収容先となっている GUI プログラムでは重要です。
+
+用例:
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	func main
+		new qApp {
+			win = new qWidget() {
+				setWindowTitle("Test ring_state_mainfile()")
+				resize(400,400) move(100,100)
+				btn = new qPushButton(Win) {
+					settext("test")
+					setclickevent("mytest()")
+				}
+				show()
+			}
+			exec()
+		}
+
+	func mytest
+		pState = ring_state_new()
+		ring_state_mainfile(pState,"runprogram.ring")
+		# ここで GUI アプリケーションを実行する場合はステートを削除しないでください。
+		# なお GUI アプリケーションのイベントを実行できます。
+			// ring_state_delete(pState)
+
+この機能を使用する場合は、前述の用例を基にアプリケーションで必要な更新をすることを覚えておいてください。
+
+この時点で ring_state_delete() 関数を呼び出すとメモリリークを回避できます！
+
+
+.. index:: 
+	pair: Ring へ Ring を組み込むには; Ring へ Ring を組み込んだときのランタイムエラーについて
+
+Ring へ Ring を組み込んだときのランタイムエラーについて
+=======================================================
+
+Ring 1.8 から Ring へ Ring を組み込んだときに、
+
+ゲスト環境でエラーが発生してもホストは異常終了しなくなりました。
+
+用例:
+
+.. code-block:: ring
+
+	? "Start the test!" 
+
+	pState = ring_state_init()
+
+	ring_state_runcode(pState," ? 'Let us try having an error' ? x")
+
+	ring_state_delete(pState)
+
+	? ""
+	? "End of test!"
+
+実行結果:
+
+.. code-block:: none
+
+	Start the test!
+	Let us try having an error
+
+	Line 1 Error (R24) : Using uninitialized variable : x
+	in file Ring_EmbeddedCode
+	End of test!
+
+.. index:: 
+	pair: Ring へ Ring を組み込むには; ring_state_filetokens() 関数
+
+ring_state_filetokens() 関数
+============================
+
+Ring 1.12 では ring_state_filetokens() 関数に対応しました。
+
+ring_state_filetokens() 関数は Ring ソースコードファイルにあるトークンを一括取得します。
+
+.. code-block:: ring
+
+	C_FILENAME 	= "test_tokens.ring"
+	C_WIDTH		= 12
+
+	# ファイルの書き込み
+		write(C_FILENAME,'
+				see "Hello, World!"
+				? 3*2+3
+				Name = "Ring"
+				? Name
+	')
+
+	# トークンの種類
+		C_KEYWORD 	= 0
+		C_OPERATOR 	= 1
+		C_LITERAL 	= 2
+		C_NUMBER 	= 3
+		C_IDENTIFIER 	= 4
+		C_ENDLINE 	= 5
+
+	# キーワードリスト
+	aKEYWORDS = ["IF","TO","OR","AND","NOT","FOR","NEW","FUNC", 
+	"FROM","NEXT","LOAD","ELSE","SEE","WHILE","OK","CLASS","RETURN","BUT", 
+	"END","GIVE","BYE","EXIT","TRY","CATCH","DONE","SWITCH","ON","OTHER","OFF", 
+	"IN","LOOP","PACKAGE","IMPORT","PRIVATE","STEP","DO","AGAIN","CALL","ELSEIF", 
+	"PUT","GET","CASE","DEF","ENDFUNC","ENDCLASS","ENDPACKAGE", 
+	"CHANGERINGKEYWORD","CHANGERINGOPERATOR","LOADSYNTAX"]
+
+	pState = ring_state_new()
+	aList = ring_state_filetokens(pState,C_FILENAME)
+	PrintTokens(aList)
+	ring_state_delete(pState)
+
+	func PrintTokens aList
+		for aToken in aList
+			switch aToken[1]
+			on C_KEYWORD 
+				? Width("Keyword",C_WIDTH) + ": "  + aKeywords[0+aToken[2]]
+			on C_OPERATOR 
+				? Width("Operator",C_WIDTH)  + ": " + aToken[2]
+			on C_LITERAL 
+				? Width("Literal",C_WIDTH)  + ": " + aToken[2]
+			on C_NUMBER 
+				? Width("Number",C_WIDTH)  + ": " + aToken[2]
+			on C_IDENTIFIER 
+				? Width("Identifier",C_WIDTH)  + ": " + aToken[2]
+			on C_ENDLINE 
+				? "EndLine"
+			off
+		next
+
+	func Width cText,nWidth
+		return cText+copy(" ",nWidth-len(cText))
+
+実行結果:
+
+.. code-block:: none
+
+	EndLine
+	Keyword     : SEE
+	Literal     : Hello, World!
+	EndLine
+	Operator    : ?
+	Number      : 3
+	Operator    : *
+	Number      : 2
+	Operator    : +
+	Number      : 3
+	EndLine
+	Identifier  : name
+	Operator    : =
+	Literal     : Ring
+	EndLine
+	Operator    : ?
+	Identifier  : name
+	EndLine

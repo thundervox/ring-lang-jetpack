@@ -1,0 +1,1263 @@
+.. index:: 
+	single: リフレクションとメタプログラミング; はじめに
+
+==================================
+リフレクションとメタプログラミング
+==================================
+
+Ring は動的プログラミング言語であり、プログラムのコードに関する応答を得られます。
+さらに、実行中にコードを変更できます。
+
+ここでは関数一覧とその用法を扱います。
+
+* locals()
+* globals()
+* functions()
+* cfunctions()
+* islocal()
+* isglobal()
+* isfunction()
+* iscfunction()
+* packages()
+* ispackage()
+* classes()
+* isclass()
+* packageclasses()
+* ispackageclass()
+* classname()
+* objectid()
+* isobject() 
+* attributes()
+* methods()
+* isattribute()
+* isprivateattribute()
+* ismethod()
+* isprivatemethod()
+* addattribute()
+* addmethod()
+* getattribute()
+* setattribute()
+* mergemethods()
+* packagename()
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; locals()
+
+locals() 関数
+=============
+
+locals() 関数は現在のスコープにある変数名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	locals() --> 現在のスコープにある変数名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	test("hello")
+
+	func test cMsg
+
+		see cMsg + nl
+
+		x = 10
+		y = 20
+		z = 30
+
+		see locals()
+
+実行結果:
+
+.. code-block:: ring
+
+	hello
+	cmsg
+	x
+	y
+	z
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; globals()
+
+globals() 関数
+==============
+
+globals() 関数はグローバルスコープにある変数名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+	
+	globals() --> グローバルスコープにある変数名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	x=10 y=20 z=30
+	test()
+
+	func test
+		see "message from test()" + nl +
+		    "Global Variables:" + nl
+		see globals()
+
+実行結果:
+
+.. code-block:: ring
+
+
+	message from test()
+	Global Variables:
+	x
+	y
+	z
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; functions()
+
+functions() 関数
+================
+
+functions() 関数は Ring で記述された関数名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	functions() --> Ring 関数名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	see functions()
+
+	func f1
+		see "f1" + nl
+
+	func f2
+		see "f2" + nl
+
+	func f3 
+		see "f3" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	f1
+	f2
+	f3
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; cfunctions()
+
+cfunctions() 関数
+=================
+
+cfunctions() 関数は C 言語で記述された関数名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	cfunctions() --> C 関数名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	aList =  cfunctions()
+	See "Count : " + len(aList) + nl
+	for x in aList
+		see x + "()" + nl
+	next
+
+実行結果:
+
+.. code-block:: ring
+
+	Count : 236
+	len() 
+	add() 
+	del() 
+	get() 
+	clock()
+	...
+	(以下、長文のため省略)
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; islocal()
+
+islocal() 関数
+==============
+
+islocal() 関数はローカルスコープで定義済みの変数か検査します。
+
+文法:
+
+.. code-block:: ring
+
+	islocal(cVariableName) --> 変数がローカルスコープで定義されているならば 1 を返します。
+				   変数がローカルスコープで定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	test()
+
+	func test
+		x=10 y=20
+		see islocal("x") + nl + 
+		    islocal("y") + nl + 
+		    islocal("z") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	1
+	0
+
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; isglobal()
+
+isglobal() 関数
+===============
+
+isglobal() 関数はグローバルスコープで定義済みの変数か検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isglobal(cVariableName) --> 変数がグローバルスコープで定義されているならば 1 を返します。
+				    変数がグローバルスコープで定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	x=10 y=20
+
+	test()
+
+	func test
+		see isglobal("x") + nl + 
+		    isglobal("y") + nl + 
+		    isglobal("z") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	1
+	0
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; isfunction()
+
+isfunction() 関数
+=================
+
+isfunction() 関数は定義済みの Ring 関数か検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isfunction(cFunctionName) --> Ring 関数が定義されているならば 1 を返します。
+				      Ring 関数が定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	see isfunction("f1") + nl + 
+	    isfunction("f2") + nl + 
+	    isfunction("f3") + nl
+
+	func f1
+		see "message from f1()" + nl
+
+	func f2
+		see "message from f2()" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	1
+	0
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; iscfunction()
+
+iscfunction() 関数
+==================
+
+iscfunction() 関数は定義済みの C 関数か検査します。
+
+文法:
+
+.. code-block:: ring
+
+	iscfunction(cFunctionName) --> C 関数が定義されているならば 1 を返します。
+				       C 関数が定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	see iscfunction("len") + nl + 
+  	    iscfunction("add") + nl + 
+  	    iscfunction("test") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	1
+	0
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; packages()
+
+packages() 関数
+===============
+
+packages() 関数はパッケージ名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	packages() --> パッケージ名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	See packages()
+
+	Package Package1
+		Class class1
+			Func f1
+
+	Package Package2
+		Class class1
+			Func f1
+
+	Package Package3
+		Class class1
+			Func f1
+
+	Package Package4
+		Class class1
+			Func f1
+
+実行結果:
+
+.. code-block:: ring
+
+	package1
+	package2
+	package3
+	package4
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; ispackage()
+
+ispackage() 関数
+================
+
+ispackage() 関数は定義済みのパッケージか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	ispackage(cPackageName) --> パッケージが定義されているならば 1 を返します。
+				    パッケージが定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	See ispackage("package1") + nl + 
+	    ispackage("package4") + nl + 
+	    ispackage("package5") + nl +
+	    ispackage("package3") + nl
+
+	Package Package1
+		Class class1
+			Func f1
+
+	Package Package2
+		Class class1
+			Func f1
+
+	Package Package3
+		Class class1
+			Func f1
+
+	Package Package4
+		Class class1
+			Func f1
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	1
+	0
+	1
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; classes()
+
+classes() 関数
+==============
+
+classes() 関数はクラス名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	classes() --> クラス名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	See classes()
+
+	Class class1
+		Func f1
+
+	Class class2
+		Func f1
+
+	Class class3
+		Func f1
+
+実行結果:
+
+.. code-block:: ring
+
+	class1
+	class2
+	class3
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; isclass()
+
+isclass() 関数
+==============
+
+isclass() 関数は定義済みのクラスか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isclass(cClassName) -->  クラスが定義されているならば 1 を返します。
+				 クラスが定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	see isclass("class4") + nl + 
+	    isclass("class3") + nl +
+	    isclass("class2") + nl
+
+	Class class1
+		func f1
+
+	class class2
+		func f1
+
+	class class3
+		func f1
+
+実行結果:
+
+.. code-block:: ring
+
+	0
+	1
+	1
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; packagesclasses()
+
+packageclasses() 関数
+=====================
+
+packageclasses() 関数はパッケージにあるクラス名のリストを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	packageclasses(cPackageName) --> パッケージにあるクラス名のリスト
+
+用例:
+
+.. code-block:: ring
+
+	see "classes in Package1" + nl
+	see packageclasses("Package1")
+	see "classes in Package2" + nl
+	see packageclasses("Package2")
+
+	Package Package1
+		Class class1
+			Func f1
+
+	Package Package2
+		Class class1
+			Func f1
+		Class class2
+			Func f1
+		Class class3
+			func f1
+
+
+実行結果:
+
+.. code-block:: ring
+
+	classes in Package1
+	class1
+	classes in Package2
+	class1
+	class2
+	class3
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; ispackagesclass()
+
+ispackageclass() 関数
+=========================
+
+ispackageclass() 関数はパッケージで定義済みのクラスか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	ispackageclass(cPackageName,cClassName) -->  クラスが定義されているならば 1 を返します。
+		  				     クラスが定義されていないならば 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	see ispackageclass("package1","class1") + nl +
+	    ispackageclass("package1","class2") + nl +
+	    ispackageclass("package2","class1") + nl +
+	    ispackageclass("package2","class2") + nl
+
+	Package Package1
+		Class class1
+			Func f1
+
+	Package Package2
+		Class class1
+			Func f1
+		Class class2
+			Func f1
+		Class class3
+			func f1
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	0
+	1
+	1
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; classname()
+
+classname() 関数
+====================
+		
+classname() 関数はオブジェクトのクラス名を検査します。 
+
+文法:
+
+.. code-block:: ring
+
+	classname(object) --> オブジェクトのクラス名を返します。
+
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point
+	o2 = new rect
+
+	see classname(o1) + nl		# point を表示
+	see classname(o2) + nl		# rect  を表示
+
+	class point
+	class rect
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; objectid()
+
+objectid() 関数
+===================
+
+objectid() 関数はオブジェクトの識別子 (ID) を検査します。
+
+文法:
+
+.. code-block:: ring
+
+	objectid(object) --> オブジェクトの識別子 (ID) を返します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point
+	see objectid(o1) + nl
+	test(o1)
+
+	func test v
+		see objectid(v) + nl
+
+	Class point x y z
+
+実行結果:
+
+.. code-block:: ring
+
+	021B5808
+	021B5808
+		
+.. index:: 
+	pair: リフレクションとメタプログラミング; isobject()
+
+isobject() 関数
+===================
+
+isobject() 関数は変数がオブジェクトか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isobject(variable) --> オブジェクトならば True を、そうでなければ False を返します。
+
+		
+.. index:: 
+	pair: リフレクションとメタプログラミング; attributes()
+
+attributes() 関数
+=====================
+
+attributes() 関数はオブジェクトの属性を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	attributes(object) --> オブジェクトの属性リストを返します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point
+	aList = attributes(o1)		# see attributes(o1) を使えます。
+	for t in aList see t next	# xyz の表示
+	Class Point x y z
+		
+.. index:: 
+	pair: リフレクションとメタプログラミング; methods()
+
+methods() 関数
+==================
+
+methods() 関数はオブジェクトのメソッドを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	methods(object) --> オブジェクトのメソッドのリストを返します。
+
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new test
+	aList = methods(o1)
+
+	for x in aList
+		cCode = "o1."+x+"()"
+		eval(cCode)
+	next
+
+	Class Test
+		func f1
+			see "hello from f1" + nl
+		func f2
+			see "hello from f2" + nl
+		func f3
+			see "hello from f3" + nl
+		func f4
+			see "hello from f4" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	hello from f1
+	hello from f2
+	hello from f3
+	hello from f4
+
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; isattribute()
+
+isattribute() 関数
+==================
+
+isattribute() 関数はオブジェクトに属性があるか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isattribute(object,cAttributeName)
+		--> オブジェクトが属性を有しているならば True を返します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point
+
+	see isattribute(o1,"x") + nl	# 1 の表示
+	see isattribute(o1,"t") + nl	# 0 の表示
+	see isattribute(o1,"y") + nl	# 1 の表示
+	see isattribute(o1,"z") + nl	# 1 の表示
+
+	class point x y z
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; isprivateattribute()
+
+isprivateattribute() 関数
+=========================
+
+isprivateattribute() 関数はオブジェクトにプライベート属性があるか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isprivateattribute(object,cAttributeName)
+		--> オブジェクトにプライベート属性があるならば True を返します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new person
+
+	see isprivateattribute(o1,"name") + nl + 
+	    isprivateattribute(o1,"address") + nl + 
+	    isprivateattribute(o1,"phone") + nl + 
+	    isprivateattribute(o1,"job") + nl + 
+	    isprivateattribute(o1,"salary")
+
+	Class Person
+		name address phone
+		private
+			job salary
+
+実行結果:
+
+.. code-block:: ring
+
+	0
+	0
+	0
+	1
+	1
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; ismethod()
+	
+ismethod() 関数
+===================
+
+ismethod() 関数はオブジェクトのクラスにメソッドがあるか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	ismethod(object,cMethodName)
+		--> オブジェクトのクラスにメソッドがあるならば True を返します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point
+
+	see ismethod(o1,"print") + nl		# 1 の表示
+
+	mylist = []
+	mylist + new point
+
+	see ismethod(mylist[1],"print") + nl	# 1 の表示
+
+	class point x y z
+		func print
+			see x + nl + y + nl + z + nl
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; isprivatemethod()
+
+isprivatemethod() 関数
+==========================
+
+isprivatemethod() 関数はオブジェクトのクラスにプライベートメソッドがあるか検査します。
+
+文法:
+
+.. code-block:: ring
+
+	isprivatemethod(object,cMethodName)
+		--> オブジェクトのクラスにプライベートメソッドあるならば True を返します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new Test
+
+	see isprivatemethod(o1,"f1") + nl +
+	    isprivatemethod(o1,"f2") 
+
+	Class Test
+		func  f1
+			see "message from f1()" + nl
+		private
+			func f2
+				see "message from f2()" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	0
+	1
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; addattribute()
+
+addattribute() 関数
+===================
+
+addattribute() 関数はオブジェクトの状態 (クラスではなく) へ属性 (または属性のグループ) を追加します。
+
+文法:
+
+.. code-block:: ring
+
+	AddAttribute(object,cAttributeName|aAttributesList)
+
+用例①:
+
+.. code-block:: ring
+
+	see new point {x=10 y=20 z=30}
+	Class Point 
+		AddAttribute(self,["x","y","z"])
+
+用例②:
+
+.. code-block:: ring
+
+	o1 = new point
+	addattribute(o1,"x")
+	addattribute(o1,"y")
+	addattribute(o1,"z")
+	see o1 {x=10 y=20 z=30}
+	class point
+
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 10.000000
+	y: 20.000000
+	z: 30.000000
+
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; addmethod()
+
+
+addmethod() 関数
+====================
+
+addmethod() 関数はオブジェクトのクラスへメソッドを追加します。
+このメソッドは同一クラスにあるオブジェクトでも使えます。
+
+文法:
+
+.. code-block:: ring
+
+	AddMethod(Object,cNewMethodName,cMethodName|AnonymousFunction)
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point { x=10 y=20 z=30 }
+
+	addmethod(o1,"print", func { see x + nl + y + nl + z + nl } )
+
+	o1.print()
+
+	Class point
+		x y z
+	
+実行結果:
+
+.. code-block:: ring
+
+	10
+	20
+	30
+
+無名関数ではなく関数名により、新規メソッドをクラスへ追加できます
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point { x=10 y=20 z=30 }
+
+	myfunc = func { see x + nl + y + nl + z + nl }
+
+	addmethod(o1,"print", myfunc )
+	addmethod(o1,"display", myfunc )
+	addmethod(o1,"show", myfunc )
+
+	o1.print()
+	o1.display()
+	o1.show()
+
+	Class point
+		x y z
+
+
+実行結果:
+
+.. code-block:: ring
+
+	10
+	20
+	30
+	10
+	20
+	30
+	10
+	20
+	30
+
+クラスへメソッドを追加するため、このメソッドでは対象のクラスにあるメソッドを使用します。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point { x=10 y=20 z=30 }
+	o2 = new point { x=100 y=200 z=300 }
+	o3 = new point { x=50 y=150 z=250 }
+
+	addmethod(o1,"print", func { see x + nl + y + nl + z + nl } )
+
+	o1.print()
+	o2.print()
+	o3.print()
+
+	Class point
+		x y z
+
+実行結果:
+
+.. code-block:: ring
+
+	10
+	20
+	30
+	100
+	200
+	300
+	50
+	150
+	250
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; getattribute()
+
+getattribute() 関数
+===================
+
+getattribute() 関数はオブジェクトの属性値を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	GetAttribute(oObject,cAttributeName) ---> 属性の値
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new point
+
+	see getattribute(o1,"name") + nl +
+	    getattribute(o1,"x") + nl +
+	    getattribute(o1,"y") + nl + 
+	    getattribute(o1,"z") + nl
+
+	Class Point
+		x=10 y=20 z=30
+		name = "3D-Point"
+	
+実行結果:
+
+.. code-block:: ring
+
+	3D-Point
+	10
+	20
+	30
+	
+
+用例:
+
+findclass() 関数から GetAttribute() を呼び出してクラスリストのメンバを検索します。検索には桁の位置よりもメンバ名を優先して使用します。
+
+.. code-block:: ring
+
+	myList =
+	          [new Company {position=3 name="Mahmoud" symbol="MHD"},
+	           new Company {position=2 name="Bert" symbol="BRT"},
+	           new Company {position=1 name="Ring" symbol="RNG"}
+	          ]
+	
+	see myList
+	see nl +"=====================" + nl + nl
+	
+	for i = 1 to len(myList)
+	     see  "Pos: "+ i +" | "+ myList[i].position +" | "+ myList[i].name +
+		  " | "+  myList[i].symbol    +" | "+ nl
+	next
+	
+	
+	See findclass(myList, "MHD", "symbol") +nl   ### メンバのクラス名を指定
+	
+	###---------------------------------------
+	
+	func findclass classList, cValue, classMember
+	
+	       See nl + "FindClass: "  +" "+ cValue + nl + nl
+	
+	       for i = 1 to len(classList)
+	            result = getattribute( classList[i], classMember )
+	           
+	           See "Result-Attr: " + i +" "+  result +nl
+	           if result = cValue
+	               j = i
+	            ok      
+	       next
+	return j
+	
+	###--------------------------------------
+	
+	class company position name symbol
+
+実行結果:
+
+.. code-block:: ring
+
+	Pos: 1 | 3 | Mahmoud | MHD |
+	Pos: 2 | 2 | Bert | BRT |
+	Pos: 3 | 1 | Ring | RNG |
+	
+	FindClass:  MHD
+	
+	Result-Attr: 1 MHD
+	Result-Attr: 2 BRT
+	Result-Attr: 3 RNG
+	
+	1
+
+	
+.. index:: 
+	pair: リフレクションとメタプログラミング; setattribute()
+
+setattribute() 関数
+===================
+
+setattribute() 関数はオブジェクトの属性値を設定します。
+
+文法:
+
+.. code-block:: ring
+
+	SetAttribute(oObject,cAttributeName,Value)
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new person
+	setattribute(o1,"cName","Mahmoud")
+	setattribute(o1,"nSalary",1000000)
+	setattribute(o1,"aColors",["white","blue","yellow"])
+
+	see o1
+	see o1.aColors
+
+	Class Person
+		cName
+		nSalary
+		aColors
+
+実行結果:
+
+.. code-block:: ring
+
+	cname: Mahmoud
+	nsalary: 1000000.000000
+	acolors: List...
+	white
+	blue
+	yellow
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; mergemethods()
+
+mergemethods() 関数
+===================
+
+MergeMethods() 関数は継承を行わずにクラスとメソッドを共有します。
+
+この関数は別のクラスへクラスのメソッドを併合します。
+
+文法:
+
+.. code-block:: ring
+
+	MergeMethods(cClassNameDestination,cClassNameSource)
+
+用例:
+
+.. code-block:: ring
+
+	mergemethods("count","share")
+	mergemethods("count2","share")
+
+	o1 = new count  { test() }
+	o1 = new count2 { test() }
+
+	Class Share
+		func one
+			see "one" + nl
+		func two
+			see "two" + nl
+		func three
+			see "three" + nl
+
+	Class Display
+		Func printline
+			see copy("*",20) + nl
+
+	Class Count from Display
+		Func test
+			printline()
+			one()
+			two()
+			three()
+			printline()
+
+	Class Count2 from Display
+		Func test
+			three()
+			two()
+			one()
+			printline()	
+
+実行結果:
+
+.. code-block:: ring
+
+	********************
+	one
+	two
+	three
+	********************
+	three
+	two
+	one
+	********************
+
+.. index:: 
+	pair: リフレクションとメタプログラミング; packagename()
+
+packagename() 関数
+==================
+
+packagename() 関数は import 命令が成功した最近のパッケージ名を検査します。
+
+文法:
+
+.. code-block:: ring
+
+	packagename() --> import 命令が成功した最近のパッケージ名を返します。
+
+
+用例:
+
+.. code-block:: ring
+
+	load "weblib.ring"
+	import System.web
+	see packagename()	# system.web
+

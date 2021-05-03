@@ -1,0 +1,453 @@
+.. index:: 
+	single: セキュリティとインターネット関数; はじめに
+
+================================
+セキュリティとインターネット関数
+================================
+
+ハッシュ、暗号化、および復号化に関するセキュリティとインターネット関数について説明します。
+
+この関数の使用前に openssllib.ring ライブラリを読み込みます。
+
+.. code-block:: ring
+
+	load "openssllib.ring"
+	# OpenSSL 関数の使用
+
+* MD5()
+* SHA1()
+* SHA256()
+* SHA512()
+* SHA384()
+* SHA224()
+* Encrypt()
+* Decrypt()
+* Randbytes()
+* MD5Init(), MD5Update(), MD5Final()
+* SHA1Init(), SHA1Update(), SHA1Final()
+* SHA256Init(), SHA256Update(), SHA256Final()
+* SHA512Init(), SHA512Update(), SHA512Final()
+* SHA384Init(), SHA384Update(), SHA384Final()
+* SHA224Init(), SHA224Update(), SHA224Final()
+
+この関数の使用前に internetlib.ring ライブラリを読み込みます。
+
+.. code-block:: ring
+
+	load "internetlib.ring"
+	# インターネット関数の使用
+
+* Download()
+* SendEmail()
+
+.. index:: 
+	pair: セキュリティとインターネット関数; MD5()
+
+MD5() 関数
+==========
+
+MD5() 関数は MD5 ハッシュ値を計算します。
+
+文法:
+
+.. code-block:: ring
+
+	MD5(cString) ---> 文字列 cString の MD5 ハッシュ値による文字列
+
+用例:
+
+.. code-block:: ring
+
+	see "md5('happy') = " + md5("happy") + nl +
+	    "md5('Hello') = " + md5("Hello") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	md5('happy') = 56ab24c15b72a457069c5ea42fcfc640
+	md5('Hello') = 8b1a9953c4611296a827abf8c47804d7
+
+.. index:: 
+	pair: セキュリティとインターネット関数; SHA1()
+
+SHA1() 関数
+===========
+
+SHA1() 関数は SHA1 ハッシュ値を計算します。
+
+文法:
+
+.. code-block:: ring
+
+	SHA1(cString) ---> 文字列 cString の SHA1 ハッシュ値による文字列
+
+用例:
+
+.. code-block:: ring
+
+	see "sha1('hello') : " + sha1("hello") + nl +
+	    "sha1('apple') : " + sha1("apple") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	sha1('hello') : aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+	sha1('apple') : d0be2dc421be4fcd0172e5afceea3970e2f3d940
+
+.. index:: 
+	pair: セキュリティとインターネット関数; SHA256()
+
+SHA256() 関数
+=============
+
+SHA256() 関数は SHA256 ハッシュ値を計算します。
+
+文法:
+
+.. code-block:: ring
+
+	SHA256(cString) ---> 文字列 cString の SHA256 ハッシュ値による文字列
+
+
+用例:
+
+.. code-block:: ring
+
+	see "sha256('hello') : " + sha256("hello") + nl +
+	    "sha256('apple') : " + sha256("apple") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	sha256('hello') : 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+	sha256('apple') : 3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b
+
+.. index:: 
+	pair: セキュリティとインターネット関数; SHA512()
+
+SHA512() 関数
+=============
+
+SHA512() 関数は SHA512 ハッシュ値を計算します。
+
+文法:
+
+.. code-block:: ring
+
+	SHA512(cString) ---> 文字列 cString の SHA512 ハッシュ値による文字列
+
+用例:
+
+.. code-block:: ring
+
+	see "sha512('hello') : " + sha512("hello") + nl +
+	    "sha512('apple') : " + sha512("apple") + nl +
+	    "sha512('hello world') : " + sha512("hello world") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	sha512('hello') : 9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673c
+	a72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043
+	sha512('apple') : 844d8779103b94c18f4aa4cc0c3b4474058580a991fba85d3ca698a0bc9e52
+	c5940feb7a65a3a290e17e6b23ee943ecc4f73e7490327245b4fe5d5efb590feb2
+	sha512('hello world') : 309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca8
+	6d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f
+
+.. index:: 
+	pair: セキュリティとインターネット関数; SHA384()
+
+SHA384() 関数
+=============
+
+
+SHA384() 関数は SHA384 ハッシュ値を計算します。
+
+文法:
+
+.. code-block:: ring
+
+	SHA384(cString) ---> 文字列 cString の SHA384 ハッシュ値による文字列
+
+用例:
+
+.. code-block:: ring
+
+	see "sha384('hello') : " + sha384("hello") + nl +
+	    "sha384('apple') : " + sha384("apple") + nl +
+	    "sha384('hello world') : " + sha384("hello world") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	sha384('hello') : 59e1748777448c69de6b800d7a33bbfb9ff1b463e44354c3553bcdb9c666fa
+	90125a3c79f90397bdf5f6a13de828684f
+	sha384('apple') : 3d8786fcb588c93348756c6429717dc6c374a14f7029362281a3b21dc10250
+	ddf0d0578052749822eb08bc0dc1e68b0f
+	sha384('hello world') : fdbd8e75a67f29f701a4e040385e2e23986303ea10239211af907fcb
+	b83578b3e417cb71ce646efd0819dd8c088de1bd
+
+.. index:: 
+	pair: セキュリティとインターネット関数; SHA224()
+
+SHA224() 関数
+=============
+
+SHA224() 関数は SHA224 ハッシュ値を計算します。
+
+文法:
+
+.. code-block:: ring
+
+	SHA224(cString) ---> 文字列 cString の SHA224 ハッシュ値による文字列
+
+用例:
+
+.. code-block:: ring
+
+	see "sha224('hello') : " + sha224("hello") + nl + 
+	    "sha224('apple') : " + sha224("apple") + nl +
+	    "sha224('hello world') : " + sha224("hello world") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	sha224('hello') : ea09ae9cc6768c50fcee903ed054556e5bfc8347907f12598aa24193
+	sha224('apple') : b7bbfdf1a1012999b3c466fdeb906a629caa5e3e022428d1eb702281
+	sha224('hello world') : 2f05477fc24bb4faefd86517156dafdecec45b8ad3cf2522a563582b
+
+.. index:: 
+	pair: セキュリティとインターネット関数; Encrypt()
+
+Encrypt() 関数
+==============
+
+Encrypt() 関数は Blowfish アルゴリズム法でデータを暗号化します。
+
+文法:
+
+.. code-block:: ring
+
+	Encrypt(cString, cKey, cIV) ---> 暗号化された文字列
+
+.. index:: 
+	pair: セキュリティとインターネット関数; Decrypt()
+
+Decrypt() 関数
+==============
+
+Decrypt() 関数は Encrypt() 関数で暗号化されたデータを復号化します。
+
+文法:
+
+.. code-block:: ring
+
+	Decrypt(cCipher, cKey, cIV) ---> 復号化された文字列
+
+.. index:: 
+	pair: セキュリティとインターネット関数; 用例
+
+暗号化と復号化の用例
+====================
+
+この用例は Encrypt() および Decrypt() 関数の用法です。
+
+いずれの関数も Blowfish アルゴリズム法を使用しています。
+
+.. code-block:: ring
+
+	See "Enter a string : " give cStr
+	list = 0:15  cKey=""    for x in list cKey += char(x) next
+	list = 1:8   cIV = ""   for x in list cIV += char(x) next
+	cStr = Encrypt(cStr,cKey,cIV) 
+	See "Cipher Text    : " + cStr + nl +
+	    "Plain Text     : " + Decrypt(cStr,cKey,cIV) + nl
+
+通常の for ループで同じ用例を記述できます。
+
+.. code-block:: ring
+
+	See "Enter a string : " give cStr
+
+	cKey=""    			# 16 バイト
+	for x = 0 to 15
+		cKey += char(x) 
+	next
+
+	cIV = ""   
+	for x = 1 to 8
+		cIV += char(x) 
+	next
+
+
+	cStr = Encrypt(cStr,cKey,cIV)
+	See "Cipher Text    : " + cStr + nl +
+	    "Plain Text     : " + Decrypt(cStr,cKey,cIV) + nl
+
+また、文字列でパスワードと IV を指定することもできます。
+
+.. code-block:: ring
+
+	See "Enter a string : " give cStr
+
+	# 注意: 推測されやすく暗号強度の低い単純なパスワードを使用しないでください！
+	cKey = "1234567890@#$%^&"		
+	cIV  = "87654321"			
+
+	cStr = Encrypt(cStr,cKey,cIV)
+	See "Cipher Text    : " + cStr + nl +
+	    "Plain Text     : " + Decrypt(cStr,cKey,cIV) + nl
+
+
+.. index:: 
+	pair: セキュリティとインターネット関数; ファイルのハッシュ
+
+ファイルのハッシュ
+==================
+
+この用例はハッシュ関数でファイルのハッシュ値を計算する方法です。
+
+.. code-block:: ring
+
+	cStr = read("myapp.exe")
+	see "Size : " + len(cStr) + nl +
+	    "md5 : " + md5(cStr) + nl +
+	    "sha1 : " + sha1(cStr) + nl +
+	    "sha256 : " + sha256(cStr) + nl +
+	    "sha224 : " + sha224(cStr) + nl +
+	    "sha384 : " + sha384(cStr) + nl +
+	    "sha512 : " + sha512(cStr) + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	Size : 58079876
+	md5 : 762eee15d8d2fd73b71ea52538b28667
+	sha1 : 9212c0c7258bad89a62bd239e1358a9276a9d070
+	sha256 : 7d6724e69b6c553da749ba31b6185dddc965129b64d9e9bf3de88f67df3b1cdc
+	sha224 : 5a9c8a7d662bce4f880ba94f90a79362b672528b9efd5abc718c7a3d
+	sha384 : 18e23f973abedbeb3981c423f12aeadecf96f9c6fb28aeabe3be4c484f8540afcc3861b
+	b370ce2b59cf3c99c130b856b
+	sha512 : da3d5e997d06f8b2a7a9964b77f7d82eedb76b245c611082c1639f83f51d83880bcd08f
+	cd53dcab1167bdca0b82fec5071971ac17c76479d76985ced4ab0d18e
+
+.. index:: 
+	pair: セキュリティとインターネット関数; RandBytes()
+
+Randbytes() 関数
+================
+
+Randbytes() 関数は擬似乱数バイト列を生成します。
+
+文法:
+
+.. code-block:: ring
+
+	Randbytes(nSize) ---> 乱数のバイト列による文字列 (バイト列数 = nSize)。
+
+用例:
+
+.. code-block:: ring
+
+	salt =  randbytes(32) 
+	password = "SecretPassWord@$%123"
+	see salt + nl
+	see sha256("test" + salt) + nl
+
+
+.. index:: 
+	pair: セキュリティとインターネット関数; 大規模ファイルのハッシュ値計算
+
+大規模ファイルのハッシュ値計算
+==============================
+
+以下の関数は大規模ファイル、またはデータの全内容を単独文字列として読み込むことなくハッシュ値を計算します。
+
+.. code-block:: none
+
+	md5init() -> MD5_CTX
+	md5update (MD5_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	md5final (MD5_CTX) -> string
+	
+	sha1init() -> SHA_CTX
+	sha1update (SHA_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha1final (SHA_CTX) -> string
+	
+	sha224init() -> SHA224_CTX
+	sha224update (SHA224_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha224final (SHA224_CTX) -> string
+	
+	sha256init() -> SHA256_CTX
+	sha256update (SHA256_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha256final (SHA256_CTX) -> string
+	
+	sha384init() -> SHA384_CTX
+	sha384update (SHA384_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha384final (SHA384_CTX) -> string
+	
+	sha512init() -> SHA512_CTX
+	sha512update (SHA512_CTX, string) -> 1 ならば成功、 0 ならば失敗
+	sha512final (SHA512_CTX) -> string
+
+.. index:: 
+	pair: セキュリティとインターネット関数; Download()
+
+Download() 関数
+===============
+
+指定された URL からファイルをダウンロードします。
+
+文法:
+
+.. code-block:: ring
+
+	Download(cURL) ---> サーバーからのレスポンス文字列
+
+用例:
+
+.. code-block:: ring
+
+	cStr= download("http://doublesvsoop.sourceforge.net/")
+	see cStr
+	write("download.txt",cStr)
+
+.. index:: 
+	pair: セキュリティとインターネット関数; SendEmail()
+
+SendEmail() 関数
+================
+
+電子メール送信します。
+
+文法:
+
+.. code-block:: ring
+
+	SendEmail(cSMTPServer,cEmail,cPassword,cSender,cReceiver,cCC,cTitle,cContent)
+
+用例:
+
+.. code-block:: ring
+
+	See "Send email..." + nl
+	sendemail("smtp://smtp.gmail.com:587",
+		"email@gmail.com",
+		"password",
+		"email@gmail.com",
+		"somebody@yahoo.com",
+		"somebodyelse@yahoo.com",
+		"Sending email from Ring",
+		"Hello
+		 How are you?
+		 Are you fine?
+		 Thank you!
+		 Greetings,
+		 Mahmoud")
+	see "Done.." + nl

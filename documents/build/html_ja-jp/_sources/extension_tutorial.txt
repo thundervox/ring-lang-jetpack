@@ -1,0 +1,1504 @@
+.. index:: 
+	single: チュートリアル: C/C++ による拡張機能の開発方法; チュートリアル: C/C++ による拡張機能の開発方法
+
+==============================================
+チュートリアル: C/C++ による拡張機能の開発方法
+==============================================
+
+Ring プログラムで C コードを用いるための簡単な用例です。
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; Hello World
+
+Hello World
+===========
+
+サンプル : ring/extensions/tutorial/helloworld
+
+ファイル mylib.c の内容
+
+.. code-block:: c
+
+	#include "ring.h"
+
+	#include "stdlib.h"
+
+	RING_FUNC(ring_myfunction)
+	{	
+		printf("Hello, World!");
+	}
+
+	RING_API void ringlib_init(RingState *pRingState)
+	{
+		ring_vm_funcregister("myfunction",ring_myfunction);
+	}
+
+ソースコードを参照すると、最初の行で Ring API の定義を記した ring.h ファイルをインクルードしています。
+
+新規関数の定義に RING_FUNC マクロを使います。通常の C 関数とは異なる定義であることを識別しやすくするために関数定義の接頭辞にring_を付けるのは良い考えです。 
+
+Ring VM で拡張機能が読み込まれるときに呼び出される関数 ringlib_init() があります。
+
+この関数では Ring VM へ新規関数を登録するために ring_vm_funcregister() を使用します。
+
+拡張機能をビルドするには :
+
+buildvc.bat
+
+buildvc.bat ファイルの内容には Visual C/C++ で拡張機能をビルドするためのコマンドが記述されています
+
+
+.. code-block:: none
+
+	cls
+	call ../../../src/locatevc.bat
+	cl /c /DEBUG mylib.c -I"..\..\..\include"
+	link /DEBUG mylib.obj  ..\..\..\lib\ring.lib /DLL /OUT:mylib.dll /SUBSYSTEM:CONSOLE,"5.01" 
+	del mylib.obj
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	loadlib("mylib.dll")
+
+	? "Calling a C Function"
+	myfunction()
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; 異動作環境間での機能拡張のビルド
+
+異動作環境間での機能拡張のビルド
+================================
+
+サンプル : ring/extensions/tutorial/helloworld2
+
+この拡張機能は前述のものですが、 Windows, Linux および macOS に対応させます。
+
+このファイルを使用します
+
+.. code-block:: none
+
+	buildvc.bat
+	buildgcc.sh
+	buildclang.sh
+
+Windows では buildvc.bat を、 Linux では buildgcc.sh および macOS では buildclang.sh でビルドします。
+
+ファイル buildgcc.sh には下記の内容が記述されています
+
+.. code-block:: none
+
+	gcc -c -fpic mylib.c -I $PWD/../../../include 
+	gcc -shared -o libmylib.so mylib.o -L $PWD/../../../lib -lring
+	sudo cp libmylib.so /usr/lib
+	sudo cp libmylib.so /usr/lib64
+
+ファイル buildclang.sh の内容
+
+.. code-block:: none
+
+	clang -c -fpic mylib.c -I $PWD/../../../include
+	clang -dynamiclib -o libmylib.dylib mylib.o  -L $PWD/../../../lib  -lring
+	cp libmylib.dylib /usr/local/lib
+
+動作環境別にライブラリの読み込み対象を変更するために mylib.ring から LoadLib() 関数を呼び出します。
+
+mylib.ringのコード内容は
+
+.. code-block:: ring
+
+	if iswindows()
+		LoadLib("mylib.dll")
+	but ismacosx()
+		LoadLib("libmylib.dylib")
+	else
+		LoadLib("libmylib.so")
+	ok
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; 二数値の合計
+
+二数値の合計
+============
+
+サンプル : ring/extensions/tutorial/sumtwonumbers
+
+この拡張機能では二数値を合計する C 関数の作成方法です。
+
+これは Hello World 2 拡張機能の更新版です : ring/extensions/tutorial/helloworld2 フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_sumtwonumbers)
+	{
+		double nNum1,nNum2,nSum;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 2) {
+				RING_API_ERROR(RING_API_MISS2PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! (RING_API_ISNUMBER(1) && RING_API_ISNUMBER(2)) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// 数値の総和
+			nNum1 = RING_API_GETNUMBER(1);
+			nNum2 = RING_API_GETNUMBER(2);
+			nSum  = nNum1 + nNum2 ;
+		// 処理結果を返します
+			RING_API_RETNUMBER(nSum);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("sumtwonumbers",ring_sumtwonumbers);
+
+前述コードは理解しやすく、エラーの確認が容易になるように記述してあります。
+
+略記もできます
+
+.. code-block:: c
+
+		RING_API_RETNUMBER(RING_API_GETNUMBER(1) + RING_API_GETNUMBER(2));
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; Say Hello
+
+Say Hello
+=========
+
+サンプル : ring/extensions/tutorial/sayhello
+
+この拡張機能では文字列として名前を取得してから say hello を表示する C 関数の作成方法です。
+
+これは sumtwonumbers 拡張機能の更新版です : ring/extensions/tutorial/sumtwonumbers フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_sayhello)
+	{
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 1) {
+				RING_API_ERROR(RING_API_MISS1PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! RING_API_ISSTRING(1) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		printf("Hello %s\n",RING_API_GETSTRING(1));
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("sayhello",ring_sayhello);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; 数値リストの総和
+
+数値リストの総和
+================
+
+サンプル : ring/extensions/tutorial/sumlist
+
+この拡張機能では数値リストの総和を行う C 関数の作成方法です。
+
+これは sayhello 拡張機能の更新版です : ring/extensions/tutorial/sayhello フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_sumlist)
+	{
+		List *pList;
+		int x,nSum;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 1) {
+				RING_API_ERROR(RING_API_MISS1PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! RING_API_ISLIST(1) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// 数値リストの総和
+			nSum = 0;
+			pList = RING_API_GETLIST(1);
+			for(x=1 ; x <= ring_list_getsize(pList) ; x++) {
+				if ( ring_list_isdouble(pList,x) ) {
+					nSum += (int) ring_list_getdouble(pList,x) ;
+				}
+			}
+		// 処理結果を返します 
+			RING_API_RETNUMBER(nSum);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("sumlist",ring_sumlist);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; リスト項目の増分
+
+リスト項目の増分
+================
+
+サンプル : ring/extensions/tutorial/incrementlist
+
+この拡張機能ではリスト項目の増分を行う C 関数の作成方法です。
+
+これは sumlist 拡張機能の更新版です : ring/extensions/tutorial/sumlist フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_inclist)
+	{
+		List *pList;
+		int x,nSum;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 2) {
+				RING_API_ERROR(RING_API_MISS2PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! ( RING_API_ISLIST(1) && RING_API_ISNUMBER(2) ) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リスト項目の増分
+			nSum = 0;
+			pList = RING_API_GETLIST(1);
+			for(x=1 ; x <= ring_list_getsize(pList) ; x++) {
+				if ( ring_list_isdouble(pList,x) ) {
+					ring_list_setdouble(pList,x,
+						ring_list_getdouble(pList,x)+
+						RING_API_GETNUMBER(2)) ;
+				}	
+			}
+		// 処理結果を返します
+			RING_API_RETLIST(pList);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("inclist",ring_inclist);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: ring
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; リスト項目の篩い分け
+
+リスト項目の篩い分け
+====================
+
+サンプル : ring/extensions/tutorial/filterlist
+
+この拡張機能ではリスト項目を篩い分ける C 関数の作成方法です。
+
+これは incrementlist 拡張機能の更新版です : ring/extensions/tutorial/incrementlist フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_filterlist)
+	{
+		List *pList;
+		int x;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 2) {
+				RING_API_ERROR(RING_API_MISS2PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! ( RING_API_ISLIST(1) && RING_API_ISNUMBER(2) ) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リスト項目の篩い分け
+			pList = RING_API_GETLIST(1);
+			for(x = ring_list_getsize(pList) ; x >= 1 ; x--) 
+				if ( ring_list_isdouble(pList,x) ) 
+					if ( ! (ring_list_getdouble(pList,x) >
+							 RING_API_GETNUMBER(2)) )
+						ring_list_deleteitem(pList,x) ;
+		// 処理結果を返します
+			RING_API_RETLIST(pList);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("filterlist",ring_filterlist);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+	? "Filter List Items (Items > 15)"
+	? filterlist(aList,15)
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+
+	Filter List Items (Items > 15)
+	16
+	17
+	18
+	19
+	20
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; リスト項目の複製
+
+リスト項目の複製
+================
+
+サンプル : ring/extensions/tutorial/replicatelist
+
+この拡張機能ではリストへ複数の項目を追加する C 関数の作成方法です。
+
+これは filterlist 拡張機能の更新版です : ring/extensions/tutorial/filterlist フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_replicatelist)
+	{
+		List *pList;
+		int x,y,nTimes,nSize;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 2) {
+				RING_API_ERROR(RING_API_MISS2PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! ( RING_API_ISLIST(1) && RING_API_ISNUMBER(2) ) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リスト項目の複製
+			pList = RING_API_GETLIST(1);
+			nSize = ring_list_getsize(pList);
+			nTimes = (int) RING_API_GETNUMBER(2);
+			if (nTimes < 1) {
+				RING_API_ERROR("Error: The second parameter must be >= 1 \n");
+				return;
+			}
+			for(x = 1 ; x <= nTimes ; x++) 
+				for(y = 1 ; y <= nSize ; y++) 
+					if ( ring_list_isdouble(pList,y) ) 
+						ring_list_adddouble(pList,
+							ring_list_getdouble(pList,y));
+		// 処理結果を返します
+			RING_API_RETLIST(pList);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("replicatelist",ring_replicatelist);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+	? "Filter List Items (Items > 15)"
+	? filterlist(aList,15)
+
+	aList = 1:3
+	? "Replicate list (1:3) three times then print the items (We expect 12 items)"
+	? replicatelist(aList,3)
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+
+	Filter List Items (Items > 15)
+	16
+	17
+	18
+	19
+	20
+
+	Replicate list (1:3) three times then print the items (We expect 12 items)
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+
+	
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; リストの生成
+
+リストの生成
+============
+
+サンプル : ring/extensions/tutorial/generatelist
+
+この拡張機能ではリストの新規作成とリストへ項目を追加する C 関数の作成方法です。
+
+これは replicatelist 拡張機能の更新版です : ring/extensions/tutorial/replicatelist フォルダ
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_generatelist)
+	{
+		List *pList;
+		int x,nSize;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 1) {
+				RING_API_ERROR(RING_API_MISS1PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! RING_API_ISNUMBER(1) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リストを作成します
+			pList = RING_API_NEWLIST;
+		// リスト項目の生成
+			nSize = (int) RING_API_GETNUMBER(1);
+			if (nSize < 1) {
+				RING_API_ERROR("Error: The list size must be >= 1 \n");
+				return;
+			}
+			for(x = 1 ; x <= nSize ; x++) 
+				ring_list_adddouble(pList,(double) x);
+		// 処理結果を返します
+			RING_API_RETLIST(pList);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("generatelist",ring_generatelist);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+	? "Filter List Items (Items > 15)"
+	? filterlist(aList,15)
+
+	aList = 1:3
+	? "Replicate list (1:3) three times then print the items (We expect 12 items)"
+	? replicatelist(aList,3)
+
+	? "Create list contains 5 items using C code"
+	aList = GenerateList(5)
+	? aList
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+
+	Filter List Items (Items > 15)
+	16
+	17
+	18
+	19
+	20
+
+	Replicate list (1:3) three times then print the items (We expect 12 items)
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+
+	Create list contains 5 items using C code
+	1
+	2
+	3
+	4
+	5
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; リストの表示
+
+リストの表示
+============
+
+サンプル : ring/extensions/tutorial/displaylist
+
+この拡張機能では多重リストも対象としたリストの全項目を表示する C 関数の作成方法です。
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	void mylib_displaylist(List *pList);
+
+	RING_FUNC(ring_displaylist)
+	{
+		List *pList;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 1) {
+				RING_API_ERROR(RING_API_MISS1PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! RING_API_ISLIST(1) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リストの取得
+			pList = RING_API_GETLIST(1);
+		// 多重リストも対象としたリスト項目の表示
+			mylib_displaylist(pList);
+	}
+
+	void mylib_displaylist(List *pList) {
+		int x;
+		for (x=1; x <= ring_list_getsize(pList); x++) {
+			if ( ring_list_isdouble(pList,x) ) {
+				printf("Number : %f \n", ring_list_getdouble(pList,x) ) ;
+			} else if ( ring_list_isstring(pList,x) ) {
+				printf("String : %s \n", ring_list_getstring(pList,x) ) ;
+			} else if ( ring_list_islist(pList,x) ) {
+				printf("Sub List..\n");
+				mylib_displaylist( ring_list_getlist(pList,x) );		
+			}
+		}
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("displaylist",ring_displaylist);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+	? "Filter List Items (Items > 15)"
+	? filterlist(aList,15)
+
+	aList = 1:3
+	? "Replicate list (1:3) three times then print the items (We expect 12 items)"
+	? replicatelist(aList,3)
+
+	? "Create list contains 5 items using C code"
+	aList = GenerateList(5)
+	? aList
+
+	? "Create List (3,2)"
+	aList = newList(3,2)
+	aList[1][1] = "R 1 C 1"
+	aList[1][2] = "R 1 C 2"
+	aList[2][1] = "R 2 C 1"
+	aList[2][2] = "R 2 C 2"
+	aList[3][1] = "R 3 C 1"
+	aList[3][2] = "R 3 C 2"
+	? "Print the List using Ring"
+	? aList
+	? "Print the List by calling C Code"
+	displayList(aList)
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+
+	Filter List Items (Items > 15)
+	16
+	17
+	18
+	19
+	20
+
+	Replicate list (1:3) three times then print the items (We expect 12 items)
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+
+	Create list contains 5 items using C code
+	1
+	2
+	3
+	4
+	5
+
+	Create List (3,2)
+	Print the List using Ring
+	R 1 C 1
+	R 1 C 2
+	R 2 C 1
+	R 2 C 2
+	R 3 C 1
+	R 3 C 2
+
+	Print the List by calling C Code
+	Sub List..
+	String : R 1 C 1
+	String : R 1 C 2
+	Sub List..
+	String : R 2 C 1
+	String : R 2 C 2
+	Sub List..
+	String : R 3 C 1
+	String : R 3 C 2
+
+	
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; テーブルの更新
+
+テーブルの更新
+==============
+
+サンプル : ring/extensions/tutorial/updatetable
+
+この拡張機能では行列から構成されるテーブルの更新を行う C 関数の作成方法です。
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_updatetable)
+	{
+		List *pList, *pRow;
+		int nRow,nCol;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 2) {
+				RING_API_ERROR(RING_API_MISS2PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! ( RING_API_ISLIST(1) && RING_API_ISNUMBER(2) ) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リストの取得 (テーブル表記)
+			pList = RING_API_GETLIST(1);
+		// テーブルの行列更新
+		for (nRow = 1 ; nRow <= ring_list_getsize(pList) ; nRow++ ) {
+			if ( ring_list_islist(pList,nRow) ) {
+			pRow = ring_list_getlist(pList,nRow);
+			for (nCol = 1 ; nCol <= ring_list_getsize(pRow) ; nCol++ ) {
+				if ( ring_list_isdouble(pRow,nCol) ) {
+					ring_list_setdouble(pRow,nCol,RING_API_GETNUMBER(2));
+				} else {
+					RING_API_ERROR("Error : We expect numbers!\n");
+					return ;
+				}
+			}
+			} else {
+				RING_API_ERROR("Error : The parameter is not a table! \n");
+				return ;
+			}
+		}
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("updatetable",ring_updatetable);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+	? "Filter List Items (Items > 15)"
+	? filterlist(aList,15)
+
+	aList = 1:3
+	? "Replicate list (1:3) three times then print the items (We expect 12 items)"
+	? replicatelist(aList,3)
+
+	? "Create list contains 5 items using C code"
+	aList = GenerateList(5)
+	? aList
+
+	? "Create List (3,2)"
+	aList = newList(3,2)
+	aList[1][1] = "R 1 C 1"
+	aList[1][2] = "R 1 C 2"
+	aList[2][1] = "R 2 C 1"
+	aList[2][2] = "R 2 C 2"
+	aList[3][1] = "R 3 C 1"
+	aList[3][2] = "R 3 C 2"
+	? "Print the List using Ring"
+	? aList
+	? "Print the List by calling C Code"
+	displayList(aList)
+	? ""
+
+	? "Create List (2,2)"
+	aList = newList(2,2)
+	? "Update the list using C code - set all cells to 10"
+	UpdateTable(aList,10)
+	? "aList[1][1] : " + aList[1][1]
+	? "aList[1][2] : " + aList[1][2]
+	? "aList[2][1] : " + aList[2][1]
+	? "aList[2][2] : " + aList[2][2]
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+
+	Filter List Items (Items > 15)
+	16
+	17
+	18
+	19
+	20
+
+	Replicate list (1:3) three times then print the items (We expect 12 items)
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+
+	Create list contains 5 items using C code
+	1
+	2
+	3
+	4
+	5
+
+	Create List (3,2)
+	Print the List using Ring
+	R 1 C 1
+	R 1 C 2
+	R 2 C 1
+	R 2 C 2
+	R 3 C 1
+	R 3 C 2
+
+	Print the List by calling C Code
+	Sub List..
+	String : R 1 C 1
+	String : R 1 C 2
+	Sub List..
+	String : R 2 C 1
+	String : R 2 C 2
+	Sub List..
+	String : R 3 C 1
+	String : R 3 C 2
+
+	Create List (2,2)
+	Update the list using C code - set all cells to 10
+	aList[1][1] : 10
+	aList[1][2] : 10
+	aList[2][1] : 10
+	aList[2][2] : 10
+
+.. index:: 
+	pair: チュートリアル: C/C++ による拡張機能の開発方法; テーブルの作成
+
+テーブルの作成
+==============
+
+サンプル : ring/extensions/tutorial/createtable
+
+この拡張機能では行列から構成されるテーブルの生成を行う C 関数の作成方法です。
+
+ファイル mylib.c を変更します
+
+.. code-block:: c
+
+	RING_FUNC(ring_createtable)
+	{
+		List *pList, *pRow;
+		int x,y,nRows,nCols;
+		// 引数の個数を検査します
+			if (RING_API_PARACOUNT != 2) {
+				RING_API_ERROR(RING_API_MISS2PARA);
+				return;
+			}
+		// 引数の型を検査します
+			if ( ! ( RING_API_ISNUMBER(1) && RING_API_ISNUMBER(2) ) ) {
+				RING_API_ERROR(RING_API_BADPARATYPE);
+				return;
+			}
+		// リストを作成します
+			pList = RING_API_NEWLIST;
+		// テーブルの項目を作成します
+			nRows = (int) RING_API_GETNUMBER(1);
+			nCols = (int) RING_API_GETNUMBER(2);
+			if ( (nRows < 1) || (nCols < 1) ) {
+			RING_API_ERROR("Error: The table rows and columns must be >= 1 \n");
+			return;
+			}
+			for(x = 1 ; x <= nRows ; x++) {
+				pRow = ring_list_newlist(pList);
+				for(y = 1 ; y <= nCols ; y++) 
+					ring_list_adddouble(pRow,0.0);
+			}
+		// 処理結果を返します
+			RING_API_RETLIST(pList);
+	}
+
+関数を新規登録します
+
+.. code-block:: c
+
+	ring_vm_funcregister("createtable",ring_createtable);
+
+ファイル test.ring の内容
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	? "Loading Library"
+	load "mylib.ring"
+
+	? "Calling a C Function"
+	myfunction()
+
+	? "Sum Two Numbers (3,5)"
+	? SumTwoNumbers(3,5)
+
+	? "Say Hello"
+	SayHello("Mahmoud")
+
+	? "Sum List contains numbers from 1 to 10"
+	aList = 1:10
+	? SumList(aList)
+
+	? "Increment List Items"
+	? inclist(aList,10)
+
+	? "Filter List Items (Items > 15)"
+	? filterlist(aList,15)
+
+	aList = 1:3
+	? "Replicate list (1:3) three times then print the items (We expect 12 items)"
+	? replicatelist(aList,3)
+
+	? "Create list contains 5 items using C code"
+	aList = GenerateList(5)
+	? aList
+
+	? "Create List (3,2)"
+	aList = newList(3,2)
+	aList[1][1] = "R 1 C 1"
+	aList[1][2] = "R 1 C 2"
+	aList[2][1] = "R 2 C 1"
+	aList[2][2] = "R 2 C 2"
+	aList[3][1] = "R 3 C 1"
+	aList[3][2] = "R 3 C 2"
+	? "Print the List using Ring"
+	? aList
+	? "Print the List by calling C Code"
+	displayList(aList)
+	? ""
+
+	? "Create List (2,2)"
+	aList = newList(2,2)
+	? "Update the list using C code - set all cells to 10"
+	UpdateTable(aList,10)
+	? "aList[1][1] : " + aList[1][1]
+	? "aList[1][2] : " + aList[1][2]
+	? "aList[2][1] : " + aList[2][1]
+	? "aList[2][2] : " + aList[2][2]
+	? ""
+
+	? "Create List (3,3) using C code"
+	aList = CreateTable(3,3)
+	? "aList[1][1] : " + aList[1][1]
+	? "aList[1][2] : " + aList[1][2]
+	? "aList[1][3] : " + aList[1][3]
+	? "aList[2][1] : " + aList[2][1]
+	? "aList[2][2] : " + aList[2][2]
+	? "aList[2][3] : " + aList[2][3]
+	? "aList[3][1] : " + aList[3][1]
+	? "aList[3][2] : " + aList[3][2]
+	? "aList[3][3] : " + aList[3][3]
+
+関数のテスト
+
+.. code-block:: none
+
+	ring test.ring
+
+実行結果
+
+.. code-block:: none
+
+	Loading Library
+	Calling a C Function
+	Hello, World!
+	Sum Two Numbers (3,5)
+	8
+	Say Hello
+	Hello Mahmoud
+	Sum List contains numbers from 1 to 10
+	55
+	Increment List Items
+	11
+	12
+	13
+	14
+	15
+	16
+	17
+	18
+	19
+	20
+
+
+	Filter List Items (Items > 15)
+	16
+	17
+	18
+	19
+	20
+
+	Replicate list (1:3) three times then print the items (We expect 12 items)
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+	1
+	2
+	3
+
+	Create list contains 5 items using C code
+	1
+	2
+	3
+	4
+	5
+
+	Create List (3,2)
+	Print the List using Ring
+	R 1 C 1
+	R 1 C 2
+	R 2 C 1
+	R 2 C 2
+	R 3 C 1
+	R 3 C 2
+
+	Print the List by calling C Code
+	Sub List..
+	String : R 1 C 1
+	String : R 1 C 2
+	Sub List..
+	String : R 2 C 1
+	String : R 2 C 2
+	Sub List..
+	String : R 3 C 1
+	String : R 3 C 2
+
+	Create List (2,2)
+	Update the list using C code - set all cells to 10
+	aList[1][1] : 10
+	aList[1][2] : 10
+	aList[2][1] : 10
+	aList[2][2] : 10
+
+	Create List (3,3) using C code
+	aList[1][1] : 0
+	aList[1][2] : 0
+	aList[1][3] : 0
+	aList[2][1] : 0
+	aList[2][2] : 0
+	aList[2][3] : 0
+	aList[3][1] : 0
+	aList[3][2] : 0
+	aList[3][3] : 0

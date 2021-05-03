@@ -1,0 +1,209 @@
+.. index:: 
+	single: RingLibCurl; はじめに
+
+==================
+RingLibCurl の用法
+==================
+
+RingLibCurl の用法です。
+
+.. index:: 
+	pair: RingLibCurl; Get リクエスト
+
+Get リクエスト
+==============
+
+用例:
+
+.. code-block:: ring
+
+	load "libcurl.ring"	
+
+	curl = curl_easy_init()
+
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1)
+	curl_easy_setopt(curl, CURLOPT_URL, "http://ring-lang.sf.net")
+
+	curl_easy_perform(curl)
+
+	curl_easy_cleanup(curl)
+
+
+.. index:: 
+	pair: RingLibCurl; Post リクエスト
+
+Post リクエスト
+===============
+
+用例:
+
+.. code-block:: ring
+
+	load "libcurl.ring"
+
+	curl = curl_easy_init()
+
+	cPostThis = "page=4&Number1=4&Number2=5"
+	curl_easy_setopt(curl, CURLOPT_URL, "http://localhost/ringapp/index.ring?page=3")
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, cPostThis)
+
+	curl_easy_perform(curl)
+
+	curl_easy_cleanup(curl)
+
+.. index:: 
+	pair: RingLibCurl; Facebook へのログイン
+
+Facebook へのログイン
+=====================
+
+用例:
+
+.. code-block:: ring
+
+	load "libcurl.ring"
+
+	see "Email     の入力 : " give $login_email 
+	See "パスワードの入力 : " give $login_pass
+
+	curl = curl_easy_init()
+
+	curl_easy_setopt(curl, CURLOPT_URL, 'https://www.facebook.com/login.php')
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS,'charset_test=j u s t a t e s t'+
+	' &email='+urlencode($login_email)+'&pass='+
+	urlencode($login_pass)+'&login=Login')
+	curl_easy_setopt(curl, CURLOPT_POST, 1)
+	curl_easy_setopt(curl, CURLOPT_HEADER, 0)
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1)
+	curl_easy_setopt(curl, CURLOPT_COOKIEJAR, "cookies.txt")
+	curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "cookies.txt")
+	curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U;"+
+	" Windows NT 5.1; en-US; rv:1.8.1.3) Gecko/20070309 Firefox/2.0.0.3")
+	curl_easy_setopt(curl, CURLOPT_REFERER, "http://www.facebook.com")
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE)
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2)
+
+	mylist = curl_slist_append(NULL,'Accept-Charset: utf-8')
+	curl_slist_append(mylist,'Accept-Language: en-us,en;q=0.7,bn-bd;q=0.3')
+	curl_slist_append(mylist,'Accept: text/xml,application/xml,'+
+	'application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5')
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, mylist)
+
+	curl_easy_setopt(curl, CURLOPT_COOKIESESSION, false)
+
+	curl_easy_perform(curl)
+
+	curl_easy_cleanup(curl)
+
+	Func URLEncode cStr
+		cOut = ""
+		for x in cStr
+			if isalnum(x)
+				cOut += x
+			but x = " "
+				cOut += "+"
+			else
+				cOut += "%"+str2hex(x)
+			ok
+		next
+		return cOut	
+
+.. index:: 
+	pair: RingLibCurl; 実行結果を文字列で保存
+
+実行結果を文字列で保存
+======================
+
+用例:
+
+.. code-block:: ring
+
+	load "libcurl.ring"
+
+	curl = curl_easy_init()
+
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1)
+	curl_easy_setopt(curl, CURLOPT_URL, "http://ring-lang.sf.net")
+
+	cOutput = curl_easy_perform_silent(curl)
+
+	See "実行結果:" + nl
+	see cOutput
+
+	curl_easy_cleanup(curl)
+
+.. index:: 
+	pair: RingLibCurl; Yahoo! から株式情報を取得
+
+Yahoo! から株式情報を取得
+=========================
+
+用例:
+
+.. code-block:: ring
+
+	Load "libcurl.ring"
+
+	### 第一部 --- 断片とクッキーの取得 -----------------------------------------
+
+	See "curl_easy_init() の処理開始: "+ nl
+	curl = curl_easy_init()                     ### >>> ハンドル >>> 01006BD0  CURL  0
+
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1)
+		curl_easy_setopt(curl, CURLOPT_COOKIEJAR,  "cookies.txt")
+		curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "cookies.txt")
+		curl_easy_setopt(curl, CURLOPT_URL, "https://finance.yahoo.com/quote/AMZN/history")
+
+		###  HTML データ >>> 標準出力 (STDOUT) ウィンドウでは curl_easy_perform_silent >>> String を使用。
+
+	cOutput = curl_easy_perform_silent(curl)    ### データの取得 >>> String
+
+
+	###   データから断片 (Crumb) を抽出します。
+	###  "CrumbStore":{"crumb":"abcdefghijk"},
+
+	if cOutput != NULL
+
+		newStr1     = substr(cOutput, substr(cOutput, '"CrumbStore":{"crumb":"' ), 48 )
+			nPosS   = substr(newStr1, ':"' ) ;  ### crumb -2 の始点
+			nPosE   = substr(newStr1, '"}' ) ;  ### crumb の終点
+			nCount  = nPosE - nPosS -2          ### crumb の大きさ
+		myCrumb     = substr(newStr1, nPosS +2, nCount)
+
+		See "myCrumb.: |"+ myCrumb +"|" +nl
+		
+		### UniCode の "\u002F" を "/" へ置換します。
+			if substr( myCrumb, "\u002F")
+			   myCrumb = substr( myCrumb, "\u002F", "/")
+			   See "myCrumb2: |"+ myCrumb +"|"+ nl
+			ok
+
+	else
+		See "Yahoo! へ接続できません。 Cookie と Crumb をご確認ください。" +nl +nl
+	ok
+
+					
+	### 第二部 --- URL へ断片とクッキーを送信 ----------------------------------------------
+
+		### Yahoo! へ URL+断片を送信して最初の株式履歴情報を取得します。
+
+		$url = "https://query1.finance.yahoo.com/v7/finance/download/AMZN"+
+			"?period1=1277856000&period2=1498777545&interval=1wk" + 
+			"&events=history&crumb=" + myCrumb
+
+		curl_easy_setopt(curl, CURLOPT_URL, $url);
+		cStr = curl_easy_perform_silent(curl)
+		See cStr 
+
+	curl_easy_cleanup(curl)  ### cURL を閉じるのを忘れないように。
+
+
+実行結果:
+
+.. code-block:: ring
+
+	myCrumb.: |sEEeW97mxvN|
+	Date,Open,High,Low,Close,Adj Close,Volume
+	2010-07-05,110.650002,117.480003,109.000000,117.260002,117.260002,21000400
+	2010-07-12,117.809998,124.879997,117.320000,118.489998,118.489998,29407300
+	2010-07-19,118.379997,121.250000,105.800003,118.870003,118.870003,74252100

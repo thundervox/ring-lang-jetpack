@@ -1,0 +1,492 @@
+.. index:: 
+	single: 文字列; はじめに
+
+======
+文字列
+======
+
+文字列の作成と操作です。
+
+.. index:: 
+	pair: 文字列; 文字列リテラル
+
+文字列リテラル
+==============
+
+文法:
+
+.. code-block:: ring
+
+	cStr = "This is a string"
+	cStr2 = 'Another string'
+	cStr3 = :JustAnotherString
+	cStr4 = `Yet "another" 'string' ! `
+
+.. index:: 
+	pair: 文字列; 文字列の長さを取得するには
+
+文字列の長さを取得するには
+==========================
+
+len() 関数は文字列の長さ (文字列内の文字数) を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	len(string) ---> 文字列の長さ
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "How are you?"
+	see cStr + nl
+	see "String size : " + len(cStr) + nl
+
+.. index:: 
+	pair: 文字列; 文字のつづりを変換するには
+
+文字のつづりを変換するには
+==========================
+
+文法:
+
+.. code-block:: ring
+
+	lower(string) ---> 文字列を小文字へ変換します。
+	upper(string) ---> 文字列を大文字へ変換します。
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome To The Ring Programming Language"
+	see cStr + nl + upper(cStr) + nl + lower(cStr) 		
+
+.. index:: 
+	pair: 文字列; 文字列にある文字へのアクセス
+
+文字列にある文字へのアクセス
+============================
+
+文字インデックスで文字列内にある文字へアクセスします。
+
+文法:	
+
+.. code-block:: ring
+
+	string[index] ---> 文字列にある文字を取得します。
+	string[index] = letter  # 文字列にある文字へ別の文字列を配置します。
+
+用例:
+
+.. code-block:: ring
+
+	# ユーザ名を一文字ずつ表示します (一文字ごとに改行されます)。
+
+	See "Hello, Enter your name : " give cName
+	for x = 1 to len(cName)
+		see nl + cName[x]
+	next
+
+for in で文字列の文字を取得します。
+
+
+用例:
+
+.. code-block:: ring
+
+	# ユーザ名を一文字ずつ表示します (一文字ごとに改行されます)。
+
+	See "Hello, Enter your name : " give cName
+	for x in cName
+		see nl + x
+	next
+
+文字列にある文字を変更します。
+
+用例:
+
+.. code-block:: ring
+
+	# 最初の一文字目を大文字へ変換します。
+
+	See "Enter your name : " give cName
+	cName[1] = upper(cName[1])
+	see "Hello " + cName
+
+.. index:: 
+	pair: 文字列; Left()
+
+Left() 関数
+===========
+
+Left() 関数は文字列から指定文字数の文字を取得します。
+
+開始位置は 1 です。
+
+文法:
+
+.. code-block:: ring
+
+	Left(string, count)
+
+用例:
+
+.. code-block:: ring
+
+	see left("Hello World!",5) # Hello の表示
+
+.. index:: 
+	pair: 文字列; Right()
+
+Right() 関数
+============
+
+Right() 関数は文字列から指定文字数の文字を取得します。
+
+始点は最後の文字の右側からです。
+
+文法:
+
+.. code-block:: ring
+
+	Right(string, count)
+
+用例:
+
+.. code-block:: ring
+
+	see Right("Hello World!",6) # World! を表示
+
+.. index:: 
+	pair: 文字列; Trim()
+
+Trim() 関数
+===========
+
+Trim() 関数は文字列の先頭と最後から半角空白文字 (0x20H) をすべて削除します。
+
+文法:
+
+.. code-block:: ring
+
+	trim(string)
+
+用例:
+
+.. code-block:: ring
+
+	cMsg = "     Welcome      "
+	see trim(cMsg)			# Welcome を表示
+
+タブ文字 (0x1BH) を削除したい場合は SubStr() 関数を併用します:
+
+.. code-block:: ring
+
+	cMsg = "     Welcome      "
+	see trim(substr(cMsg, tab, ' '))	# Welcome を表示
+
+.. index:: 
+	pair: 文字列; Copy()
+
+
+Copy() 関数
+===========
+
+copy() 関数は文字列を一回以上繰り返してコピーします。
+
+文法:
+
+.. code-block:: ring
+
+	copy(string, nCount)
+		---> 文字列を nCount 回繰り返します。
+
+用例:
+
+.. code-block:: ring
+
+	see copy("***hello***",3) # ***hello******hello******hello*** を表示
+
+.. index:: 
+	pair: 文字列; Lines()
+
+Lines() 関数
+============
+
+Lines() は文字列にある行数を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	lines(string) ---> 文字列内の行数
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Hello
+	How are you?
+	are you fine?"
+	see lines(cStr)		# 3 の表示
+
+.. index:: 
+	pair: 文字列; Substr()
+
+Substr() 関数
+=============
+
+Substr() 関数は文字列内にある部分文字列を処理します。
+また、このようなことができます。 
+
+* 部分文字列の検索
+
+* 指定位置から末尾までの部分文字列の取得
+
+* 指定位置から文字の字数を取得
+
+* 部分文字列を別の部分文字列へ変換
+
+.. index:: 
+	pair: 文字列; 部分文字列の検索
+
+部分文字列の検索
+================
+
+文法:
+
+.. code-block:: ring
+
+	substr(string, substring)
+		---> 文字列内の部分文字列における始点位置
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome to the Ring programming language"
+	see substr(cStr,"Ring")		# 16 の表示
+
+.. index:: 
+	pair: 文字列; 指定位置から末尾までの部分文字列を取得するには
+
+指定位置から末尾までの部分文字列を取得するには
+==============================================
+
+文法:
+
+.. code-block:: ring
+
+	substr(string, position)
+		---> 指定位置から末尾までの部分文字列を取得します。
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome to the Ring programming language"
+	nPos = substr(cStr,"Ring")	# nPos = 16
+	see substr(cStr,nPos)		# Ring programming language を表示
+
+.. index:: 
+	pair: 文字列; 文字の位置を数値で取得するには
+
+文字の位置を数値で取得するには
+==============================
+
+文法:
+
+.. code-block:: ring
+
+	substr(string, position, count)
+		---> 文字の位置を取得します。
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome to the Ring programming language"
+	nPos = substr(cStr,"Ring")	# nPos = 16
+	see substr(cStr,nPos,4)		# Ring を表示
+
+.. index:: 
+	pair: 文字列; 部分文字列を別の部分文字列へ置換するには
+
+部分文字列を別の部分文字列へ置換するには
+========================================
+
+文法:
+
+.. code-block:: ring
+
+	substr(string, substring, newsubstring)
+		---> 置換文字列 (英数大小文字を区別する)
+
+	substr(string, substring, newsubstring, 1)
+		---> 置換文字列 (英数大小文字を区別しない)
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome to the New programming language"
+	see substr(cStr,"New","Ring")   + nl # Welcome to the Ring programming language の表示
+	see substr(cStr,"new","Ring",1) + nl # Welcome to the Ring programming language の表示
+
+.. index:: 
+	pair: 文字列; strcmp()
+
+strcmp() 関数
+=============
+
+strcmp() 関数は文字列同士を比較します。
+
+文法:
+
+.. code-block:: ring
+
+	strcmp(cString1,cString2) ---> 値 = 0 if cString1 = cString2
+				       値 < 0 if cString1 < cString2
+				       値 > 0 if cString1 > cString2
+
+用例:
+
+.. code-block:: ring
+
+	see strcmp("hello","hello") + nl +
+  	    strcmp("abc","bcd") + nl + 
+  	    strcmp("bcd","abc") + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	0
+	-1
+	1
+
+.. index:: 
+	pair: 文字列; str2list() と list2str()
+
+str2list() と list2str() 関数
+=============================
+
+str2list() 関数は文字列にある行をリストへ変換します。
+また list2str() 関数はリストを文字列へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	str2list(string) ---> 文字列の行からリストの項目への変換結果 (改行で分割)
+	list2str(list)   ---> リストの項目から文字列への変換結果 (リストの全項目を連結)
+
+用例:
+
+.. code-block:: ring
+
+	/* 実行結果:
+	** Items : 4
+	** Item : Hello
+	** Item : How are you ?
+	** Item : are you fine ?
+	** Item : ok
+	** list2Str result = Hello
+	** How are you ?
+	** are you fine ?
+	** ok
+	** Done
+	*/
+
+	mystr = "Hello
+	How are you ?
+	are you fine ?
+	ok"
+
+	mylist = str2list(mystr)
+	see "Items : " + len(mylist) + nl
+
+	for x in mylist
+		see "Item : " + x + nl
+	next
+
+	newstr = list2str(mylist)
+	see "list2Str result = " + newstr
+
+	if mystr = newstr
+		see nl + "Done"
+	else
+		see nl + "Error!"
+	ok
+		
+
+
+.. index:: 
+	pair: 文字列; バイナリ文字の統合
+
+バイナリ文字の統合
+==================
+
+Ring 1.0 からバイナリ文字列の作成と操作を行えます。
+
+Ring 1.8 より文字列から個別に文字を取得したり、
+'+' 演算子でまとめて統合できます。
+
+用例:
+
+.. code-block:: ring
+
+	cStr = "Welcome"
+	? cstr[1] + cstr[2] + cStr[5]
+	v = cstr[1] + cstr[2] + cStr[5]
+	? v
+	? len(v)
+	c1 = cStr[1]
+	? c1
+	aList = [1,2,3]
+	cStr = ""
+	for item in aList 
+		cStr += int2bytes(item)
+	next 
+	? "All String"
+	? len(cStr)
+	? "First Part"
+	n1 = cStr[1] + cStr[2] + cStr[3] + cStr[4]
+	? len(n1)
+	? "Second Part"
+	n2 = cStr[5] + cStr[6] + cStr[7] + cStr[8]
+	? len(n2)
+	? "Third Part"
+	n3 = cStr[9] + cStr[10] + cStr[11] + cStr[12]
+	? len(n3)
+	? "All String"
+	cString = cStr[1] + cStr[2] + cStr[3] + cStr[4] + 
+		  cStr[5] + cStr[6] + cStr[7] + cStr[8] + 
+		  cStr[9] + cStr[10] + cStr[11] + cStr[12]
+	? len(cString)
+	? ascii(cStr[1])
+	? len(cStr[2])
+
+実行結果:
+
+.. code-block:: ring
+
+	Weo
+	Weo
+	3
+	W
+	All String
+	12
+	First Part
+	4
+	Second Part
+	4
+	Third Part
+	4
+	All String
+	12
+	1
+	1

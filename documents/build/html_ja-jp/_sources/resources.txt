@@ -1,0 +1,47 @@
+.. index:: 
+	single: 関連情報; はじめに
+
+========
+関連情報
+========
+
+Ring の関連情報を掲載しております。
+
+.. index:: 
+	pair: 関連情報; Ring のウェブサイト
+
+Ring のウェブサイト
+===================
+
+Ring の最新情報はウェブサイトを参照してください。
+
+	 http://ring-lang.net/
+
+	 http://ring-lang-081.osdn.jp/ (日本語版非公式サイト)
+
+.. index:: 
+	pair: 関連情報; ソースコード
+
+ソースコード
+============
+
+Ring は自由なオープンソースです (MIT ライセンス)
+
+ソースコード : https://github.com/ring-lang/ring/
+
+.. index:: 
+	pair: 関連情報; 作者の連絡先
+
+作者の連絡先
+============
+
+Ring チーム
+	http://ring-lang.sourceforge.net/team.html
+
+Ring チーム (日本)
+	http://ring-lang-081.osdn.jp/team.html
+
+日本語版翻訳者 (isVowel)
+	Twitter: https://www.twitter.com/isvowel/
+	
+	Jami   : isvowel

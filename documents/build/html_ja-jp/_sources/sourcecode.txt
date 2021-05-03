@@ -1,0 +1,809 @@
+.. index:: 
+	single: ソースコードからのビルド方法; はじめに
+
+============================
+ソースコードからのビルド方法
+============================
+
+Ring は自由なオープンソース製品 (MIT ライセンス) です。
+
+Ring は CMake あるいは、スクリプト (バッチファイル、またはシェルスクリプト) でビルドします。
+
+この手順はスクリプトによるビルド方法の解説です。
+
+* Microsoft Windows でのビルド方法
+* Ubuntu Linux でのビルド方法
+* Fedora Linux でのビルド方法
+* macOS でのビルド方法
+* CMake でのビルド方法
+
+.. index:: 
+	pair: ソースコードからのビルド方法; Microsoft Windows でのビルド方法
+
+Microsoft Windows でのビルド方法
+================================
+
+ソースコードの取得
+
+.. code-block:: none
+
+	git clone http://github.com/ring-lang/ring.git
+
+Ring (コンパイラ、仮想計算機) のビルド
+
+.. code-block:: none
+
+	cd ring/language/src
+	buildvc.bat
+	buildvcw.bat
+
+Ring2EXE のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ring2exe
+	buildring2exe.bat
+
+RingConsoleColors ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringconsolecolors
+	gencode.bat
+	buildvc.bat
+
+RingInternet のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringinternet
+	buildvc.bat
+
+RingLibCurl ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringcurl
+	gencode.bat
+	buildvc.bat
+
+RingZip ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringzip
+	gencode.bat
+	buildvc.bat
+
+
+RingPM のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ringpm
+	buildringpm.bat
+
+.. warning:: 特に指定がない限り /ring2exe/libs フォルダは削除しないでください。 RingPM のビルドが正常にできなくなります。
+
+.. note:: Light Release 版では「どのフォルダからでも Ring を呼び出せるようにします」まで読みとばしてください。
+
+RingODBC のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringodbc
+	buildvc.bat
+
+RingMySQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmysql
+	buildvc.bat
+
+RingSQLite のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringsqlite
+	buildvc.bat
+
+RingPostgreSQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringpostgresql
+	gencode.bat
+	buildvc.bat
+
+RingOpenSSL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopenssl
+	buildvc.bat
+
+RingMurmurHash のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmurmurhash
+	buildvc.bat
+
+RingAllegro ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringallegro
+	gencode.bat
+	buildvc.bat
+
+RingLibuv ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringlibuv
+	gencode.bat
+	buildvc.bat
+
+RingFreeGLUT ソースコードの生成とビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringfreeglut
+	gencode.bat
+	buildvc.bat
+
+RingOpenGL ソースコードの生成とビルド
+
+ringopengl のサブフォルダには OpenGL 1.1 ～ 4.6 が収録されています。
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopengl/opengl21
+	gencode.bat
+	buildvc.bat
+
+RingPostgreSQL ソースコードの生成とビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringpostgresql
+	gencode.bat
+	buildvc.bat
+
+RingQt ソースコードの生成とビルド
+
+Qt 5.12 と Qt 5.15 で検証済み
+
+Qt 5.12 の手順 ( Qt 5.12 のインストール : https://download.qt.io/archive/qt/5.12/5.12.6/ )
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt
+	gencodeqt512_nobluetooth.bat
+	buildqt512_nobluetooth.bat
+
+Qt ランタイムファイルを ring/bin フォルダへコピーします。
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt/binupdate
+	installqt512.bat
+
+Qt 5.15 の手順 ( Qt 5.15 のインストール : https://www.qt.io/blog/qt-5.15-released )
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt
+	gencodeqt515_nobluetooth.bat
+	buildqt515_nobluetooth.bat
+
+Qt ランタイムファイルを ring/bin フォルダへコピーします。
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt/binupdate
+	installqt515.bat
+
+どのフォルダからでも Ring を呼び出せるようにします。
+
+.. code-block:: none
+
+	cd ring/bin
+	install.bat
+
+システムパスへ Ring/bin を追加
+
+.. code-block:: none
+
+	"Windows キー" の打鍵。
+	"システム環境変数の編集" の入力
+	"詳細" タブ を選択。
+	"環境変数..." をクリック
+	"パス" のダブル・クリック
+	パスの末尾へセミコロンで区切った新しいパスを追加します。
+	    ;C:\Ring\Bin
+
+Ring ノートパッドの実行
+
+.. code-block:: none
+
+	cd ring/tools/ringnotepad
+	ring rnote.ring
+
+.. index:: 
+	pair: ソースコードからのビルド方法; Ubuntu Linux でのビルド方法
+
+Ubuntu Linux でのビルド方法
+===========================
+
+ソースコードの取得
+
+.. code-block:: none
+
+	git clone http://github.com/ring-lang/ring.git
+
+ライブラリのインストール
+
+.. code-block:: none
+
+	cd ring/language/src
+	./installdep.sh 
+
+Ring (コンパイラ、仮想計算機) のビルド
+
+.. code-block:: none
+
+	sudo ./buildgcc.sh
+
+Ring2EXE のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ring2exe
+	sudo ./buildring2exe.sh
+
+RingConsoleColors ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringconsolecolors
+	./gencode.sh
+	./buildgcc.sh
+
+RingInternet のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringinternet
+	./buildgcc.sh
+
+RingLibCurl ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringcurl
+	./gencode.sh
+	./buildgcc.sh
+
+RingZip ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringzip
+	./gencode.sh
+	./buildgcc.sh
+
+RingPM のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ringpm
+	sudo ./buildringpm.sh
+
+RingODBC のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringodbc
+	./buildgcc.sh
+
+RingMySQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmysql
+	./buildgcc.sh
+
+RingSQLite のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringsqlite
+	./buildgcc.sh
+
+RingPostgreSQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringpostgresql
+	gencode.sh
+	buildgcc.sh
+
+RingOpenSSL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopenssl
+	./buildgcc.sh
+
+RingMurmurHash のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmurmurhash
+	./buildgcc.sh
+
+RingAllegro ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringallegro
+	./gencode.sh
+	./buildgcc.sh
+
+RingLibuv ソースコードの生成とビルド
+
+最初に Libuv をビルドします
+
+.. code-block:: none
+
+	cd ring/extensions/ringlibuv/libuv
+	sudo apt-get install libtool m4 automake
+	sh autogen.sh
+	./configure
+	make
+	make check
+	sudo make install
+
+次に RingLibuv をビルドします
+
+.. code-block:: none
+	
+	cd ring/extensions/ringlibuv
+	./gencode.sh
+	./buildgcc.sh
+
+RingFreeGLUT ソースコードの生成とビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringfreeglut
+	./gencode.sh
+	./buildgcc.sh
+
+RingOpenGL ソースコードの生成とビルド
+
+ringopengl のサブフォルダには OpenGL 1.1 ～ 4.6 が収録されています。
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopengl/opengl21
+	gencode.sh
+	buildgcc.sh
+
+RingPostgreSQL ソースコードの生成とビルド 
+
+.. code-block:: none
+
+	cd ring/extensions/ringpostgresql
+	./gencode.sh
+	./buildgcc.sh
+
+RingQt ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt
+	./gencode.sh
+	./buildgcc.sh
+
+どのフォルダからでも Ring を呼び出せるようにします。
+
+.. code-block:: none
+
+	cd ring/bin
+	sudo ./install.sh
+
+Ring ノートパッドの実行
+
+.. code-block:: none
+
+	cd ring/tools/ringnotepad
+	ring rnote.ring
+
+.. index:: 
+	pair: ソースコードからのビルド方法; Fedora Linux でのビルド方法
+
+Fedora Linux でのビルド方法
+===========================
+
+ソースコードの取得
+
+.. code-block:: none
+
+	git clone http://github.com/ring-lang/ring.git
+
+ライブラリのインストール
+
+.. code-block:: none
+
+	cd ring/language/src
+	./installdepfedora.sh 
+
+Ring (コンパイラ、仮想計算機) のビルド
+
+.. code-block:: none
+
+	sudo ./buildgcc.sh
+
+Ring2EXE のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ring2exe
+	sudo ./buildring2exe.sh
+
+RingConsoleColors ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringconsolecolors
+	./gencode.sh
+	./buildgcc.sh
+
+RingInternet のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringinternet
+	./buildgcc.sh
+
+RingLibCurl ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringcurl
+	./gencode.sh
+	./buildgcc.sh
+
+RingZip ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringzip
+	./gencode.sh
+	./buildgcc.sh
+
+RingPM のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ringpm
+	sudo ./buildringpm.sh
+
+RingODBC のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringodbc
+	./buildgcc.sh
+
+RingMySQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmysql
+	./buildgccfedora.sh
+
+RingSQLite のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringsqlite
+	./buildgcc.sh
+
+RingPostgreSQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringpostgresql
+	gencode.sh
+	buildgcc.sh
+
+RingOpenSSL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopenssl
+	./buildgcc.sh
+
+RingMurmurHash のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmurmurhash
+	./buildgcc.sh
+
+RingAllegro ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringallegro
+	./gencode.sh
+	./buildgcc.sh
+
+RingLibuv ソースコードの生成とビルド
+
+最初に Libuv をビルドします
+
+.. code-block:: none
+
+	cd ring/extensions/ringlibuv/libuv
+	sudo dnf install libtool m4 autoconf automake
+	sh autogen.sh
+	./configure
+	make
+	make check
+	sudo make install
+
+次に RingLibuv をビルドします
+
+.. code-block:: none
+	
+	cd ring/extensions/ringlibuv
+	./gencode.sh
+	./buildgcc.sh
+
+RingFreeGLUT ソースコードの生成とビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringfreeglut
+	./gencode.sh
+	./buildgcc.sh
+
+RingOpenGL ソースコードの生成とビルド
+
+ringopengl のサブフォルダには OpenGL 1.1 ～ 4.6 が収録されています。
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopengl/opengl21
+	gencode.sh
+	buildgcc.sh
+
+RingPostgreSQL ソースコードの生成とビルド 
+
+.. code-block:: none
+
+	cd ring/extensions/ringpostgresql
+	./gencode.sh
+	./buildgcc.sh
+
+RingQt ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt
+	./gencode.sh
+	./buildgccfedora.sh
+
+どのフォルダからでも Ring を呼び出せるようにします。
+
+.. code-block:: none
+
+	cd ring/bin
+	sudo ./install.sh
+
+Ring ノートパッドの実行
+
+.. code-block:: none
+
+	cd ring/tools/ringnotepad
+	ring rnote.ring
+
+
+
+.. index:: 
+	pair: ソースコードからのビルド方法; macOS でのビルド方法
+
+macOS でのビルド方法
+====================
+
+ソースコードの取得
+
+.. code-block:: none
+
+	git clone http://github.com/ring-lang/ring.git
+
+homebrew のインストール (homebrew のホームページに記載されている説明に従ってください)。
+
+ライブラリのインストール
+
+.. code-block:: none
+
+	cd ring/language/src
+	./installdepmac.sh 
+
+Ring (コンパイラ、仮想計算機) のビルド
+
+.. code-block:: none
+
+	./buildclang.sh
+
+Ring2EXE のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ring2exe
+	sudo ./buildring2exe.sh
+
+RingConsoleColors ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringconsolecolors
+	./gencode.sh
+	./buildclang.sh
+
+RingInternet のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringinternet
+	./buildclang.sh
+
+RingLibCurl ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringcurl
+	./gencode.sh
+	./buildclang.sh
+
+RingZip ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringzip
+	./gencode.sh
+	./buildclang.sh
+
+RingPM のビルド
+
+.. code-block:: none
+
+	cd ring/tools/ringpm
+	sudo ./buildringpm.sh
+
+RingODBC のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringodbc
+	./buildclang.sh
+
+RingMySQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmysql
+	./buildclang.sh
+
+RingSQLite のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringsqlite
+	./buildclang.sh
+
+RingPostgreSQL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringpostgresql
+	gencode.sh
+	buildclang.sh
+
+RingOpenSSL のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopenssl
+	./buildclang.sh
+
+RingMurmurHash のビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringmurmurhash
+	./buildclang.sh
+
+RingAllegro ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringallegro
+	./gencode.sh
+	./buildclang.sh
+
+RingLibuv ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringlibuv
+	./gencode.sh
+	./buildclang.sh
+
+RingFreeGLUT ソースコードの生成とビルド
+
+.. code-block:: none
+	
+	cd ring/extensions/ringfreeglut
+	./gencode.sh
+	./buildclang.sh
+
+RingOpenGL ソースコードの生成とビルド
+
+ringopengl のサブフォルダには OpenGL 1.1 ～ 4.6 が収録されています。
+
+.. code-block:: none
+	
+	cd ring/extensions/ringopengl/opengl21
+	./gencode.sh
+	./buildclang.sh
+
+RingPostgreSQL ソースコードの生成とビルド 
+
+.. code-block:: none
+
+	cd ring/extensions/ringpostgresql
+	./gencode.sh
+	./buildclang.sh
+
+RingQt ソースコードの生成とビルド
+
+.. code-block:: none
+
+	cd ring/extensions/ringqt
+	./gencodemac.sh
+	./buildclang.sh
+
+どのフォルダからでも Ring を呼び出せるようにします。
+
+.. code-block:: none
+
+	cd ring/bin
+	sudo ./install.sh
+
+Ring ノートパッドの実行
+
+.. code-block:: none
+
+	cd ring/tools/ringnotepad
+	sudo ring rnote.ring
+
+.. index:: 
+	pair: ソースコードからのビルド方法; CMake によるビルド方法
+
+CMake によるビルド方法
+======================
+
+Ring のコンパイラと仮想計算機をビルドするには、
+
+.. code-block:: none
+
+	cmake .
+	make

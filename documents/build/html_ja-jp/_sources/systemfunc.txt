@@ -1,0 +1,582 @@
+.. index:: 
+	single: システム関数; はじめに
+
+============
+システム関数
+============
+
+システム関数の用法です。
+
+* System()
+
+* SysGet()
+
+* SysSet()
+
+* SysUnset()
+
+* IsMSDOS()
+
+* IsWindows()
+
+* IsWindows64()
+
+* IsUnix()
+
+* IsMacOSX()
+
+* IsLinux()
+
+* IsFreeBSD()
+
+* IsAndroid()
+
+* GetArch()
+
+* Windowsnl()
+
+* コマンドライン引数の取得
+
+* 使用中のソースファイル名を取得
+
+* CurrentDir()
+
+* ExeFileName()
+
+* ChDir()
+
+* ExeFolder()
+
+* Version()
+
+* Shutdown()
+
+.. index:: 
+	pair: システム関数; System() 関数
+
+System() 関数
+=============
+
+System() 関数はシステムコマンドを実行します。
+
+文法:
+
+.. code-block:: ring
+
+	System(cCommand)
+
+用例:
+
+.. code-block:: ring
+
+	System("myapp.exe")     # myapp.exe の実行
+	System("ls")            # ファイルのリストを表示
+
+.. index:: 
+	pair: システム関数; SysGet() 関数
+
+SysGet() 関数
+=============
+
+SysGet() 関数は環境変数を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	SysGet(cVariable)
+
+用例:
+
+.. code-block:: ring
+
+	see sysget("path")		# システムパスの情報を表示
+
+.. index:: 
+	pair: システム関数; SysSet() 関数
+
+SysSet() 関数
+=============
+
+SysSet() 関数は指定された環境変数を定義します。
+
+.. code-block:: none
+
+	SysSet(cVariable, cValue) ---> 1 ならば成功であり 0 ならば失敗です。
+
+.. index:: 
+	pair: システム関数; SysUnset() 関数
+
+SysUnset() 関数
+===============
+
+SysUnset() 関数は指定された環境変数を削除します。
+
+.. code-block:: none
+
+	SysUnset(cVariable) ---> 1 ならば成功であり 0 ならば失敗です。
+
+.. index:: 
+	pair: システム関数; IsMSDOS() 関数
+
+IsMSDOS() 関数
+==============
+
+IsMSDOS() 関数はオペレーティングシステムが MS-DOS か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsMSDOS()
+		→ オペレーティングシステムが MS-DOS ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsWindows() 関数
+
+IsWindows() 関数
+================
+
+IsWindows() 関数はオペレーティングシステムが Windows か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsWindows()
+		→ オペレーティングシステムが Windows ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsWindows64() 関数
+
+IsWindows64() 関数
+==================
+
+IsWindows64() 関数はオペレーティングシステムが 64bit 版の Windows か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsWindows64() 
+		→ オペレーティングシステムが Windows64 ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsUnix() 関数
+
+IsUnix() 関数
+=============
+
+IsUnix() 関数はオペレーティングシステムが UNIX か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsUnix() 
+		→ オペレーティングシステムが UNIX ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsMacOSX() 関数
+
+IsMacOSX() 関数
+===============
+
+IsMacOSX() 関数はオペレーティングシステムが macOS か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsMacOSX() 
+		→ オペレーティングシステムが macOS ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsLinux() 関数
+
+IsLinux() 関数
+==============
+
+IsLinux() 関数はオペレーティングシステムが Linux か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsLinux()
+		→ オペレーティングシステムが Linux ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsFreeBSD() 関数
+
+IsFreeBSD() 関数
+================
+
+IsFreeBSD() 関数はオペレーティングシステムが FreeBSD か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsFreeBSD() 
+		→ オペレーティングシステムが FreeBSD ならば 1 を、そうでなければ 0 を返します。
+
+
+.. index:: 
+	pair: システム関数; IsAndroid() 関数
+
+IsAndroid() 関数
+================
+
+IsAndroid() 関数はオペレーティングシステムが Android か確認します。
+
+文法:
+
+.. code-block:: ring
+
+	IsAndroid() 
+		→ オペレーティングシステムが Android ならば 1 を、そうでなければ 0 を返します。
+
+.. index:: 
+	pair: システム関数; 用例
+
+用例
+====
+
+.. code-block:: ring
+
+	see "IsMSDOS()     --> " + ismsdos()     + nl
+	see "IsWindows()   --> " + iswindows()   + nl
+	see "IsWindows64() --> " + iswindows64() + nl
+	see "IsUnix()      --> " + isunix()      + nl
+	see "IsMacOSX()    --> " + ismacosx()    + nl
+	see "IsLinux()     --> " + islinux()     + nl
+	see "IsFreeBSD()   --> " + isfreebsd()   + nl
+	see "IsAndroid()   --> " + isandroid()   + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	IsMSDOS()     --> 0
+	IsWindows()   --> 1
+	IsWindows64() --> 0
+	IsUnix()      --> 0
+	IsMacOSX()    --> 0
+	IsLinux()     --> 0
+	IsFreeBSD()   --> 0
+	IsAndroid()   --> 0
+
+
+.. index:: 
+	pair: システム関数; GetArch() 関数
+
+GetArch() 関数
+==============
+
+GetArch() 関数は Ring 実行可能ファイルが動作しているアーキテクチャ名を検出します。
+
+文法:
+
+.. code-block:: none
+
+	GetArch() ---> cString (Ring 実行可能ファイルが動作しているアーキテクチャ名)
+
+利用できる値:
+
+.. code-block:: none
+
+    x86
+    x64
+    arm64
+    arm
+    unknown
+
+用例:
+
+.. code-block:: ring
+
+	switch getarch()
+	on "x86"
+	        ? "x86 32bit アーキテクチャ"
+	on "x64"
+	        ? "x64 64bit アーキテクチャ"
+	on "arm64"
+	        ? "ARM64 64bit アーキテクチャ"
+	on "arm"
+	        ? "ARM 32bit アーキテクチャ"
+	other
+	        ? "Unknown アーキテクチャ"
+	off
+
+
+.. index:: 
+	pair: システム関数; Windowsnl() 関数
+
+Windowsnl() 関数
+================
+
+Windowsnl() 関数は Windows の改行文字を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	WindowsNL() → CR+LF = CHAR(13) + CHAR(10) から構成される文字列
+
+用例:
+
+.. code-block:: ring
+
+	cStr = read("input.txt")
+
+	if iswindows()
+		cStr = substr(cStr,windowsnl(),nl)
+	ok
+
+	aList = str2list(cStr)
+	# 課題 - リストの項目処理で "for in" を使用する
+	cStr = list2str(aList)
+
+	if iswindows()
+		cStr = substr(cStr,nl,windowsnl())
+	ok
+
+	write("ouput.txt",cStr)
+
+.. index:: 
+	pair: システム関数; コマンドライン引数の取得
+
+コマンドライン引数の取得
+========================
+
+Ring スクリプトへ渡されたコマンドライン引数を得るには、リスト形式の変数 sysargv を使用します。
+
+.. note:: ring2exe で実行可能ファイルにした場合、 sysargv の位置は -1 ずれます (Windows)。
+	対策方法は ringpm のソースコード getpara.ring をお読みください。
+
+用例:
+
+.. code-block:: ring
+
+	see copy("=",30) + nl
+	see "Command Line Parameters" + nl
+	see "Size : " + len(sysargv) + nl
+	see sysargv
+	see copy("=",30) + nl
+	if len(sysargv) < 4 return ok
+	nStart = sysargv[3]
+	nEnd = sysargv[4]
+	for x = nStart to nEnd
+		see x + nl
+	next
+
+実行結果:
+
+.. code-block:: ring
+
+	c:\mahmoud\apps\ring>ring tests\syspara.ring 1 10
+	==============================
+	Command Line Parameters
+	Size : 4
+	ring
+	tests\syspara.ring
+	1
+	10
+	==============================
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+
+.. index:: 
+	pair: システム関数; 使用中のソースファイル名を取得
+
+使用中のソースファイル名を取得
+==============================
+
+filename() 関数は現在使用中のソースファイル名 (\*.ring) を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	filename() → この文字列は現在使用中のソースファイル名です。
+
+用例:
+
+.. code-block:: ring
+
+	see "Active Source File Name : " + filename() + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	Active Source File Name : tests\filename.ring
+
+
+用例:
+
+.. code-block:: ring
+
+	if sysargv[2] = filename()
+		see "I'm the main program file!" + nl
+		# ここでテスト実行ができます！
+	else
+		see "I'm a sub file in a program" + nl
+	ok
+
+
+.. index:: 
+	pair: システム関数; PrevFileName() 関数
+
+PrevFileName() 関数
+===================
+
+PrevFileName() 関数は以前使用中のソースファイル名を取得します。
+
+「以前使用中のファイル」とは、呼び出し元の関数が存在するファイル、または PrevFileName() を呼び出す前に呼び出された関数が存在するファイルです。
+
+文法:
+
+.. code-block:: ring
+
+	prevfilename() → この文字列は以前使用中のソースファイル名です。
+
+用例:
+
+この関数は stdlib.ring の PrevFileName() により
+「呼び出し元にある関数が存在するファイル」が「プログラムのメインソース」であるか判定をします。
+
+.. code-block:: ring
+
+	Func IsMainSourceFile
+		if PrevFileName() = sysargv[2]
+			return true
+		ok
+		return false
+
+.. index:: 
+	pair: システム関数; CurrentDir() 関数
+
+CurrentDir() 関数
+=====================
+
+現在のディレクトリをパスを返します。
+
+文法:
+
+.. code-block:: ring
+
+	CurrenDir() → この文字列は現在のディレクトリのパスです。
+
+.. index:: 
+	pair: システム関数; ExeFileName() 関数
+
+ExeFileName() 関数
+======================
+
+Ring の実行可能ファイル名を返します。
+
+文法:
+
+.. code-block:: ring
+
+	exefilename() → この文字列は Ring の実行可能ファイル名です。
+
+.. index:: 
+	pair: システム関数; ChDir() 関数
+
+ChDir() 関数
+================
+
+現在のディレクトリを変更します。
+
+文法:
+
+.. code-block:: ring
+
+	ChDir(cNewPath)
+
+.. index:: 
+	pair: システム関数; ExeFolder() 関数
+
+ExeFolder() 関数
+====================
+
+Ring の実行可能ファイルがあるパスを返します。
+
+文法:
+
+.. code-block:: ring
+
+	exefolder() → この文字列は Ring の実行可能ファイルがあるパスです。
+
+.. index:: 
+	pair: システム関数; Version() 関数
+
+Version() 関数
+==============
+
+Ring のバージョン情報を返します。
+
+文法:
+
+.. code-block:: ring
+
+	version() → この文字列は Ring のバージョンです。
+
+実行結果:
+
+.. code-block:: ring
+
+	1.14
+
+
+.. index:: 
+	pair: システム関数; Shutdown() 関数
+
+Shutdown() 関数
+===============
+
+アプリケーションを閉じます。
+
+文法:
+
+.. code-block:: ring
+
+	shutdown(nStatus) → アプリケーションを閉じます。
+
+
+.. index:: 
+	pair: システム関数; NofProcessors() 関数
+
+NofProcessors() 関数
+====================
+
+NofProcessors() 関数はシステムに搭載されている CPU の論理プロセッサ数を検出します。
+
+文法:
+
+.. code-block:: none
+
+	NofProcessors() ---> nProcessors
+
+用例:
+
+.. code-block:: ring
+
+	? NofProcessors()

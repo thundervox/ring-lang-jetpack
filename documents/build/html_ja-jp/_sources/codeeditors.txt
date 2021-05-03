@@ -1,0 +1,205 @@
+.. index:: 
+	single: テキストエディタの設定; はじめに
+
+======================
+テキストエディタの設定
+======================
+
+Ring/Tools/Editors フォルダには、テキストエディタ用の拡張機能を収録しています。
+
+* Atom
+* Emacs
+* Geany
+* Notepad++
+* SpaceVim
+* Sublime Text 2
+* Visual Studio Code (VSCode)
+* Visual Studio IDE
+* サクラエディタ (サポート対象外)
+* 秀丸エディタ (サポート対象外)
+* Code Browser (サポート対象外)
+
+.. index:: 
+	pair: テキストエディタの設定; Atom
+
+Atom
+====
+
+フォルダ : ring/tools/editors/atom
+
+このフォルダへ atom-language-ring をコピーします。
+
+.. code-block:: none
+
+	"C:\Users\{ユーザ名}\.atom\Packages"
+
+.. image:: editor3.jpg
+	:alt: Atom
+
+
+.. index:: 
+	pair: テキストエディタの設定; Emacs エディタ
+
+Emacs エディタ
+==============
+
+フォルダ : ring/tools/editors/emacs
+
+インストール手順は ReadMe ファイルを参照してください。
+
+スクリーンショット:
+
+.. image:: ringemacs.png
+	:alt: Emacs エディタ
+
+.. index:: 
+	pair: テキストエディタの設定; Geany
+
+Geany
+=====
+
+フォルダ : ring/tools/editors/geany
+
+* Geany エディタを起動します。
+* “ツール → 設定ファイル → filetypes_extensions.conf” メニューをクリックします。
+* この行 “Ring=*.ring;” を [Extensions] の後ろにクォートを付けずに追加します。
+* Ubuntu では “filetypes.Ring.conf” ファイルを “/home/{ユーザ名}/filetypes.Ring.conf” フォルダへコピーします。
+* F5 キーを押すと実行します。
+
+.. image:: editor2.png
+	:alt: Geany
+
+.. index:: 
+	pair: テキストエディタの設定; Notepad++
+
+Notepad++
+=========
+
+フォルダ : ring/tools/editors/notepad_plus_plus
+
+* Notepad++ を開きます。
+* “言語” メニューを開きます。
+* “言語の定義...” を選択します。
+* “インポート...” をクリックします。
+* `Ring.xml` を選択します。
+* “インポート成功” のダイアログで “OK” を選択してから “ユーザ定義言語” のダイアログまたはパネルを閉じます。
+* Notepad++ を再起動してください。
+
+.. image:: editor1.png
+	:alt: Notepad++
+
+.. index:: 
+	pair: テキストエディタの設定; SpaceVim
+
+SpaceVim
+========
+
+URL: https://github.com/SpaceVim/SpaceVim
+
+スクリーンショット:
+
+.. image:: ringinvim.png
+	:alt: SpaceVim
+
+.. index:: 
+	pair: テキストエディタの設定; Sublime Text 2
+
+Sublime Text 2
+==============
+
+フォルダ : ring/tools/editors/sublime text 2
+
+Sublime_Text_2 フォルダには以下のファイルがあります:
+
+1 - ring.json-tmlanguage
+
+2 - ring.sublime-build
+
+3 - ring.tmlanguage
+
+上記のファイルを下記のパスへコピーします。
+
+.. code-block:: none
+
+	"C:\Users\{ユーザ名}\AppData\Roaming\Sublime Text 2\Packages\User\"
+
+この行が ring.sublime-build ファイルに記載されています。
+
+.. code-block:: none
+
+	"cmd": ["C:\\ring\\bin\\ring.exe","$file"],
+
+システムの構成に合わせて ring.exe のパスを変更します。
+
+
+.. image:: editor4.jpg
+	:alt: Sublime Text 2
+
+.. index:: 
+	pair: テキストエディタの設定; Visual Studio Code
+
+Visual Studio Code
+==================
+
+フォルダ : ring/tools/editors/vscode
+
+インストール手順は ReadMe ファイルを参照してください。
+
+スクリーンショット:
+
+.. image:: ringinvscode.png
+	:alt: Visual Studio Code
+
+.. index:: 
+	pair: テキストエディタの設定; Visual Studio IDE
+
+Visual Studio IDE
+=================
+
+フォルダ : ring/tools/editors/visualstudio
+
+インストール手順は ReadMe ファイルを参照してください。
+
+.. image:: editor5.png
+	:alt: Visual Studio IDE
+
+.. index:: 
+	pair: テキストエディタの設定; サクラエディタ
+
+サクラエディタ
+==============
+
+URL : https://osdn.net/projects/ring-lang-081/scm/git/editor/tree/sakura-editor/
+
+スクリーンショット:
+
+.. image:: ring_on_the_sakura_editor.png
+	:alt: サクラエディタ
+
+.. index:: 
+	pair: テキストエディタの設定; 秀丸エディタ
+
+秀丸エディタ
+============
+
+URL : https://osdn.net/projects/ring-lang-081/scm/git/editor/tree/hidemaru-editor/
+
+スクリーンショット:
+
+.. image:: ring_on_the_hidemaru_editor.png
+	:alt: サクラエディタ
+
+.. index:: 
+	pair: テキストエディタの設定; Code Browser
+
+Code Browser
+============
+
+URL : https://osdn.net/projects/ring-lang-081/scm/git/editor/tree/code-browser/
+
+スクリーンショット:
+
+.. image:: ring_on_the_code_browser.png
+	:alt: Code Browser (コードブラウザ)
+
+

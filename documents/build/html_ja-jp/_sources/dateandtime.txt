@@ -1,0 +1,268 @@
+.. index:: 
+	single: 日付と時刻; はじめに
+
+==========
+日付と時刻
+==========
+
+日付と時刻の用法です。
+
+.. index:: 
+	pair: 日付と時刻; clock()
+
+
+Clock() 関数
+============
+
+文法:
+
+.. code-block:: ring
+
+	 Clock() ---> プログラム開始時からのクロック・ティック数
+
+用例:
+
+.. code-block:: ring
+	
+	See "Calculate performance" + nl
+	t1 = clock()
+	for x = 1 to 1000000 next
+	see clock() - t1 
+
+.. index:: 
+	pair: 日付と時刻; ClosPerSecond()
+
+ClocksPerSecond() 関数
+======================
+
+一秒あたりのクロック数を返します。
+
+文法:
+
+.. code-block:: ring
+
+	clockspersecond() ---> 一秒あたりのクロック数
+
+用例:
+
+.. code-block:: ring
+
+	# 1 秒待つ
+	t = clock()
+	while clock() - t <= clockspersecond() end
+
+.. index:: 
+	pair: 日付と時刻; Time()
+
+Time() 関数
+===========
+
+Time() 関数はシステムの時刻を取得します。
+
+用例:
+
+.. code-block:: ring
+	
+	See "Time : " + time()
+
+
+.. index:: 
+	pair: 日付と時刻; Date()
+
+Date() 関数
+===========
+
+Date() 関数は日付を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	 Date() ---> 文字列は "日/月/西暦" 表記による日付表記です。
+
+用例:
+
+.. code-block:: ring
+
+	See "Date : " + date()  # 日付 : 24/05/2015
+
+
+.. index:: 
+	pair: 日付と時刻; TimeList()
+
+TimeList() 関数
+===============
+
+TimeList() 関数は日付と時刻の情報を表示します。 
+
+文法:
+
+.. code-block:: ring
+
+	TimeList() ---> 時刻と日時の情報をリストで返します。
+
+この表はリストの項目です。
+
+============	=================================================
+インデックス		値
+============	=================================================
+1 				略式による週の名前
+2 				正式による週の名前
+3 				略式による月の名前
+4 				正式による月の名前
+5 				日付と時刻
+6 				今月の経過日数
+7 				時間 (24 時間制)
+8 				時間 (12 時間制)
+9 				今年の経過日数
+10 				今年の経過月数
+11 				今時の経過分数
+12 				AM (午前) または PM (午後)
+13 				今分の経過秒数
+14 				今年の経過週数 (日～土)
+15 				今週の経過日数
+16 				日付
+17 				時刻
+18 				世紀による年の表記
+19 				西暦
+20 				タイムゾーン
+21 				パーセント記号
+============	=================================================
+
+用例:
+
+.. code-block:: ring
+
+	## 実行結果:
+	## Sun                  略式による週の名前
+	## Sunday               正式による週の名前
+	## May                  略式による月の名前
+	## May                  正式による月の名前
+	## 05/24/15 09:58:38    日付と時刻
+	## 24                   今月の経過日数
+	## 09                   時間 (24 時間制)
+	## 09                   時間 (12 時間制)
+	## 144                  今年の経過日数
+	## 05                   今年の経過月数
+	## 58                   今時の経過分数
+	## AM                   AM (午前) または PM (午後)
+	## 38                   今分の経過秒数
+	## 21                   今年の経過週数 (日～土)
+	## 0                    今週の経過日数
+	## 05/24/15             日付
+	## 09:58:38             日時
+	## 15                   世紀による年表記
+	## 2015                 西暦
+	## 東京 (標準時)        タイムゾーン (結果は OS, 言語、地域に依存)
+	## %                    パーセント記号
+	
+	See TimeList() 
+
+用例:
+
+.. code-block:: ring
+
+	See "Day Name : " + TimeList()[2]	# Sunday
+
+用例:
+
+.. code-block:: ring
+
+	See "Month Name : " + TimeList()[4]	# May
+
+.. index:: 
+	pair: 日付と時刻; AddDays()
+
+AddDays() 関数
+==============
+
+文法:
+
+.. code-block:: ring
+
+	AddDays(cDate,nDays) ---> cDate から  nDays 後の日付です。
+
+用例:
+
+.. code-block:: ring
+
+	cDate = date()
+	see cDate + nl			# 24/05/2015
+	cDate = adddays(cDate,10)
+	see cDate + nl			# 03/06/2015
+
+.. index:: 
+	pair: 日付と時刻; DiffDays()
+
+DiffDays() 関数
+===============
+
+文法:
+
+.. code-block:: ring
+
+	DiffDays(cDate1,cDate2) ---> 日数 (Date1 - Date2)
+
+用例:
+
+.. code-block:: ring
+
+	cDate1 = date()
+	see cDate1 + nl						# 24/05/2015
+	cDate2 = adddays(cDate1,10)
+	see cDate2 + nl						# 03/06/2015
+	see "DiffDays = " + diffdays(cDate1,cDate2) + nl	# -10
+	see "DiffDays = " + diffdays(cDate2,cDate1) + nl	# 10
+	
+.. index:: 
+	pair: 日付と時刻; EpochTime()
+
+EpochTime() 関数
+====================
+
+文法:
+
+.. code-block:: ring
+
+	EpochTime( cDate, cTime ) ---> エポック秒
+
+用例:
+
+.. code-block:: ring
+
+	###-------------------------------------------------------------
+	# EpochTime()
+	# 用例    ---   EpochSec = EpochTime( Date(), Time() )
+	# 呼び出し形式: EpochSec = EpochTime( "15/07/2016", "10:15:30" )
+	#               EpochSec = 1468577730
+	#---------------------------------------------------------------
+	
+	Func EpochTime(Date, Time)
+		
+	    arrayDate = split(Date, "/")
+	    arrayTime = split(Time, ":")
+		
+	    Year = arrayDate[3] ; Month  = arrayDate[2] ; Day    = arrayDate[1]
+	    Hour = arrayTime[1] ; Minute = arrayTime[2] ; Second = arrayTime[3]
+		
+	    cDate1    = Day +"/"+ Month +"/"+ Year
+	    cDate2    = "01/01/" + Year
+	    DayOfYear = DiffDays( cDate1, cDate2)
+		
+	    ### 数式
+	    tm_sec  = Second    * 1
+	    tm_min  = Minute    * 60
+	    tm_hour = Hour      * 3600
+	    tm_yday = DayOfYear * 86400
+	    tm_year = Year      - 1900
+		
+	    tm_year1 =         ( tm_year -  70)          * 31536000
+	    tm_year2 = ( floor(( tm_year -  69) /   4 )) * 86400
+	    tm_year3 = ( floor(( tm_year -   1) / 100 )) * 86400
+	    tm_year4 = ( floor(( tm_year + 299) / 400 )) * 86400
+		
+	    ### 結果
+	    EpochSec = tm_sec + tm_min + tm_hour + tm_yday + tm_year1 + tm_year2 - tm_year3 + tm_year4
+
+	return EpochSec
+

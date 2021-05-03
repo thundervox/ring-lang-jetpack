@@ -1,0 +1,225 @@
+.. index:: 
+	single: モバイル用 RingQt アプリケーションのビルド方法; はじめに
+
+==============================================
+モバイル用 RingQt アプリケーションのビルド方法
+==============================================
+
+モバイル用 RingQt アプリケーションのビルド方法です。
+
+
+.. index:: 
+	pair: モバイル用 RingQt アプリケーションのビルド方法; 開発環境のダウンロード
+
+開発環境のダウンロード
+======================
+
+このリンクをご確認ください : http://doc.qt.io/qt-5/androidgs.html
+
+ダウンロード
+
+* Android SDK ツール
+
+	https://developer.android.com/sdk/index.html
+
+* Android NDK (android-ndk-r21 で検証済み)
+
+	http://developer.android.com/tools/sdk/ndk/index.html
+
+* Java SE Development Kit (JDK) v6 以降
+
+	https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+.. index:: 
+	pair: モバイル用 RingQt アプリケーションのビルド方法; Android SDK の更新
+
+Android SDK の更新
+==================
+
+開発で必要な API および、ツールのパッケージを得るには Android SDK を更新します。
+
+	Android 4.4.2 (API 19) で検証済み。
+
+* Windows では -  愛用のシステムに合わせて環境変数を定義します。
+
+(1) JAVA_HOME
+
+.. code-block:: ring
+	
+	用例 : C:\Program Files (x86)\Java\jdk1.8.0_05 
+
+(2) ANDROID_HOME	
+
+.. code-block:: ring
+
+	用例 : C:\JavaAndroid\AndroidSDK
+
+.. index:: 
+	pair: モバイル用 RingQt アプリケーションのビルド方法; Qt for Android のインストール
+
+Qt for Android のインストール
+=============================
+
+* このリンクから Qt for Android をインストールします。
+
+		https://download.qt.io/archive/qt/5.12/5.12.6/
+
+* Qt Creator を実行後に、 ツール → オプション → Android を選択して
+    Android NDK と SDK のパスを追加します。
+
+		http://doc.qt.io/qtcreator/creator-developing-android.html
+
+.. index:: 
+	pair: モバイル用 RingQt アプリケーションのビルド方法; Ring2EXE の用法
+
+
+Ring2EXE の用法
+===============
+
+Qt プロジェクトのアプリケーションを Ring2EXE で手軽に用意できます。
+
+用例:
+
+.. code-block:: none
+
+	ring2exe myapp.ring -dist -mobileqt
+
+
+.. note:: Ring ノートパッドの配布メニューからでもできます。
+
+.. tip:: Ring2EXE (Qt プロジェクトの準備 - モバイル機器用の配布) オプションは配布メニューにあります。
+
+.. index:: 
+	pair: モバイル用 RingQt アプリケーションのビルド方法; Ring アプリケーション用の Qt プロジェクト
+
+Ring アプリケーション用の Qt プロジェクト
+=========================================
+
+Ring2EXE または Ring ノートパッドの配布メニューを使用後に、
+
+*  Qt Creator で生成された Qt プロジェクトを開きます。
+
+	フォルダ : target/mobile/qtproject
+
+	プロジェクトファイル : project.pro
+
+* Qt Creator からリソース (YourAppName.ringo) にコンパイルされた Ring アプリケーションを見つけられます。
+
+	このファイル (Ring オブジェクトファイル) は Ring コンパイラで生成します。
+
+.. code-block:: none
+
+	ring YourAppName.ring -go -norun
+
+* Qt Creator でアプリケーションをビルドします。
+
+(1) リソースにはアプリケーションで使う画像を追加できます。
+
+	またはテキストエディタを (Notepad など) で修正します : project.qrc
+
+(2) Ring アプリケーションから画像を見つけ出すには、リソースで使われているファイル名が必要です。
+
+	用例
+
+.. code-block:: ring
+
+	if isandroid()
+ 		mypic = new QPixmap(":/cards.jpg")
+	else
+    		mypic = new QPixmap("cards.jpg")
+	ok
+
+.. index:: 
+	pair: モバイル用 RingQt アプリケーションのビルド方法; Android 開発についての注釈 (RingQt)
+
+Android 開発についての注釈 (RingQt)
+===================================
+
+(1) メインのプロジェクトファイルは main.cpp です。
+
+	このファイルは Ring コンパイラ、仮想計算機 (VM) と RingQt で読み込まれます。
+
+	実行中にリソースの一時作業フォルダから Ring オブジェクトファイルを取得します。
+
+	そして Ring 仮想計算機 (VM) で Ring オブジェクトファイル (ringapp.ringo) を実行します。
+
+	main.cpp で追加 (複数のファイルから構成されているプロジェクト) することにより、
+	リソースの一時作業フォルダから複数のファイルを抽出できます。
+
+(2) この Ring エディションにおいて、この関数は未実装です。
+
+	* データベース (ODBC, SQLite と MySQL)
+
+	* セキュリティとインターネット関数 (LibCurl と OpenSSL)
+
+	* RingAllegro (Allegro ライブラリ)
+
+	* RingLibSDL (LibSDL ライブラリ)
+
+	Qt クラスは RingQt から使います。
+
+	データベースのアクセスには QSqlDatabase クラスを使います。
+
+.. note:: 未実装のライブラリ (LibCurl, OpenSSL および Allegro) は全て Android 用にコンパイルできますが Qt プロジェクトは収録されていません。
+
+(3) Android 用のコードへ動作を切り替えたい場合は isandroid() を使います。
+
+用例:
+
+.. code-block:: ring
+
+	if isandroid()
+		// Android のコード
+	else
+  		// それ以外のプラットフォーム
+	ok
+
+(4) ボタンのテキスト、または画像が繰り返し描画されることがあること気づくと思います！
+	このコードで Qt の問題を回避できます。
+
+.. code-block:: ring
+
+	if isandroid()
+		setStyleSheet("
+			border-style: outset;
+			border-width: 2px;
+			border-radius: 4px;
+			border-color: black;
+			padding: 6px;")
+	 ok
+
+(5) 手動設定によるコントロールの位置と寸法ではなくレイアウトを必ず使います。
+	これはユーザインタフェースの問題回避を想定した最良の方法 (小規模、追加の寸法を有するコントロール) です。
+
+(6) Qt クラスを扱う場合はリソースから画像を決定できます (main.cpp で使うためのコピーは不要です)。
+
+
+用例:
+
+.. code-block:: ring
+
+	if isandroid()
+	    mypic = new QPixmap(":/cards.jpg")
+	else
+	    mypic = new QPixmap("cards.jpg")
+	ok
+
+RingQt にはファイル名を決定するために AppFile() 関数があります。
+
+用例:
+
+.. code-block:: ring
+
+	mypic = new QPixmap(AppFile("cards.jpg"))  # デスクトップまたは Androrid
+
+(7) プロジェクトのコード更新時、 Qt プロジェクトの生成に Ring2EXE を再実行する必要はありません。
+
+Ring ノートパッドの配布メニューからオブジェクトファイルの生成 (\*.ringo) を選択します。
+
+その後 YourAppName.ringo ファイルを target/mobile/qtproject フォルダへコピーしてファイルの置き換えに応じてください。
+
+(8) アプリケーションにフォルダに Qt リソースファイル (project.qrc) がある場合は、
+
+Ring2EXE または Ring ノートパッドの配布メニュー → Ring2EXE (Qt プロジェクトの準備 - モバイル機器用の配布) を実行するとリソースファイルを使います。
+
+用例は ring/applications/cards ゲームを参照してください。

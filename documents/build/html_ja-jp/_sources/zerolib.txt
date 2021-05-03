@@ -1,0 +1,168 @@
+.. index:: 
+	Single: ZeroLib の用法;  はじめに
+
+==============
+ZeroLib の用法
+==============
+
+ZeroLib ライブラリの用法です。
+
+
+.. index:: 
+	pair: ZeroLib の用法; はじめに
+
+はじめに
+========
+
+ZeroLib は Ring で記述したシンプルなライブラリです。
+
+添字 0 始点のリストと文字列用クラスが使えるライブラリです。
+
+
+.. index:: 
+	pair: ZeroLib の用法; Z() 関数
+
+Z() 関数
+========
+
+文法x:
+
+.. code-block:: none
+
+	Z(String|List) ---> 新規オブジェクト (ZeroBasedString|ZeroBasedList)
+
+.. index:: 
+	pair: ZeroLib の用法; ZeroBasedList クラス
+
+ZeroBasedList クラス
+====================
+
+添字 0 始点のリストを実装したシンプルなクラスです。
+
+メソッド:
+
+===========================	======================================================================
+メソッド						詳細・結果
+===========================	======================================================================
+Init(List)			
+Add(Value)			リストへ項目を追加します
+Insert(nIndex,Value)		nIndex の後に項目を挿入します
+Find(Value)			項目を検索します
+Delete(nIndex)			リストから項目を削除します
+Item(nIndex)			リストから項目を取得しま
+First()				リストから最初の項目を取得します
+Last()				リストから最後の項目を取得します
+Set(nIndex,Value)		項目の値を設定します
+FindInColumn(nCol,Value)	列にある項目を検索します
+Sort()				項目の整列 - 新規項目を返します
+Reverse()			項目の反転 - 新規項目を返します
+Swap(nIndex1,nIndex2)		項目同士を入れ替えます
+===========================	======================================================================
+
+
+用例:
+
+.. code-block:: ring
+
+	load "zerolib.ring"
+
+	? "Using List - Index start from 0"
+	List = Z( [1,2,3] )
+	List.Add(4)
+	List.Add(5)
+	? List[0]
+	? List[1]
+	? List[2]
+	? List[3]
+	? List[4]
+	nIndex = List.find(2)
+	? "Find(2) = " + nIndex
+	List.delete(0)
+	? "After deleting the first item : List[0]" 
+	? "Now List[0] = " + List[0] 
+
+実行結果:
+
+.. code-block:: ring 
+
+	Using List - Index start from 0
+	1
+	2
+	3
+	4
+	5
+	Find(2) = 1
+	After deleting the first item : List[0]
+	Now List[0] = 2
+
+.. index:: 
+	pair: ZeroLib の用法; ZeroBasedString クラス
+
+ZeroBasedString クラス
+======================
+
+添字 0 始点の文字列を実装したシンプルなクラスです。
+
+===========================	======================================================================
+メソッド						詳細・結果
+===========================	======================================================================
+Init(String|Number) 
+Lower()  			新規文字列 - 小文字
+Upper()  			新規文字列 - 大文字
+Left(x)  			新規文字列 - 左から x 文字を含む
+Right(x) 			新規文字列 - 右から x 文字を含む
+Lines()  			数値 - 行数
+Trim()   			新規文字列 - 空白の削除
+Copy(x)  			新規文字列 - 文字列の x 回反復
+strcmp(cString)   		文字列を cString と比較 
+tolist()	  		リスト (文字列行から文字列項目へ)
+tofile(cFileName) 		文字列をファイルへ出力
+mid(nPos1,nPos2)  		新規文字列 - nPos1 から nPos2 まで
+getfrom(nPos1)	  		新規文字列 - nPos1 から文字列終端まで
+replace(cStr1,cStr2,lCase) 	新規文字列 - cStr1 を cStr2 へ置換。 lCase で字種変換 (True=無変換)
+split()		  		List - リスト項目を単語ごとに分割
+startswith(substring)		部分文字列で始まる場合は true を返します
+endswith(substring)		部分文字列で終わる場合は true を返します
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	load "zerolib.ring"
+
+	? "Using String - Index start from 0"
+	String = Z( "Welcome" )
+	? String[0]
+	? String[1]
+	? String[2]
+	? String[3]
+	? String[4]
+	? String[5]
+	? String[6]
+
+実行結果:
+
+.. code-block:: ring 
+
+	Using String - Index start from 0
+	W
+	e
+	l
+	c
+	o
+	m
+	e
+
+.. index:: 
+	pair: ZeroLib の用法; ソースコード
+
+ソースコード
+============
+
+このフォルダにライブラリのソースコードがあります
+
+URL : https://github.com/ring-lang/ring/tree/master/libraries/zerolib
+
+
+

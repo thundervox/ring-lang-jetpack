@@ -1,0 +1,1498 @@
+.. index:: 
+	single: Stdlib クラス; はじめに
+
+=============
+Stdlib クラス
+=============
+
+stdlib.ring のクラスです。
+
+* StdBase クラス
+* String クラス
+* List クラス
+* Stack クラス
+* Queue クラス
+* HashTable クラス
+* Tree クラス
+* Math クラス
+* DateTime クラス
+* File クラス
+* System クラス
+* Debug クラス
+* DataType クラス
+* Conversion クラス
+* ODBC クラス
+* MySQL クラス
+* SQLite クラス
+* PostgreSQL クラス
+* Security クラス
+* Internet クラス
+
+.. index:: 
+	pair: Stdlib クラス; StdBase クラス
+
+StdBase クラス
+==============
+
+属性:
+
+* vValue : オブジェクトの値
+
+メソッド:
+
+=========	========================================
+メソッド 		説明・実行結果
+=========	========================================
+Init(x) 	vValue 属性へ x の値を設定します。
+Print() 	PvValue を表示します。
+PrintLn() 	vValue を表示後に改行します。
+Size() 		vValue のサイズを数値表現で返します。
+Value() 	vValue を返します。
+Set(x) 		Init(x) を呼び出します。
+=========	========================================
+
+
+.. index:: 
+	pair: Stdlib クラス; String クラス
+
+String クラス
+=============
+
+親クラス : StdBase クラス
+
+メソッド:
+
+===========================	======================================================================
+メソッド 					説明・実行結果
+===========================	======================================================================
+Init(文字列|数値|リスト) 	 
+Lower() 					新しい文字列 - 小文字へ変換
+Upper() 					新しい文字列 - 大文字へ変換
+Left(x) 					新しい文字列 - 左側から x 文字を取得
+Right(x) 					新しい文字列 - 右側から x 文字を取得
+Lines() 					数値 - 行数
+Trim() 						新しい文字列 - 空白文字の除去
+Copy(x) 					新しい文字列 - 文字列を x 回反復コピー
+strcmp(cString) 			文字列を cString と比較
+tolist() 					リスト - 文字列の行から文字列の項目へ変換します。
+tofile(cFileName) 			文字列をファイルへ書き込む
+mid(nPos1,nPos2) 			新しい文字列 - nPos1 から nPos2 までを切り出し
+getfrom(nPos1) 				新しい文字列 - nPos1 から文字列の末尾まで切り出し
+replace(cStr1,cStr2,lCase) 	新しい文字列 - cStr1 を cStr2 へ置換。 lCase (True = 英数大小文字)
+split() 					リスト - 各語からリスト項目へ変換します。
+startswith(substring) 		開始位置が部分文字列で始まるならば true を返します。
+endswith(substring) 		開始位置が部分文字列で終わるならば true を返します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	See "Testing the String Class" + nl
+	oString = new string("Hello, World!")
+	oString.println()
+	oString.upper().println()
+	oString.lower().println()
+	oString.left(5).println()
+	oString.right(6).println()
+	oString = new string("Hi" + nl + "Hello" )
+	See oString.lines() + nl
+	oString = new string("    Welcome    ")
+	oString.println()
+	oString.trim().println()
+	oString = new string("Hello! ")
+	oString.copy(3).println()
+	see oString.strcmp("Hello! ") + nl
+	see oString.strcmp("Hello ") + nl
+	see oString.strcmp("Hello!! ") + nl
+	oString = new string(["one","two","three"])
+	oString.print()
+	see oString.lines() + nl
+	oString = new String(1234)
+	oString.println()
+	oString = new String("one"+nl+"two"+nl+"three")
+	aList = oString.tolist()
+	see "List Items" + nl See aList
+	oString = new String( "Welcome to the Ring programming language")
+	See "the - position : " + oString.pos("the") + nl
+	oString = oString.getfrom(oString.pos("Ring"))
+	oString.println()
+	oString.mid(1,4).println()
+	oString = oString.replace("Ring","***Ring***",true)
+	oString.println()
+	oString = oString.replace("ring","***Ring***",false)
+	oString.println()
+	oString1 = new string("First")
+	oString2 = new string("Second")
+	oString = oString1 + oString2
+	oString.println()
+	oString = oString1 * 3
+	oString.println()
+	for t in ostring see t next
+	oString.tofile("test.txt")
+	oString = new string("one two three")
+	see nl
+	see ostring.split()
+	oString {
+		set("Hello") println()
+		set("How are you?") println()
+	}
+
+実行結果:
+
+.. code-block:: ring
+
+	Testing the String Class
+	Hello, World!
+	HELLO, WORLD!
+	hello, world!
+	Hello
+	World!
+	2
+		Welcome
+	Welcome
+	Hello! Hello! Hello!
+	0
+	1
+	-1
+	one
+	two
+	three
+	4
+	1234
+	List Items
+	one
+	two
+	three
+	the - position : 12
+	Ring programming language
+	Ring
+	***Ring*** programming language
+	******Ring****** programming language
+	FirstSecond
+	FirstFirstFirst
+	FirstFirstFirst
+	one
+	two
+	three
+	Hello
+	How are you?
+
+.. index:: 
+	pair: Stdlib クラス; List クラス
+	
+List クラス
+===========
+
+親クラス : StdBase クラス
+
+メソッド:
+
+===========================	======================================================================
+メソッド 					説明・実行結果
+===========================	======================================================================
+Init(文字列|リスト) 	 
+Add(値) 					リストへ項目を追加
+Delete(nIndex) 				リストから項目を削除
+Item(nIndex) 				リストから項目を取得
+First() 					リストから最初の項目を取得
+Last() 						リストから最後の項目を取得
+Set(nIndex,値) 				項目の値を設定
+FindInColumn(nCol,値)	 	列にある項目を検索
+Sort() 						項目の整列 - 新しいリストを返す
+Reverse() 					項目の反転 - 新しいリストを返す
+Insert(nIndex,値) 			nIndex の後に項目を挿入
+===========================	======================================================================
+
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oList = new list ( [1,2,3] )
+	oList.Add(4)
+	oList.print()
+	see oList.item(1) + nl
+	oList.delete(4)
+	oList.print()
+	see oList.first() + nl
+	see oList.last() + nl
+	oList { set(1,"one") set(2,"two") set(3,"three") print() }
+	see oList.find("two") + nl
+	oList.sort().print()
+	oList.reverse().print()
+	oList.insert(2,"nice")
+	oList.print()
+	oList = new list ( [ [1,"one"],[2,"two"],[3,"three"] ] )
+	see copy("*",10) + nl
+	oList.print()
+	see "Search two : " + oList.findincolumn(2,"two") + nl
+	see "Search 1 : " + oList.findincolumn(1,1) + nl
+	oList = new list ( [ "Egypt" , "USA" , "KSA" ] )
+	for x in oList
+		see x + nl
+	next
+	oList =  new list ( [1,2,3,4] )
+	oList + [5,6,7] 
+	oList.print()
+	oList = new list ( ["one","two"] )
+	oList2 = new list ( ["three","four"] )
+	oList + oList2
+	oList.print()
+
+	
+実行結果:
+
+.. code-block:: ring
+
+	1
+	2
+	3
+	4
+	1
+	1
+	2
+	3
+	1
+	3
+	one
+	two
+	three
+	2
+	one
+	three
+	two
+	three
+	two
+	one
+	one
+	two
+	nice
+	three
+	**********
+	1
+	one
+	2
+	two
+	3
+	three
+	Search two : 2
+	Search 1 : 1
+	Egypt
+	USA
+	KSA
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	one
+	two
+	three
+	four
+
+.. index:: 
+	pair: Stdlib クラス; Stack クラス
+	
+Stack クラス
+============
+
+親クラス : List クラス
+
+メソッド:
+
+===========================	======================================================================
+メソッド 					説明・実行結果
+===========================	======================================================================
+Init(文字列|数値|リスト) 	 
+Push(値) 					項目をスタックへ退避します。
+Pop() 						項目をスタックへ復帰します。
+Print() 					スタックの項目を表示します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oStack = new Stack
+	oStack.push(1)
+	oStack.push(2)
+	oStack.push(3)
+	see oStack.pop() + nl
+	see oStack.pop() + nl
+	see oStack.pop() + nl	
+	oStack.push(4)
+	see oStack.pop() + nl
+	oStack { push("one") push("two") push("three") }
+	oStack.print()	
+	
+実行結果:
+
+.. code-block:: ring
+
+	3
+	2
+	1
+	4
+	three
+	two
+	one
+	
+.. index:: 
+	pair: Stdlib クラス; Queue クラス
+	
+Queue クラス
+============
+
+親クラス : List クラス
+
+メソッド:
+
+===========================	======================================================================
+メソッド					説明・実行結果
+===========================	======================================================================
+Init(文字列|数値|リスト) 	 
+Remove() 					キューから項目を削除します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oQueue = new Queue
+	oQueue.add(1)
+	oQueue.add(2)
+	oQueue.add(3)
+	see oQueue.remove() + nl
+	see oQueue.remove() + nl
+	see oQueue.remove() + nl
+	oQueue.add(4)
+	see oQueue.remove() + nl
+	oQueue { add("one") add("two") add("three") }
+	oQueue.print()
+	
+実行結果:
+
+.. code-block:: ring
+
+	1
+	2
+	3
+	4
+	one
+	two
+	three
+
+.. index:: 
+	pair: Stdlib クラス; HashTable クラス
+
+HashTable クラス
+================
+
+親クラス : List クラス
+
+メソッド:
+
+===========================	======================================================================
+メソッド						説明・実行結果
+===========================	======================================================================
+Init(リスト) 	 
+Add(cKey,値) 				ハッシュテーブルへ項目を追加。
+Set(cKey,値) 				キーで項目の値を設定します。
+GetValue(cKey) 				キーで項目の値を取得します。
+Contains(cKey) 				キーでハッシュテーブルに項目があるか確認します。
+Index(cKey) 				キーでインデックスの項目を取得します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	ohashtable = new hashtable
+	See "Test the hashtable Class Methods" + nl
+	ohashtable { 
+		Add("Egypt","Cairo")
+		Add("KSA","Riyadh")
+		see self["Egypt"] + nl
+		see self["KSA"] + nl
+		see contains("Egypt") + nl
+		see contains("USA") + nl
+		see index("KSA")  + NL
+		print()
+		delete(index("KSA"))
+		see copy("*",60) + nl
+		print()
+	}
+	
+実行結果:
+
+.. code-block:: ring
+
+	Test the hashtable Class Methods
+	Cairo
+	Riyadh
+	1
+	0
+	2
+	Egypt
+	Cairo
+	KSA
+	Riyadh
+	************************************************************
+	Egypt
+	Cairo
+
+
+.. index:: 
+	pair: Stdlib クラス; Tree クラス
+
+Tree クラス
+===========
+
+データ:
+
+===========================	======================================================================
+属性						説明
+===========================	======================================================================
+Data 						ノード値
+Children 					子のリスト
+===========================	======================================================================
+
+メソッド:
+
+===========================	======================================================================
+メソッド					説明・実行結果
+===========================	======================================================================
+set(値) 					ノード値を設定します。
+value() 					ノード値を取得します。
+Add(値) 					新しい子を追加します。
+parent() 					親ノードを取得します。
+print()					 	ノードツリーを表示します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	otree = new tree
+	See "Test the tree Class Methods" + nl
+	otree {
+		set("The first step")	# ルートのノード値を設定します。
+		see value() + nl
+		Add("one")
+		Add("two")
+		Add("three") {
+			Add("3.1")
+			Add("3.2")
+			Add("3.3")
+			see children
+		}
+		see children
+		oTree.children[2] {
+			Add("2.1") Add("2.2") Add("2.3") {
+				Add("2.3.1") Add("2.3.2") Add("test")
+			}
+		}
+		oTree.children[2].children[3].children[3].set("2.3.3")
+	}
+	see copy("*",60) + nl
+	oTree.print()
+	
+実行結果:
+
+.. code-block:: ring
+
+	Test the tree Class Methods
+	The first step
+	data: 3.1
+	parent: List...
+	children: List...
+	data: 3.2
+	parent: List...
+	children: List...
+	data: 3.3
+	parent: List...
+	children: List...
+	data: one
+	parent: List...
+	children: List...
+	data: two
+	parent: List...
+	children: List...
+	data: three
+	parent: List...
+	children: List...
+	************************************************************
+	one
+	two
+	2.1
+	2.2
+	2.3
+	2.3.1
+	2.3.2
+	2.3.3
+	three
+	3.1
+	3.2
+	3.3
+
+.. index:: 
+	pair: Stdlib クラス; Math クラス
+
+Math クラス
+===========
+
+メソッド:
+
+===============		============================================================================================
+メソッド			説明・実行結果
+===============		============================================================================================
+sin(x) 				ラジアン x のサイン角度を返します。
+cos(x) 				ラジアン x のコサイン角度を返します。
+tan(x) 				ラジアン x のタンジェント角度を返します。
+asin(x) 			ラジアン表記によるアークサインの x の主値を返します。
+acos(x) 			ラジアン表記によるアークコサインの x の主値を返します。
+atan(x) 			ラジアン表記によるアークタンジェントの x の主値を返します。
+atan2(y,x) 			ラジアン [-pi,+pi] の区間にある、ラジアン表記によるアークタンジェントの x の主値を返します。
+sinh(x) 			ラジアン x の双曲線サインを返します。
+cosh(x) 			ラジアン x の双曲線コサインを返します。
+tanh(x) 			ラジアン x の双曲線タンジェントを返します。
+exp(x) 				e の x 乗値を返します。
+log(x) 				x の常用対数を返します。
+log10(x) 			x の常用対数を返します (基数 10 の対数)。
+ceil(x) 			x 以上の最短整数値を返します。
+floor(x)		 	x 以下の最大整数値を返します。
+fabs(x) 			x の絶対値を返します。
+pow(x,y) 			x に対する y の累乗を返します。
+sqrt(x) 			x の平方根を返します。
+random(x)		 	[0,x] の範囲による乱数を返します。
+unsigned(n,n,c) 	符号なし数値で演算を実行します。
+decimals(n) 		浮動小数点数、倍精度数の小数点の後にある小数点以下の数値を決定します。
+=============== 	============================================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oMath = new Math
+
+	See "Test the Math Class Methods" + nl
+	See "Sin(0) = " + oMath.sin(0) + nl
+	See "Sin(90) radians = " + oMath.sin(90) + nl
+	See "Sin(90) degree = " + oMath.sin(90*3.14/180) + nl
+
+	See "Cos(0) = " + oMath.cos(0) + nl
+	See "Cos(90) radians = " + oMath.cos(90) + nl
+	See "Cos(90) degree = " +oMath. cos(90*3.14/180) + nl
+
+	See "Tan(0) = " + oMath.tan(0) + nl
+	See "Tan(90) radians = " + oMath.tan(90) + nl
+	See "Tan(90) degree = " + oMath.tan(90*3.14/180) + nl
+
+	See "asin(0) = " + oMath.asin(0) + nl
+	See "acos(0) = " + oMath.acos(0) + nl
+	See "atan(0) = " + oMath.atan(0) + nl
+	See "atan2(1,1) = " +oMath. atan2(1,1) + nl
+
+	See "sinh(0) = " + oMath.sinh(0) + nl
+	See "sinh(1) = " + oMath.sinh(1) + nl
+	See "cosh(0) = " + oMath.cosh(0) + nl
+	See "cosh(1) = " + oMath.cosh(1) + nl
+	See "tanh(0) = " + oMath.tanh(0) + nl
+	See "tanh(1) = " + oMath.tanh(1) + nl
+
+	See "exp(0) = " + oMath.exp(0) + nl
+	See "exp(1) = " + oMath.exp(1) + nl
+	See "log(1) = " + oMath.log(1) + nl
+	See "log(2) = " + oMath.log(2) + nl
+	See "log10(1) = " + oMath.log10(1) + nl
+	See "log10(2) = " + oMath.log10(2) + nl
+	See "log10(10) = " + oMath.log10(10) + nl
+
+	See "Ceil(1.12) = " + oMath.Ceil(1.12) + nl
+	See "Ceil(1.72) = " + oMath.Ceil(1.72) + nl
+
+	See "Floor(1.12) = " + oMath.floor(1.12) + nl
+	See "Floor(1.72) = " + oMath.floor(1.72) + nl
+
+	See "fabs(1.12) = " + oMath.fabs(1.12) + nl
+	See "fabs(1.72) = " + oMath.fabs(1.72) + nl
+
+	See "pow(2,3) = " + oMath.pow(2,3) + nl
+
+	see "sqrt(16) = " + oMath.sqrt(16) + nl
+
+	for x = 1 to 20
+        		see "Random number Max (100) : " + oMath.random(100) + nl
+	next
+
+	x = 1.1234567890123
+	for d = 0 to 14
+	        oMath.decimals(d)
+	        see x + nl
+	next
+
+	cKey = "hello"
+
+ 	h = 0
+	for x in cKey
+		h = oMath.unsigned(h,ascii(x),"+")
+		h = oMath.unsigned(h,oMath.unsigned(h,10,"<<"),"+")
+		r = oMath.unsigned(h,6,">>")
+		h = oMath.unsigned(h, r,"^")
+	next
+	h = oMath.unsigned(h,oMath.unsigned(h,3,"<<"),"+")
+	h = oMath.unsigned(h,oMath.unsigned(h,11,">>"),"^")
+	h = oMath.unsigned(h,oMath.unsigned(h,15,"<<"),"+")
+
+	see "Hash : " + h
+
+	
+	
+実行結果:
+
+.. code-block:: ring
+
+	Test the Math Class Methods
+	Sin(0) = 0
+	Sin(90) radians = 0.89
+	Sin(90) degree = 1.00
+	Cos(0) = 1
+	Cos(90) radians = -0.45
+	Cos(90) degree = 0.00
+	Tan(0) = 0
+	Tan(90) radians = -2.00
+	Tan(90) degree = 1255.77
+	asin(0) = 0
+	acos(0) = 1.57
+	atan(0) = 0
+	atan2(1,1) = 0.79
+	sinh(0) = 0
+	sinh(1) = 1.18
+	cosh(0) = 1
+	cosh(1) = 1.54
+	tanh(0) = 0
+	tanh(1) = 0.76
+	exp(0) = 1
+	exp(1) = 2.72
+	log(1) = 0
+	log(2) = 0.69
+	log10(1) = 0
+	log10(2) = 0.30
+	log10(10) = 1
+	Ceil(1.12) = 2
+	Ceil(1.72) = 2
+	Floor(1.12) = 1
+	Floor(1.72) = 1
+	fabs(1.12) = 1.12
+	fabs(1.72) = 1.72
+	pow(2,3) = 8
+	sqrt(16) = 4
+	Random number Max (100) : 87
+	Random number Max (100) : 49
+	Random number Max (100) : 99
+	Random number Max (100) : 58
+	Random number Max (100) : 15
+	Random number Max (100) : 46
+	Random number Max (100) : 37
+	Random number Max (100) : 64
+	Random number Max (100) : 73
+	Random number Max (100) : 35
+	Random number Max (100) : 89
+	Random number Max (100) : 80
+	Random number Max (100) : 20
+	Random number Max (100) : 33
+	Random number Max (100) : 44
+	Random number Max (100) : 89
+	Random number Max (100) : 82
+	Random number Max (100) : 94
+	Random number Max (100) : 83
+	Random number Max (100) : 68
+	1
+	1.1
+	1.12
+	1.123
+	1.1235
+	1.12346
+	1.123457
+	1.1234568
+	1.12345679
+	1.123456789
+	1.1234567890
+	1.12345678901
+	1.123456789012
+	1.1234567890123
+	1.12345678901230
+	Hash : 3372029979.00000000000000
+
+.. index:: 
+	pair: Stdlib クラス; DateTime クラス
+
+DateTime クラス
+===============
+
+メソッド:
+
+===========================	======================================================================
+メソッド						説明・実行結果
+===========================	======================================================================
+clock() 					プログラム開始時からのクロック・ティック数
+time() 						システム時刻を取得。
+date() 						日付を取得します。
+timelist() 					日付と時刻の情報を有するリスト。
+adddays(cDate,nDays)	 	cDate から nDays 後の日付を返します。
+diffdays(cDate1,cDate2) 	日数 (Date1 - Date2) を返します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oDateTime = new datetime
+
+	See "Test the datetime Class Methods" + nl
+
+	See "Calculate performance" + nl
+	t1 = oDateTime.clock()
+	for x = 1 to 1000000 next
+	see oDateTime.clock() - t1 + nl
+
+	See "Time : " + oDateTime.time() + nl
+
+	See "Date : " + oDateTime.date() + nl 
+
+	See oDateTime.TimeList()
+
+	See "Month Name : " + oDateTime.TimeList()[4]      
+
+	cDate = oDateTime.date()
+	see cDate + nl                  
+	cDate = oDateTime.adddays(cDate,10)
+	see cDate + nl 
+
+	cDate1 = oDateTime.date()
+	see cDate1 + nl                                          
+	cDate2 = oDateTime.adddays(cDate1,10)
+	see cDate2 + nl                                          
+	see "DiffDays = " + oDateTime.diffdays(cDate1,cDate2) + nl         
+	see "DiffDays = " + oDateTime.diffdays(cDate2,cDate1) + nl       
+
+
+実行結果:
+
+.. code-block:: ring
+
+	Test the datetime Class Methods
+	Calculate performance
+	85
+	Time : 02:53:35
+	Date : 31/08/2016
+	Wed
+	Wednesday
+	Aug
+	August
+	08/31/16 02:53:35
+	31
+	02
+	02
+	244
+	08
+	53
+	AM
+	35
+	35
+	3
+	08/31/16
+	02:53:35
+	16
+	2016
+	Arab Standard Time
+	%
+	Month Name : August31/08/2016
+	10/09/2016
+	31/08/2016
+	10/09/2016
+	DiffDays = -10
+	DiffDays = 10
+
+	
+.. index:: 
+	pair: Stdlib クラス; File クラス
+
+File クラス
+===========
+
+メソッド:
+
+===========================	======================================================================
+メソッド					説明・実行結果
+===========================	======================================================================
+read(cFileName) 			ファイルの内容を読み取ります。
+write(cFileName,cStr) 		文字列をファイルへ書き込みます。
+dir(cFolderPath) 			フォルダの内容 (ファイルとサブフォルダ) を取得します。
+rename(cOld,cNew) 			Rename() 関数はファイルの名称変更をします。
+remove(cFileName) 			Remove() 関数はファイルの削除をします。
+open(cFileName,cMode)	 	Fopen() 関数はファイルを開きます。
+close() 					ファイルを閉じます。
+flush() 					ストリームの出力バッファを追い出します。
+reopen(cFileName,cMode) 	同じファイルハンドルで別のファイルを開きます。
+tempfile() 					一時作業用ファイルを作成します (バイナリ形式)。
+seek(noffset,nwhence)	 	ストリームにおけるファイル位置を設定します。
+tell() 						ストリームにおける現在のファイル位置を検出します
+rewind() 					ファイルの位置をファイルの先頭へ設定します。
+getpos() 					ハンドルにおける現在のファイル位置を取得します。
+setpos(poshandle) 			現在のファイルの位置を設定します。
+clearerr() 					EOF エラーとエラーインジケーターをストリームから消去します。
+eof() 						EOF (ファイル終端) インジケーターのテストがします。
+error() 					エラーインジケーターをテストします。
+perror(cErrorMessage) 		標準出力エラーへエラーメッセージを表示します。
+getc() 						ストリームから次の文字を取得します。
+gets(nsize) 				ストリームから新しい行を読み取ります。
+putc(cchar) 				文字をストリームへ書き込みます。
+puts(cStr) 					文字列をストリームへ書き込みます。
+ungetc(cchar) 				文字をストリームへプッシュします。
+fread(nsize) 				データをストリームへ読み込みます。
+fwrite(cString) 			データをストリームへ書き込みます。
+exists(cFileName) 			ファイルの存在を確認します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	ofile = new file
+
+	See "Test the file Class Methods" + nl
+	see ofile.read(filename())
+
+	see nl
+	ofile.open(filename(),"r")
+	see ofile.gets(100) + nl
+	ofile.close()
+
+.. index:: 
+	pair: Stdlib クラス; System クラス
+
+System クラス
+=============
+
+メソッド:
+
+=============	========================================================================================
+メソッド		説明・実行結果
+=============	========================================================================================
+system() 		システムコマンドを実行します。
+sysget() 		環境変数を取得します。
+ismsdos() 		オペレーティングシステムが MS-DOS か確認します。
+iswindows() 	オペレーティングシステムが Windows か確認します。
+iswindows64() 	オペレーティングシステムが 64bit 版の Windows か確認します。
+isunix() 		オペレーティングシステムが UNIX か確認します。
+ismacosx() 		オペレーティングシステムが macOS か確認します。
+islinux() 		オペレーティングシステムが Linux か確認します。
+isfreebsd() 	オペレーティングシステムが FreeBSD か確認します。
+isandroid() 	オペレーティングシステムが Android か確認します。
+windowsnl() 	Windows の改行文字を取得します。
+sysargv() 		コマンドライン引数を Ring スクリプトへ渡します。
+filename() 		現在使用中のソースファイル名を取得します。
+=============	========================================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oSystem = new System
+
+	See "Test the System Class Methods" + nl
+ 	
+	oSystem.system("dir")
+	see oSystem.sysget("path") + nl
+	see oSystem.ismsdos() + nl
+	see oSystem.iswindows() + nl
+	see oSystem.iswindows64() + nl
+	see oSystem.isunix() + nl
+	see oSystem.ismacosx() + nl
+	see oSystem.islinux() + nl
+	see oSystem.isfreebsd() + nl
+	see oSystem.isandroid() + nl
+	see oSystem.windowsnl() + nl
+	see oSystem.sysargv() + nl
+	see oSystem.filename() + nl
+
+.. index:: 
+	pair: Stdlib クラス; Debug クラス
+
+Debug クラス
+============
+
+メソッド:
+
+===========================	======================================================================
+メソッド					説明・実行結果
+===========================	======================================================================
+eval(cCode)					実行時に文字列からコードを実行します。
+raise(cError)				例外を発生させます。
+assert(cCondition)			コードの実行前に条件をテストします。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oDebug = new Debug
+	See "Test the Debug Class Methods" + nl
+	oDebug.eval("see 'Hello'+nl")
+	try
+		x = 10
+		oDebug.assert(x=11)
+	catch see "assert" + nl done
+	raise("Error!")
+	
+
+.. index:: 
+	pair: Stdlib クラス; DataType クラス
+
+DataType クラス
+===============
+
+メソッド:
+
+===========================	==========================================================================
+メソッド					説明・実行結果
+===========================	==========================================================================
+isstring(vValue) 			値が文字列か検査します。
+isnumber(vValue) 			値が数値か検査します。
+islist(vValue) 				値がリストか検査します。
+type(vValue) 				値の型を検査します。
+isnull(vValue) 				値が null か検査します。
+isalnum(vValue) 			値が数字または文字ならば 1 を、そうでなければ 0 です。
+isalpha(vValue) 			値が文字ならば 1 を、そうでなければ 0 です。
+iscntrl(vValue) 			値が制御文字 (表示不能) ならば 1 を、そうでなければ 0 です。
+isdigit(vValue) 			値が数字ならば 1 を、そうでなければ 0 です。
+isgraph(vValue) 			値が表示可能 (空白文字を除く) であれば 1 を、そうでなければ 0 を返します。
+islower(vValue) 			値が英数小文字ならば 1 を、そうでなければ 0 です。
+isprint(vValue) 			値が表示可能であれば 1 を、そうでなければ 0 です。
+ispunct(vValue) 			値が句読記号文字ならば 1 を、そうでなければ 0 です。
+isspace(vValue) 			値が空白文字ならば 1 を、そうでなければ 0 です。
+isupper(vValue) 			値が英数大文字ならば 1 を、そうでなければ 0 です。
+isxdigit(vValue)		 	値が十六進数文字ならば 1 をそうでなければ 0 です。
+===========================	==========================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oDataType = new DataType
+	See "Test the DataType Class Methods" + nl
+	see oDataType.isstring("test") + nl
+	see oDataType.isnumber(1) + nl
+	see oDataType.islist(1:3) + nl
+	see oDataType.type("test") + nl
+	see oDataType.isnull(null) + nl
+	see oDataType.isalnum("Hello") + nl +              # 1 を表示
+	oDataType.isalnum("123456") + nl +                 # 1 を表示
+	oDataType.isalnum("ABCabc123") + nl +              # 1 を表示
+	oDataType.isalnum("How are you")  + nl             # 空なので 0 を表示
+	see oDataType.isalpha("Hello") + nl +              # 1 を表示
+		oDataType.isalpha("123456") + nl +             # 0 を表示
+	oDataType.isalpha("ABCabc123") + nl +              # 0 を表示
+	oDataType.isalpha("How are you")  + nl             # 0 を表示
+	See oDataType.iscntrl("hello") + nl +              # 0 を表示
+	oDataType.iscntrl(nl)                              # 1 を表示
+	see oDataType.isdigit("0123456789") + nl +         # 1 を表示
+	oDataType.isdigit("0123a") + nl
+	see oDataType.isgraph("abcdef") + nl +             # 1 を表示
+	oDataType.isgraph("abc def")   + nl                # 0 を表示
+	see oDataType.islower("abcDEF") + nl +             # 0 を表示
+	oDataType.islower("ghi") + nl                      # 1 を表示
+	see oDataType.isprint("Hello") + nl +              # 1 を表示
+	oDataType.isprint("Nice to see you") + nl +        # 1 を表示
+	oDataType.isprint(nl)    + nl                      # 0 を表示
+	see oDataType.isprint("Hello") + nl                # 1 を表示
+	see oDataType.isupper("welcome") + nl +            # 0 を表示
+	oDataType.isupper("WELCOME")  + nl                 # 1 を表示
+	see oDataType.isxdigit("0123456789abcdef") + nl +  # 1 を表示
+	oDataType.isxdigit("123z")                         # 0 を表示
+
+
+実行結果:
+
+.. code-block:: ring
+
+	Test the DataType Class Methods
+	1
+	1
+	1
+	STRING
+	1
+	1
+	1
+	1
+	0
+	1
+	0
+	0
+	0
+	0
+	11
+	0
+	1
+	0
+	0
+	1
+	1
+	1
+	0
+	1
+	0
+	1
+	1
+	0	
+
+.. index:: 
+	pair: Stdlib クラス; Conversion クラス
+
+Conversion クラス
+=================
+
+メソッド:
+
+===========================	======================================================================
+メソッド					説明・実行結果
+===========================	======================================================================
+number(vValue)				文字列を数値へ変換します。
+string(vValue)				数値を文字列へ変換します。
+ascii(vValue)				文字から ASCII コードを取得します。
+char(vValue)				ASCII コードを文字へ変換します。
+hex(vValue)					十進数から十六進数へ変換します。
+dec(vValue)					十六進数から十進数へ変換します。
+str2hex(vValue)				文字列の文字を十六進数文字へ変換します。
+hex2str(vValue)				十六進数文字を文字列へ変換します。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oConversion = new conversion
+	See "Test the conversion Class Methods" + nl
+	See oConversion.number("3") + 5  + nl
+	See oConversion.string(3) + "5" + nl
+	See oConversion.Ascii("m") + nl	
+	See oConversion.char(77) + nl	
+	see oConversion.hex(162) + nl
+	see oConversion.dec("a2") + nl
+	cHex = oConversion.str2hex("Hello")
+	see cHex + nl
+	see oConversion.hex2str(cHex) + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	Test the conversion Class Methods
+	8
+	35
+	109
+	M
+	a2
+	162
+	48656c6c6f
+	Hello
+
+.. index:: 
+	pair: Stdlib クラス; ODBC クラス
+
+ODBC クラス
+===========
+
+メソッド:
+
+===========================	======================================================================
+メソッド					説明・実行結果
+===========================	======================================================================
+drivers()					ODBC ドライバのリストを取得します。
+datasources()				ODBC データソースのリストを取得します。
+close()						リソースを解放します。
+connect(cConString)			データベースへ接続します。
+disconnect()				データベースへの接続を閉じます。
+execute(cSQL)				SQL ステートメントを実行します。
+colcount()					クエリの結果にあるカラム数を取得します。
+fetch()						クエリ結果から列をフェッチします。
+getdata(nCol)				フェッチ済みの列からカラム値を取得します。
+tables()					テーブル内にあるテーブルのリストを取得します。
+columns(cTableName)			テーブル内にあるカラムのリストを取得します。
+autocommit(lStatus)			自動コミット機能の有効または無効化します。
+commit()					データベースのコミット更新をします。
+rollback()					データベースのロールバック更新をします。
+===========================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oodbc = new odbc
+	See "Test the odbc Class Methods" + nl
+	oODBC { 
+ 		see drivers()
+		see datasources()
+		See "Connect to database" + nl
+		see connect("DBQ=test.mdb;Driver={Microsoft Access Driver (*.mdb)}") + nl
+		See "Select data" + nl
+		see execute("select * from person") + nl
+		nMax = colcount()
+		See "Columns Count : " + nMax + nl
+		while fetch()
+		        See "Row data:" + nl
+		        for x = 1 to nMax
+		                see getdata(x) + " - "
+		        next
+		end
+		See "Close database..." + nl
+		disconnect()
+		close()
+	}
+	
+.. index:: 
+	pair: Stdlib クラス; MySQL クラス
+
+MySQL クラス
+============
+
+メソッド:
+
+======================================	======================================================================
+メソッド								説明・実行結果
+======================================	======================================================================
+info()									MySQL クライアントのバージョンを文字列を返します。
+error()									MySQL クライアントからエラーメッセージを取得します。
+connect(cServer,cUser,cPass,cDatabase) 	MySQL データベースサーバーへ接続します。
+close()									MySQL データベースへの接続を閉じます。
+query(cQuery)							SQL クエリーの実行。
+insert_id()								挿入された列の ID を取得します。
+result()								クエリの結果 (カラム名を除くデータ) を取得します。
+next_result()							次のクエリの結果を移動します。
+columns()								カラム名のリストを取得します。
+result2()								カラム名を全て取得した後にクエリの結果を一つのリストにします。
+escape_string(cStr)						バイナリデータと特殊文字をデータベースへ格納する前に処理を行います。
+autocommit(lStatus)						自動コミット機能の有効または禁止。
+commit()								データベースのコミット更新。
+rollback()								データベースのロールバック更新。
+======================================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+	
+	omysql = new mysql
+	See "Test the MySQL Class Methods" + nl
+	omysql { 
+		see info() + nl
+		connect("localhost", "root", "root","mahdb")
+		see "Execute Query" + nl
+		query("SELECT * FROM Employee")
+		see "Print Result" + nl
+		see result2()
+		see "Close database" + nl
+		close()
+	}
+	
+実行結果:
+
+.. code-block:: ring
+	
+	Test the MySQL Class Methods
+	5.5.30
+	Execute Query
+	Print Result
+	Id
+	Name
+	Salary
+	1
+	Mahmoud
+	15000
+	2
+	Samir
+	16000
+	3
+	Fayed
+	17000
+	Close database
+
+.. index:: 
+	pair: Stdlib クラス; SQLite クラス
+
+SQLite クラス
+=============
+
+メソッド:
+
+======================================	======================================================================
+メソッド								説明・実行結果
+======================================	======================================================================
+open(cDatabase) 						データベースを開きます。
+close() 								データベースを閉じます。
+errormessage()						 	エラーメッセージを取得します。
+execute(cSQL) 							クエリーを実行します。
+======================================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	osqlite = new sqlite
+	See "Test the sqlite Class Methods" + nl
+	osqlite {
+		open("test.db")
+		sql = "CREATE TABLE COMPANY("  +
+       			"ID INT PRIMARY KEY     NOT NULL," +
+		         "NAME           TEXT    NOT NULL," +
+		         "AGE            INT     NOT NULL," +
+		         "ADDRESS        CHAR(50)," +
+		         "SALARY         REAL );"
+
+		execute(sql)
+
+		sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "  +
+		         "VALUES (1, 'Mahmoud', 29, 'Jeddah', 20000.00 ); " +
+		         "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "  +
+		         "VALUES (2, 'Ahmed', 27, 'Jeddah', 15000.00 ); "     +
+		         "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
+		         "VALUES (3, 'Mohammed', 31, 'Egypt', 20000.00 );" +
+		         "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
+		         "VALUES (4, 'Ibrahim', 24, 'Egypt ', 65000.00 );"
+
+		execute(sql)
+
+		aResult =  execute("select * from COMPANY")
+		for x in aResult
+			for t in x
+				see t[2] + nl
+			next
+		next
+		see copy("*",50)  + nl
+		for x in aResult
+			see x["name"] + nl
+		next
+		close()
+	}
+
+実行結果:
+
+.. code-block:: ring
+
+	Test the sqlite Class Methods
+	1
+	Mahmoud
+	29
+	Jeddah
+	20000.0
+	2
+	Ahmed
+	27
+	Jeddah
+	15000.0
+	3
+	Mohammed
+	31
+	Egypt
+	20000.0
+	4
+	Ibrahim
+	24
+	Egypt
+	65000.0
+	**************************************************
+	Mahmoud
+	Ahmed
+	Mohammed
+	Ibrahim
+
+
+.. index:: 
+	pair: Stdlib クラス; PostgreSQL クラス
+
+PostgreSQL クラス
+=================
+
+メソッド:
+
+======================================	======================================================================
+メソッド									説明・実行結果
+======================================	======================================================================
+init(cConString)						データベースを開きます。
+close()									データベースを閉じます。
+execute(cSQL)							クエリーを実行します。
+======================================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+
+	oPostgreSQL = new PostgreSQL("user=postgres password=sa dbname = mahdb")
+
+	See "Test the PostgreSQL Class Methods" + nl
+
+	oPostgreSQL {
+
+		sql = "CREATE TABLE COMPANY_TEST("  +
+       			"ID INT PRIMARY KEY     NOT NULL," +
+		         "NAME           TEXT    NOT NULL," +
+		         "AGE            INT     NOT NULL," +
+		         "ADDRESS        CHAR(50)," +
+		         "SALARY         REAL );"
+
+		execute(sql)
+
+		sql = "INSERT INTO COMPANY_TEST (ID,NAME,AGE,ADDRESS,SALARY) "  +
+		         "VALUES (1, 'Mahmoud', 29, 'Jeddah', 20000.00 ); " +
+		         "INSERT INTO COMPANY_TEST (ID,NAME,AGE,ADDRESS,SALARY) "  +
+		         "VALUES (2, 'Ahmed', 27, 'Jeddah', 15000.00 ); "     +
+		         "INSERT INTO COMPANY_TEST (ID,NAME,AGE,ADDRESS,SALARY)" +
+		         "VALUES (3, 'Mohammed', 31, 'Egypt', 20000.00 );" +
+		         "INSERT INTO COMPANY_TEST (ID,NAME,AGE,ADDRESS,SALARY)" +
+		         "VALUES (4, 'Ibrahim', 24, 'Egypt ', 65000.00 );"
+
+		execute(sql)
+
+		?  execute("select * from COMPANY_TEST")
+
+		? copy("*",50)  
+
+		close()
+	}
+
+実行結果:
+
+.. code-block:: none
+
+	Test the PostgreSQL Class Methods
+	id
+	name
+	age
+	address
+	salary
+	1
+	Mahmoud
+	29
+	Jeddah
+	20000
+	2
+	Ahmed
+	27
+	Jeddah
+	15000
+	3
+	Mohammed
+	31
+	Egypt
+	20000
+	4
+	Ibrahim
+	24
+	Egypt
+	65000
+
+	**************************************************
+
+
+.. index:: 
+	pair: Stdlib クラス; Security クラス
+
+Security クラス
+===============
+
+
+メソッド:
+
+======================================	======================================================================
+メソッド								説明・実行結果
+======================================	======================================================================
+md5(cString)						 	MD5 ハッシュを計算します。
+sha1(cString)						 	SHA1 ハッシュを計算します。
+sha256(cString) 						SHA256 ハッシュを計算します。
+sha512(cString) 						SHA512 ハッシュを計算します。
+sha384(cString) 						SHA384 ハッシュを計算します。
+sha224(cString) 						SHA224 ハッシュを計算します。
+encrypt(cString,cKey,cIV)			 	Blowfish アルゴリズムでデータを暗号化します。
+decrypt(cString,cKey,cIV)			 	Encrypt() メソッドで暗号化されたデータを復号化します。
+randbytes(nSize) 						擬似乱数バイトの文字列を生成します。
+======================================	======================================================================
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oSecurity = new security
+	See "Test the security Class Methods" + nl
+	oSecurity { 
+		see md5("hello") + nl + 
+		sha1("hello") + nl + sha256("hello") + nl +
+		sha512("hello") + nl + sha384("hello") + nl + 
+		sha256("hello") + nl 
+		list = 0:15  cKey=""   for x in list cKey += char(x) next
+		list = 1:8   cIV = ""   for x in list cIV += char(x) next
+		cCipher = encrypt("hello",cKey,cIV)
+		see cCipher + nl + decrypt(cCipher,cKey,cIV) + nl
+	}
+
+	
+.. index:: 
+	pair: Stdlib クラス; Internet クラス
+
+Internet クラス
+===============
+
+メソッド:
+
+* download(cURL)
+* sendemail(cSMTPServer,cEmail,cPassword,cSender,cReceiver,cCC,cTitle,cContent)
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	ointernet = new internet
+	See "Test the internet Class Methods" + nl
+	ointernet { 
+		see download("www.ring-lang.sf.net")
+	}

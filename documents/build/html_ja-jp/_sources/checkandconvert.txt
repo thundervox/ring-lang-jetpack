@@ -1,0 +1,586 @@
+.. index:: 
+	single: データ型; はじめに
+
+====================
+データ型の検査と変換
+====================
+
+この用途の関数です。
+
+* データ型の判定
+* 字種判定
+* 変換処理
+
+.. index:: 
+	pair: データ型; データ型の判定
+
+データ型の判定
+==============
+
+データ型判定用の関数です。
+
+* isstring()
+* isnumber()
+* islist()
+* type()
+* isnull()
+
+.. index:: 
+	pair: データ型; IsString() 関数
+
+IsString() 関数
+===============
+
+IsString() 関数は値が文字列か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsString(値) ---> 値が文字列ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isstring(5) + nl +		# 0 を表示
+	    isstring("hello") + nl	# 1 を表示
+
+.. index:: 
+	pair: データ型; IsNumber() 関数
+
+IsNumber() 関数
+===============
+
+IsNumber() 関数は値が数値か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsNumber(値) ---> 値が数値ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isnumber(5) + nl +		# 1 を表示
+	    isnumber("hello") + nl	# 0 を表示
+
+.. index:: 
+	pair: データ型; IsList() 関数
+
+IsList() 関数
+=============
+
+IsList() 関数は値がリストか判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsList(値) ---> 値がリストならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see islist(5) + nl +		# 0 を表示
+	    islist("hello") + nl +	# 0 を表示
+	    islist([1,3,5]) 		# 1 を表示
+	
+.. index:: 
+	データ型; Type() 関数
+
+Type() 関数
+===========
+
+Type() 関数は値の型を検査します。
+
+
+文法:
+
+.. code-block:: ring
+
+	Type(値) ---> 型を文字列で返します。
+
+用例:
+
+.. code-block:: ring
+
+	    see Type(5) + nl +		# NUMBER を表示
+	    Type("hello") + nl +	# STRING を表示
+	    Type([1,3,5]) 		# LIST を表示
+
+.. index:: 
+	pair: データ型; isNULL() 関数
+
+IsNULL() 関数
+=============
+
+IsNULL() 関数は値が null か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsNULL(値) ---> 値が NULL ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	    see isnull(5) + nl +	# 0 を表示
+	    isnull("hello") + nl +	# 0 を表示
+	    isnull([1,3,5]) + nl +	# 0 を表示
+	    isnull("") + nl +		# 1 を表示
+	    isnull("NULL")		# 1 を表示
+
+.. index:: 
+	pair: データ型; 字種判定
+
+字種判定
+========
+
+字種判定用の関数です。
+
+* isalnum()
+* isalpha()
+* iscntrl()
+* isdigit()
+* isgraph()
+* islower()
+* isprint()
+* ispunct()
+* isspace()
+* isupper()
+* isxdigit()
+
+.. index:: 
+	pair: データ型; IsAlNum() 関数
+
+IsAlNum() 関数
+==============
+
+IsAlNum() 関数は値が英数字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsAlNum(値) ---> 値が数字または文字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isalnum("Hello") + nl +	# 1 を表示
+	    isalnum("123456") + nl +	# 1 を表示
+	    isalnum("ABCabc123") + nl +	# 1 を表示
+	    isalnum("How are you")  	# 空白のため 0 を表示
+
+.. index:: 
+	pair: データ型; IsAlpha() 関数
+
+IsAlpha() 関数
+==============
+
+IsAlpha() 関数は値が英字文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsAlpha(値) ---> 値が文字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isalpha("Hello") + nl +	# 1 を表示
+	    isalpha("123456") + nl +	# 0 を表示
+	    isalpha("ABCabc123") + nl +	# 0 を表示
+	    isalpha("How are you")  	# 0 を表示
+
+.. index:: 
+	pair: データ型; IsCntrl() 関数
+
+IsCntrl() 関数
+==============
+
+IsCntrl() 関数は値が制御文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsCntrl(値) ---> 値が制御文字 (表示不能) ならば 1 を、
+			    そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	See iscntrl("hello") + nl +	# 0 を表示 
+	    iscntrl(nl)			# 1 を表示
+
+.. index:: 
+	pair: データ型; IsDigit() 関数
+
+IsDigit() 関数
+==============
+
+IsDigit() 関数は値が数字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsDigit(値) ---> 値が数字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isdigit("0123456789") + nl +	# 1 を表示
+	    isdigit("0123a") 			# 0 を表示
+
+.. index:: 
+	pair: データ型; IsGraph() 関数
+
+IsGraph() 関数
+==============
+
+IsGraph() 関数は値が表示可能 (空白文字を除く) か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsGraph(値)
+		---> 値が表示可能 (空白文字を除く) であれば 1 を、そうでなければ 0 を返します。
+
+用例:
+
+.. code-block:: ring
+
+	see isgraph("abcdef") + nl +	# 1 を表示
+	    isgraph("abc def") 		# 0 を表示
+
+
+.. index:: 
+	pair: データ型; IsLower() 関数
+
+IsLower() 関数
+==============
+
+IsLower() 関数は値が英数小文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsLower(値) ---> 値が英数小文字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see islower("abcDEF") + nl + 	# 0 を表示
+	    islower("ghi")		# 1 を表示
+
+
+.. index:: 
+	pair: データ型; IsPrint() 関数
+
+IsPrint() 関数
+==============
+
+IsPrint() 関数は値が表示可能か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsPrint(値) ---> 値が表示可能であれば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isprint("Hello") + nl + 		# 1 を表示
+	    isprint("Nice to see you") + nl +   # 1 を表示
+	    isprint(nl)				# 0 を表示
+
+.. index:: 
+	pair: データ型; IsPunct() 関数
+
+IsPunct() 関数
+==============
+
+IsPunct() 関数は値が句読記号文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsPunct(値) ---> 値が句読記号文字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see ispunct("hello") + nl +	# 0 を表示
+	    ispunct(",") 		# 1 を表示
+
+.. index:: 
+	pair: データ型; IsSpace() 関数
+
+IsSpace() 関数
+==============
+
+IsSpace() 関数は値が空白文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsSpace(値) ---> 値が空白文字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isspace("   ") + nl +	# 1 を表示
+	    isspace("test") 		# 0 を表示
+
+
+.. index:: 
+	pair: データ型; IsUpper() 関数
+
+IsUpper() 関数
+==============
+
+IsUpper() 関数は値が英数大文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsUpper(値) ---> 値が英数大文字ならば 1 を、そうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isupper("welcome") + nl +	 # 0 を表示 
+	    isupper("WELCOME") 		 # 1 を表示
+
+
+.. index:: 
+	pair: データ型; IsXdigit() 関数
+
+IsXdigit() 関数
+===============
+
+IsXdigit() 関数は値が十六進数文字か判定します。
+
+文法:
+
+.. code-block:: ring
+
+	IsXdigit(値) ---> 値が十六進数文字ならば 1 をそうでなければ 0 です。
+
+用例:
+
+.. code-block:: ring
+
+	see isxdigit("0123456789abcdef") + nl +  # 1 を表示
+	    isxdigit("123z") 			 # 0 を表示
+
+
+.. index:: 
+	pair: データ型; 変換処理
+
+変換処理
+========
+
+文字列と数値の変換用関数です。
+
+* number()
+* string()
+* ascii()
+* char()
+* hex()
+* dec()
+* str2hex()
+* hex2str()
+
+.. index:: 
+	pair: データ型; Number() 関数
+
+Number() 関数
+=============
+
+Number() 関数または + 演算子は文字列を数値へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	Number(文字列) ---> 数値
+	0 + 文字列     ---> 数値
+
+用例:
+
+.. code-block:: ring
+
+	see number("5") + 5 + nl 	# 10 を表示
+	see 0 + "10" + 2		# 12 を表示	
+
+.. index:: 
+	pair: データ型; String() 関数
+
+String() 関数
+=============
+
+String() 関数または + 演算子は数値を文字列へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	String(数値) ---> 文字列
+	"" + 数値    ---> 文字列
+
+用例:
+
+.. code-block:: ring
+
+	see string(5) + 5 + nl 		# 55 を表示
+	see "" + 10 + 2			# 102 を表示
+
+.. index:: 
+	pair: データ型; Ascii() 関数
+
+Ascii() 関数
+============
+
+Ascii() 関数は文字から ASCII コードを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Ascii(文字) ---> ASCII コード
+
+用例:
+
+.. code-block:: ring
+
+	See ascii("m") + nl + 	# 109 を表示
+	    ascii("M") 		# 77 を表示
+
+.. index:: 
+	pair: データ型; Char() 関数
+
+Char() 関数
+===========
+
+Char() 関数は ASCII コードを文字へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	Char(ASCII コード) ---> 文字
+
+用例:
+
+.. code-block:: ring
+
+	See char(109) + nl + 	# m を表示
+	    char(77) 		# M を表示
+
+
+.. index:: 
+	pair: データ型; Hex() 関数
+
+Hex() 関数
+==========
+
+Hex() 関数は十進数から十六進数へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	Hex(十進数) ---> 十六進数
+
+用例:
+
+.. code-block:: ring
+
+	See hex(10) + nl + 	# a を表示
+	    hex(200)		# c8 を表示
+
+.. index:: 
+	pair: データ型; Dec()
+
+Dec() 関数
+==========
+
+Dec() 関数は十六進数から十進数へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	Dec(十六進数) ---> 十進数
+
+用例:
+
+.. code-block:: ring
+
+	See dec("a") + nl + 	# 10 を表示
+	    dec("c8")		# 200 を表示
+
+.. index:: 
+	pair: データ型; Str2hex() 関数
+
+Str2hex() 関数
+==============
+
+Str2hex() 関数は文字列の文字を十六進数文字へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	Str2hex(文字列) ---> 十六進数文字列
+
+用例:
+
+.. code-block:: ring
+
+	See str2hex("hello")  	# 68656c6c6f を表示
+
+.. index:: 
+	pair: データ型; Hex2str() 関数
+
+Hex2str() 関数
+==============
+
+Hex2str() 関数は十六進数文字を文字列へ変換します。
+
+文法:
+
+.. code-block:: ring
+
+	Hex2Str(十六進数文字列) ---> 文字列
+
+用例:
+
+.. code-block:: ring
+
+	See hex2str("68656c6c6f")  	# hello を表示

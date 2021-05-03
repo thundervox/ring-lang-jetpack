@@ -1,0 +1,186 @@
+.. index:: 
+     single: 性能改善に関する情報; はじめに
+
+====================
+性能改善に関する情報
+====================
+
+Ring の性能改善方法です。
+
+
+.. index:: 
+     pair: 性能改善に関する情報; リストの作成
+
+リストの作成
+============
+
+用例:
+
+.. code-block:: ring
+
+	? "Create the list using the Range operator"
+	t1 = clock()
+	aList = 1:1000000
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+	? "Create the list using the For loop"
+	t1 = clock()
+	aList = []
+	for x = 1 to 1000000
+		aList + x
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+	? "Create the list using the list() function and the For loop"
+	t1 = clock()
+	aList = list(1000000)
+	for x = 1 to 1000000
+		aList[x] = x
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+実行結果:
+
+.. code-block:: none
+
+	Create the list using the Range operator
+	Time : 0.48 seconds
+	Create the list using the For loop
+	Time : 0.79 seconds
+	Create the list using the list() function and the For loop
+	Time : 1.56 seconds
+
+.. note:: リストの作成で for ループ、または list() 関数を使用するよりも、範囲演算子のほうが速いです。
+
+.. note:: リストの追加で add() 関数を使用するよりも、連結演算子‘+’を使用したほうが関数呼び出しのオーバーヘッドが少ないため速いです。ただしソースコードの可読性は落ちる場合があります。
+
+.. note:: 処理に時間が掛かり過ぎるため copy() 関数で数十万件を超える大量のテストデータを作成しないでください。
+
+.. index:: 
+     pair: 性能改善に関する情報; 算術演算子
+
+算術演算子
+==========
+
+用例:
+
+.. code-block:: ring
+
+	? "Using * operator"
+	t1 = clock()
+	for x = 1 to 1000000
+		out = x * 2
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+	? "Using *= operator"
+	t1 = clock()
+	for x = 1 to 1000000
+		out = x
+		out *= 2
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+実行結果:
+
+.. code-block:: none
+
+	Using * operator
+	Time : 1.34 seconds
+	Using *= operator
+	Time : 0.47 seconds
+
+.. note:: \* 演算子よりも \*= 演算子を使用したほうが速いです。
+
+
+.. index:: 
+     pair: 性能改善に関する情報; len() と For ループの使用
+
+len() と For ループの使用
+=========================
+
+用例:
+
+.. code-block:: ring
+
+	aList = 1:1000000
+
+	? "Using len() in the For loop"
+	t1 = clock()
+	for x = 1 to len(aList)
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+	? "Using len() before the For loop"
+	t1 = clock()
+	nMax = len(aList)
+	for x = 1 to nMax
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+実行結果:
+
+.. code-block:: none
+
+	Using len() in the For loop
+	Time : 5.50 seconds
+	Using len() before the For loop
+	Time : 0.24 seconds
+
+.. note:: Len() 関数は For ループ内ではなく For ループの手前で使用したほうが早いです。
+
+.. index:: 
+     pair: 性能改善に関する情報; 関数とメソッドの呼び出し
+
+関数とメソッドの呼び出し
+========================
+
+用例:
+
+.. code-block:: ring
+
+	? "calling 100000 functions"
+	t1 = clock()
+	for x = 1 to 100000
+		test()
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+	o1 = new test
+
+	? "calling 100000 methods using the dot operator"
+	t1 = clock()
+	for x = 1 to 100000
+		o1.test()
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+	? "calling 100000 methods using braces "
+	t1 = clock()
+	for x = 1 to 100000
+		o1 { test() }
+	next
+	? "Time : " + ((clock()-t1)/clockspersecond()) + " seconds"
+
+
+	func test
+
+	class test
+		func test
+
+
+実行結果:
+
+.. code-block:: none
+
+	calling 100000 functions
+	Time : 0.28 seconds
+	calling 100000 methods using the dot operator
+	Time : 0.36 seconds
+	calling 100000 methods using braces
+	Time : 1.19 seconds
+
+.. note:: メソッドの呼び出しよりも、関数の呼び出しのほうが僅かに速いです。
+
+.. note:: メソッドの呼び出しで弓括弧を使用するよりも、ドット演算子を使用したほうが速いです。
+

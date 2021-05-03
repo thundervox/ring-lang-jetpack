@@ -1,0 +1,238 @@
+.. index:: 
+	single: トレースライブラリとインタラクティブデバッガ; はじめに
+
+============================================
+トレースライブラリとインタラクティブデバッガ
+============================================
+
+トレースライブラリとインタラクティブデバッガの用法です。
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; トレースライブラリの読み込み
+
+トレースライブラリの読み込み
+============================
+
+トレースライブラリの使用前に tracelib.ring ライブラリを読み込みます。
+
+.. code-block:: ring
+
+	load "tracelib.ring"
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; イベントをすべてトレースするには
+
+イベントをすべてトレースするには
+================================
+
+この用例は トレースライブラリの用法としてイベントをすべてトレースするためのデモです。
+
+.. code-block:: ring
+
+	# イベントをすべてトレース
+	trace(:AllEvents)
+
+	see "Hello, world!" + nl
+	see "Welcome" + nl
+	see "How are you?" +nl
+
+	mytest()
+
+	new myclass { mymethod() }
+
+	func mytest
+		see "Message from mytest" + nl
+
+	class myclass
+		func mymethod
+			see "Message from mymethod" + nl
+
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; 関数と制御フローのトレース
+
+関数と制御フローのトレース
+==========================
+
+この用例は関数と制御フローのトレースのデモとしての
+トレースライブラリの用法です。
+
+.. code-block:: ring
+
+	Trace(:Functions)
+
+	test1()
+
+	func test1
+		see :test1 + nl
+		test2()
+
+	func test2
+		see :test2 + nl
+		see test3() + nl
+
+	func test3
+		see :test3 + nl
+		return "test 3 output" 
+	
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; エラーの渡しかた
+
+エラーの渡しかた
+================
+
+この用例は トレースライブラリの用法であり、
+エラーを渡すためのデモです！
+
+.. code-block:: ring
+
+	Trace(:PassError)
+
+	test1()
+
+	func test1
+		x = 10
+		see :test1 + nl
+		test2()	# ランタイムエラー！
+		see "We can continue!"
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; インタラクティブデバッガ
+
+インタラクティブデバッガ
+========================
+
+この用例は トレースライブラリの用法であり、
+インタラクティブデバッガを使用したデモです。
+
+.. code-block:: ring
+
+	Trace(:Debugger)
+
+	test1()
+	see "good bye!" + nl
+
+	func test1
+		x = 10
+		see :test1 + nl
+		t = 12
+		test2()	# ランタイムエラー！
+		see "After Error!" +nl
+		see "t = " see t see nl
+		see "x = " see x see nl
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; プログラムを一行ずつ実行
+
+プログラムを一行ずつ実行
+========================
+
+この用例は トレースライブラリの用法であり、
+プログラムを一行ずつ実行するデモです！
+
+.. code-block:: ring
+
+	Trace(:LineByLine)
+
+	test1()
+
+	func test1
+		x = 10
+		see :test1 + nl
+		t = 12
+		test2()
+		see "After Error!" +nl
+		see "t = " + t + nl
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; ブレークポイント
+	
+ブレークポイント
+================
+
+この用例は トレースライブラリのブレークポイントの停止における
+用法のデモンストレーションです！
+
+.. code-block:: ring
+
+	test1()
+
+	func test1
+		x = 10
+		see :test1 + nl
+		t = 12
+		BreakPoint()
+		see "After breakpoint!" +nl
+		see "t = " + t + nl
+		see "End of program!" + nl
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; ブレークポイントの禁止
+
+ブレークポイントの禁止
+======================
+
+この用例はトレースライブラリの用法であり、
+ブレークポイントを禁止する方法です！
+
+.. code-block:: ring
+
+	NoBreakPoints()
+
+	test1()
+
+	func test1
+		x = 10
+		see :test1 + nl
+		t = 12
+		BreakPoint()
+		see "After breakpoint!" +nl
+		see "t = " + t + nl
+		see "End of program!" + nl
+
+.. index:: 
+	pair: トレースライブラリとインタラクティブデバッガ; インタラクティブデバッガの用法
+		
+インタラクティブデバッガの用法
+==============================
+
+この用例はブレークポイントをインタラクティブデバッガで開きます！
+
+.. code-block:: ring
+
+	load "tracelib.ring"
+
+	test1()
+
+	func test1
+		x = 10
+		see :test1 + nl
+		t = 12
+		BreakPoint()
+		see "After breakpoint!" +nl
+		see "t = " + t + nl
+		see "End of program!" + nl
+
+
+スクリーンショット:
+
+インタラクティブデバッガでブレークポイントを操作できます！
+
+.. image:: debugshot1.png
+	:alt: インタラクティブデバッガ
+
+変数の値を表示できます。
+
+.. image:: debugshot2.png
+	:alt: インタラクティブデバッガ
+
+変数値の変更後に実行を継続できます。
+
+.. image:: debugshot3.png
+	:alt: インタラクティブデバッガ
+
+実行結果ウィンドウでもインタラクティブデバッガを操作できます。
+
+.. image:: debugshot4.png
+	:alt: インタラクティブデバッガ
+

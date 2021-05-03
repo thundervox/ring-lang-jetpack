@@ -1,0 +1,719 @@
+.. index:: 
+	single: 言語設計; はじめに
+
+========
+言語設計
+========
+
+言語設計の背景にある基本概念です。
+
+.. index:: 
+	pair: 言語設計; Ring Ring をオススメする理由
+
+Ring をオススメする理由
+=======================
+
+プログラミング言語 Ring には簡明、違和感の排除、組織化の奨励、
+および透過性とビジュアル実装があります。
+簡潔なシンタックス、そして自然なインタフェースの作成を可能にする機能群、
+短時間で作成・構築できる宣言型ドメイン特化言語機能を標準装備しています。
+非常に小規模、高速なスマートガベージコレクターにより、
+プログラマはメモリを制御下に置くことができます。
+また、多種多様なプログラミングパラダイムに対応しており、便利で実用的なライブラリが付属しています。
+Ring は生産性と拡張性に優れた高品質な解決方法の開発のために設計しました。
+
+.. index:: 
+	pair: 言語設計; 明確な設計目標
+
+明確な設計目標
+==============
+
+* アプリケーション開発用のプログラミング言語です。
+* 生産性と拡張性に優れた高品質な解決方法の開発。
+* 小規模・高速な言語で C/C++ プロジェクトへ組み込めます。
+* 学習と入門 (文教用途、およびコンパイラ・仮想計算機の概念) に使用できる単純明快な言語です。
+* ドメイン特化ライブラリ、フレームワーク、およびツールを作成できる汎用プログラミング言語です。
+* ビジュアル・プログラミング言語 Programming Without Coding Technology (PWCT) ソフトウェアの次世代版の開発用に設計した実用プログラミング言語です。 
+
+.. index:: 
+	pair: 言語設計; 簡明
+
+シンプル
+========
+
+Ring は非常に簡明な言語であり、非常にわかりやすくすっきりしたシンタックスから構成しています。プログラマには、ボイラープレートコードのないプログラムの記述を奨励しています。 
+
+'See' 命令はメッセージを標準出力へ表示します。
+
+.. code-block:: ring
+
+	See "Hello, World!" 
+
+Main 関数はオプション扱いであり、ステートメントの後に実行するため、ローカルスコープで便利です。
+
+.. code-block:: ring
+
+	Func Main
+		See "Hello, World!" 
+		
+動的型付け、およびレキシカルスコープを使用しています。変数名の先頭に $ は不要です！
+
+文字列の連結は‘+’演算子です。弱い型付け言語であり、文字列はコンテキストに基づいて数値と文字列との間で自動的に変換します。
+
+.. code-block:: ring
+
+	nCount = 10	# グローバル変数
+	Func Main
+		nID = 1	# ローカル変数
+		See "Count = " + nCount + nl + " ID = " + nID
+
+.. index:: 
+	pair: 言語設計; 違和感の排除
+
+違和感の排除
+============
+
+Ring は英数大小文字を区別しません。
+
+.. code-block:: ring
+
+
+	See "Enter your name ? " 
+	Give name
+	See "Hello " + Name	# Name は name と同じです。
+			
+リストのインデックス (添字番号) は 1 から開始します。
+
+.. code-block:: ring
+
+	aList = ["one","two","three"]
+	See aList[1]	# one を表示
+			
+定義前の関数呼び出し:
+
+.. code-block:: ring
+
+
+	one() 
+	two() 
+	three()
+	Func one 
+		See "One" + nl
+	Func two 
+		See "two" + nl
+	Func three 
+		See "three" + nl
+			
+代入演算子は深いコピーを使用します (この操作は参照ではありません)。
+
+.. code-block:: ring
+
+	aList = ["one","two","three"]
+	aList2 = aList
+	aList[1] = 1
+	see alist[1]	# 1 を表示
+	see aList2[1]	# one を表示
+				
+数値と文字列は値渡しですが、リストとオブジェクトは参照渡しです。 
+For in ループ でリストの項目 (アイテム、要素とも言います) を更新できます。
+
+.. code-block:: ring
+
+	Func Main
+		aList = [1,2,3]
+		update(aList)
+		see aList	# one two three を表示
+
+	Func update aList
+		for x in aList
+			switch x
+			on 1 x = "one"
+			on 2 x = "two"
+			on 3 x = "three"
+			off
+		next
+			
+定義時のリスト使用:
+
+.. code-block:: ring
+
+	aList = [ [1,2,3,4,5] , aList[1] , aList[1] ]
+	see aList       # 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 を表示
+			
+一階層以上のループから脱出
+
+.. code-block:: ring
+
+	for x = 1 to 10
+			for y = 1 to 10
+					see "x=" + x + " y=" + y + nl
+					if x = 3 and y = 5
+							exit 2     # 二階層のループから脱出
+					ok
+			next
+	next
+	
+.. index:: 
+	pair: 言語設計; 組織化の奨励
+
+組織化の奨励
+============
+
+Ring ではプログラムの組織化を奨励しています。まずは関数、次にクラス、
+そして、関数とヘンテコなモノと組み合わせるプログラミング言語を使用していた悪夢の日々を忘却の彼方へ追いやります！ 
+
+ソースファイルの構造は:
+
+* ファイルの読み込み
+* ステートメントとグローバル変数
+* 関数
+* パッケージとクラス
+
+これにより、構成要素で end キーワードを記述しなくてもパッケージ、
+クラスと関数を使えます。
+
+一行コメント、または複数行コメントを使えます。
+一行コメントは # あるいは // で始まります。
+複数行コメントは /* ～ \*/ の間に記述します。
+
+.. code-block:: ring
+
+	/* 
+		プログラムの名前    : はじめての Ring プログラム
+		日付                : 2015.05.08
+	*/
+
+	See "What is your name? "   # 画面へメッセージを表示
+	give cName                  # ユーザからの標準入力を取得
+	see "Hello " + cName        # こんにちわ！
+
+	// See "Bye!"
+	
+
+.. index:: 
+	pair: 言語設計; データの表現方法
+
+データの表現方法
+================
+
+Ring においてプログラムのデータ表現で使える型は四種類のみです。
+
+つまり、型として扱えるものは文字列、数値、リストとオブジェクトです。
+
+その狙いは、様々な状況で使いやすい関数を書くことであり、
+型別にユースケースを多数定義すると柔軟性と性能が高くなります。
+
+文字列型は下記の表現で使います:
+* 文字
+* 複数文字による文字列
+* 複数行による文字列
+* バイナリデータ
+
+.. code-block:: ring
+
+	cStr1 = "a"			# 文字
+	cStr2 = "Hello, World!" 	# 複数文字による文字列
+	cStr3 = "Hello
+	Welcome to the Ring language!
+	"				# 複数行による文字列
+	cStr4 = read(EXEFileName())	# 実行可能ファイルの読み取り (バイナリデータ)
+
+数値型は下記の表現で使います:
+* ブール値
+* 符号あり・なし整数
+* 浮動小数・倍精度小数
+
+.. code-block:: ring
+
+	nNum1 = True		# ブール値 (1)
+	nNum2 = False		# ブール値 (0)
+	nNum3 = 10		# 整数
+	nNum4 = -10		# 符号あり整数
+	nNum5 = 1250.11		# 浮動小数・倍精度小数
+
+リスト型は下記の表現で使います:
+* 一次元配列
+* 多次元配列
+* 複合型のリスト
+* 多重リスト
+* ハッシュテーブル (キーと値)
+* ツリー
+* C ポインタとのラッパー接続
+
+.. code-block:: ring
+
+	aList1 = ["one","two","three"]				# 文字列
+	aList2 = [1,2,3,4,5,6,7,8,9,10]				# 数値
+	aList3 = ["Ring",1234]					# 複合型
+	aList4 = [["Fayed","Egypt"],["Mansour","Tunisia"]]  	# 多重リスト
+	aList5 = [ :name = "Fayed", :country = "Egypt"]		# ハッシュテーブル
+
+オブジェクト型はクラスから生成されたオブジェクトの表現で使います。
+
+また、クラスと演算子のオーバーロードを用いることで任意定義型を作れます。
+
+.. index:: 
+	pair: 言語設計; 簡潔なシンタックス
+
+簡潔なシンタックス
+==================
+
+行の区別はしませんので、ステートメントの後に ; は不要です。または ENTER や TAB の打鍵は不要ですので、このようなコードを記述可能です。
+
+.. code-block:: ring
+
+
+	See "The First Message"	See " Another message in the same line! " + nl
+	See "Enter your name?" Give Name See "Hello " + Name
+			
+このコードは三種類の属性 X, Y および Z を有する Point クラスを作成します。クラス、パッケージ、関数の定義の終了で end キーワードは不要です。また、クラス名の直下に属性名を書くことができます。
+
+.. code-block:: ring
+
+	Class Point X Y Z
+			
+定義前にクラスと関数を使えます。
+この用例では、オブジェクトの新規作成と属性の設定、および値を表示します。
+
+.. code-block:: ring
+
+	o1 = New point	o1.x=10    o1.y=20   o1.z=30	See O1	Class Point X Y Z
+			
+ドット演算子‘.’でオブジェクトの属性とメソッドへアクセスするのではなく、括弧 { } でオブジェクトへアクセスできます。その後にオブジェクトの属性とメソッドを使えます。
+
+.. code-block:: ring
+
+	o1 = New point { x=10 y=20 z=30 } See O1  Class Point X Y Z
+			 
+メソッドの呼び出し後に { } でオブジェクトへアクセスします。
+
+.. code-block:: ring
+
+	 
+	oPerson = new Person
+	{
+		Name = "Somebody"
+		Address = "Somewhere"
+		Phone = "0000000"
+		Print()			# ここでは Print() メソッドを呼び出します。
+	}
+	Class Person Name Address Phone
+		Func Print
+			See "Name :" + name + nl +
+				"Address :" + Address + nl +
+				"Phone : " + phone + nl
+
+{ } で、オブジェクトへアクセスしてからオブジェクト名を記述するとき、自動的に呼び出される全ての setter/getter メソッドに対してクラスを検査します。
+
+.. code-block:: ring
+
+
+	New Number {
+			See one		# GetOne() の実行
+			See two		# GetTwo() の実行
+			See three	# GetThree() の実行
+	}
+	Class Number one two three
+		Func GetOne
+			See "Number : One" + nl
+			return 1
+		Func GetTwo
+			See "Number : Two" + nl
+			return 2
+		Func GetThree
+			See "Number : Three" + nl
+			return 3	
+			
+.. index:: 
+	pair: 言語設計; 自然言語ステートメントの定義
+
+自然言語ステートメントの定義
+============================
+
+{ } でオブジェクトへアクセス後に、クラスに BraceEnd() メソッドがあれば BraceEnd() メソッドを実行します！
+
+.. code-block:: ring
+
+
+	TimeForFun = new journey
+	# あっと驚く！
+	TimeForFun {
+		Hello it is me		# なんと美しいプログラミングの世界でしょう！
+	}
+	# クラス本体
+	Class journey
+		hello=0 it=0 is=0 me=0
+		func GetHello
+			See "Hello" + nl
+		func braceEnd
+			See "Goodbye!" + nl
+
+Eval() 関数は、文字列に記述されたコードを実行します。
+
+.. code-block:: ring
+
+
+	cCode = "See 'Code that will be executed later!' "
+	Eval(cCode)	# コードを実行してメッセージを表示します。
+
+リストの作成後に、実行用のコードをリストから生成できます。
+
+.. code-block:: ring
+
+	aWords = ["hello","it","is","me"]
+	for word in aWords cCode=word+"=0" eval(cCode) next
+
+Read(cFileName) 関数は、テキストファイルを読み取ります。また Write(cFileName,cString) 関数はファイルへ書き込みます。
+
+.. code-block:: ring
+
+	See "Enter File Name:" Give cFileName See Read(cFileName) # ファイルの内容を表示
+
+この用例は、二つの命令を定義するクラスの作成方法です。
+
+* 最初の命令は : I want window
+
+* 次の命令は : Window title = <式>
+
+* ‘the’キーワードなどは無視されます。
+
+.. code-block:: ring
+
+
+	New App
+	{
+		I want window
+		The window title = "hello world"
+	}
+
+	Class App
+
+		# I want window 命令の属性
+			i want window
+			nIwantwindow = 0
+		# Window title 命令の属性
+		# ここでは window 属性を再定義しません。
+			title
+			nWindowTitle = 0
+		# 値を与えると、キーワードを無視します。
+			the=0
+
+		func geti
+				if nIwantwindow = 0
+					nIwantwindow++
+				ok
+
+		func getwant
+				if nIwantwindow = 1
+					nIwantwindow++
+				ok
+
+		func getwindow
+				if nIwantwindow = 2
+					nIwantwindow= 0
+					see "Instruction : I want window" + nl
+				ok
+				if nWindowTitle = 0
+					nWindowTitle++
+				ok
+
+		func settitle cValue
+				if nWindowTitle = 1
+					nWindowTitle=0
+					see "Instruction : Window Title = " + cValue + nl
+				ok
+
+		
+前述の用例を完了するには read() でファイルの内容を取得します。
+
+.. code-block:: ring
+
+	I want window
+	The window title = "hello world"
+
+そして eval() でファイルの内容を実行します！
+
+また、 GUI ライブラリでウィンドウを作成するには GetWindow() と SetTitle() メソッドを更新します。
+
+
+.. index:: 
+	pair: 言語設計; 宣言型言語の定義
+
+宣言型言語の定義
+================
+
+
+自然言語ステートメントによるコードの実行、および多重構造によるコードの実行方法について既に学んでいます。
+
+この用例は Web ライブラリからの引用です。 Bootstrap ライブラリで HTML ドキュメントを生成します。
+この用例では、 HTML コードを記述せずに、類似言語を作成しています (ただの用例です)。その後、宣言型言語を使用するために多重構造で HTML ドキュメントを生成しています。この用例での考えかたとして GetDiv() および GetH1() メソッドは { } でアクセスできるオブジェクトを返します。各オブジェクトへのアクセス後に BraceEnd() メソッドが実行されると、生成された HTML を BraceEnd() の出力表示がルートに到達するまで親オブジェクトへ送信します。
+
+.. code-block:: ring
+
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+
+	  BootStrapWebPage()
+	  {
+		div
+		{
+		  classname = :container
+		  div
+		  {
+			classname = :jumbotron
+			H1 {   text("Bootstrap Page")   }
+		  }
+		  div
+		  {
+			classname = :row
+			for x = 1 to 3
+			  div
+			  {
+			    classname = "col-sm-4"
+			    H3 { html("Welcome to the Ring programming language") }
+			    P  { html("Using a scripting language is very fun!") }
+			  }
+			next
+		  }
+		}
+	  }
+
+このようなクラスで宣言型インタフェースを強化します。
+
+.. code-block:: ring
+
+	Class Link from ObjsBase
+		title  link
+		Func braceend			
+			cOutput = nl+GetTabs() + "<a href='" + 
+				  Link + "'> "+ Title + " </a> " + nl			
+
+	Class Div from ObjsBase 
+		Func braceend
+			cOutput += nl+'<div'
+			addattributes()
+			AddStyle()
+			getobjsdata()
+			cOutput += nl+"</div>" + nl
+			cOutput = TabMLString(cOutput)
+
+.. index:: 
+	pair: 言語設計; 透過型実装
+
+透過型実装
+==========
+
+Ring は透過型実装です。 コンパイラの処理段階、および仮想計算機による実行中の処理内容を把握できます。
+
+例えば : ring helloworld.ring -tokens -rules -ic
+
+.. code-block:: ring
+
+	See "Hello, World!" 
+			
+実行結果
+
+.. code-block:: ring
+
+
+	==================================================================
+	Tokens - Generated by the Scanner
+	==================================================================
+
+	   Keyword : SEE
+	   Literal : Hello, World!
+	   EndLine
+
+	==================================================================
+
+	==================================================================
+	Grammar Rules Used by The Parser
+	==================================================================
+
+	Rule : Program --> {Statement}
+
+	Line 1
+	Rule : Factor --> Literal
+	Rule : Range --> Factor
+	Rule : Term --> Range
+	Rule : Arithmetic --> Term
+	Rule : BitShift --> Arithmetic
+	Rule : BitAnd --> BitShift
+	Rule : BitOrXOR -->  BitAnd
+	Rule : Compare --> BitOrXOR
+	Rule : EqualOrNot --> Compare
+	Rule : LogicNot -> EqualOrNot
+	Rule : Expr --> LogicNot
+	Rule : Statement  --> 'See' Expr
+
+	==================================================================
+
+
+
+	==================================================================
+	Byte Code - Before Execution by the VM
+	==================================================================
+
+		 PC      OPCode        Data
+
+		  1     FuncExE
+		  2       PushC   Hello, World!
+		  3       Print
+		  4  ReturnNull
+
+	==================================================================
+
+	Hello, World!
+				
+.. index:: 
+	pair: 言語設計; ビジュアル実装
+
+ビジュアル実装
+==============
+
+Ring は、ビジュアル・プログラミングツール Programming Without Coding Technology (PWCT) で設計しました。
+Ring のビジュアルソースは、 “language/visualsrc” フォルダの \*.ssf ファイルです。
+生成後の C 言語ソースコードは language/src フォルダ、
+および language/include フォルダにあります。
+
+このスクリーンショットは、 ring_vm.ssf ファイルからの引用です (ring_vm.c および ring_vm.h が生成されます)。
+
+.. image:: visualsrc1.jpg
+
+このスクリーンショットは、 ring_list.ssf ファイルからの引用です (ring_list.c および ring_list.h が生成されます)。
+
+.. image:: visualsrc2.jpg
+
+.. index:: 
+	pair: 言語設計; スマートガベージコレクター
+
+スマートガベージコレクター
+==========================
+
+わずらわしいメモリ操作関連の問題から解放します。
+
+* メモリへの不正アクセス
+* メモリリーク
+* 未初期化メモリへのアクセス
+* ダングリングポインタ
+
+規則:
+
+* グローバル変数は代入ステートメントで削除するまでメモリに存在し続けます。
+* ローカル変数は関数の処理終了後に削除されます。
+* プログラマは代入ステートメントでメモリから変数を削除する機会を完全に制御できます。
+
+用例:
+
+.. code-block:: ring
+
+	aList = [1,2,3,4,5]
+	aList = "nice"
+			
+二行目の直後、リスト [1,2,3,4,5] はメモリから削除され、文字列 “nice” が残ります。
+
+* プログラマは callgc() 関数を呼び出すことで、ガベージコレクターを強制実行できます。
+* 変数参照時 (関数へオブジェクト、およびリストを渡すとき)、参照カウントに基づいて変数を削除します。未参照では全て削除されますが、参照しているときはデータはメモリに残ります。
+
+
+.. index:: 
+	pair: 言語設計; インタプリタ (VM) 全体の停止なし (GIL なし)
+
+インタプリタ (VM) 全体の停止なし (GIL なし)
+===========================================
+
+アプリケーションでスレッドを使うとき、インタプリタ (VM) 全体の停止 (global interpreter (VM) lock) は起こりません (GIL なし)。
+
+よって、スレッドは並列動作可能であり、Ring 命令は同時実行されます。
+
+これはスレッドと平行性において最良のものです (さらなる高速化が実現できます！)
+
+
+.. index:: 
+	pair: 言語設計; ほとんどのアプリケーションで十分に高速動作します
+
+ほとんどのアプリケーションで十分に高速動作します
+================================================
+
+プログラミング言語 Ring は単純明快、小規模、柔軟性のある最先端の設計です。また、ほとんどのアプリケーションで十分に高速動作します。 
+
+これまで、市販の電子計算機で Ring を使用してきました。下記の処理は約 1 秒で完了します。
+
+(1) 100,000 行コードのコンパイル
+(2) 1 ～ 10,000,000 まで数え上げる空ループの実行
+(3) 100,000 項目から成るリストで最後の項目を見つけようとして、線形検索で 1000 回の検索処理を実行 (最悪値)
+(4) 1,000,000 項目から成るリストを作成後にリスト全項目の合計を計算
+(5) GUI アプリケーションで ListWidget へ 20,000 アイテムを追加
+(6) GUI アプリケーションで TreeWidget へ 5,000 ノードを追加
+(7) ターミナルのコンソールアプリケーションで 10,000 メッセージを表示 
+
+さらなる高速化を求めるならば C/C++ 拡張機能を使えます！
+
+用例:
+
+.. code-block:: ring
+
+	? "Create list contains 100,000 items"
+	aList = 1:100000
+
+	? "Do 1000 search operation - Find the last item (Worst Case!)"
+	c = clock() 
+
+	for t = 1 to 1000
+		find(alist,100000)
+	next
+
+	? "Time: " + ( clock() - c ) / clockspersecond() + " seconds"
+
+実行結果:
+
+.. code-block:: none
+
+	Create list contains 100,000 items
+	Do 1000 search operation - Find the last item (Worst Case!)
+	Time: 0.87 seconds
+
+用例:
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	func main
+
+	new qApp {
+		win = new qWidget() { 
+			move(100,100) resize(500,500)
+			setWindowTitle("Many Tree Items - Testing Performance")
+			tree = new qTreeWidget(win) { 
+				blocksignals(True) setUpdatesEnabled(False)
+				root = new qTreeWidgetItem()
+				root.setText(0,"The Root Node")
+				t1 = clock()
+				for t = 1 to 5000
+					oItem = new qTreeWidgetItem()
+					oItem.settext(0,"Item " + t)
+					root.addchild(oItem)
+				next
+				cTime = (clock()-t1)/clockspersecond()
+				setHeaderLabel("Creating 5000 nodes in " + cTime + " seconds.")
+				addTopLevelItem(root)
+				expanditem(root)
+				blocksignals(False) setUpdatesEnabled(True)
+			}
+			oLayout = new qVBoxLayout() {
+				addWidget(tree)
+			}
+			setLayout(oLayout)
+			show() 
+		}
+		exec()
+	}
+	
+
+実行結果:
+
+.. image:: manytreeitems.png
+	:alt: 大量のツリー項目

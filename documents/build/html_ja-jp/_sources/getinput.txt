@@ -1,0 +1,103 @@
+.. index:: 
+	single: 標準入力の取得; はじめに
+
+==============
+標準入力の取得
+==============
+
+標準入力 (キーボード) の用法です。
+
+* Give 命令
+* GetChar() 関数
+* Input() 関数
+
+.. index:: 
+	pair: 標準入力の取得; Give 命令
+
+Give 命令
+=========
+
+Give 命令はユーザからの標準入力を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Give 変数名
+
+用例:
+
+.. code-block:: ring
+
+	See "Enter the first number : " Give nNum1
+	See "Enter the second number : " Give nNum2
+	See "Sum : " + ( 0 + nNum1 + nNum2 )
+ 
+実行結果:
+
+.. code-block:: ring
+
+	Enter the first number : 3
+	Enter the second number : 4
+	Sum : 7
+
+.. index:: 
+	pair: 標準入力の取得; GetChar() 関数
+
+GetChar() 関数
+==============
+
+GetChar() 関数は標準入力から一文字取得します。
+
+文法:
+
+.. code-block:: ring
+
+	GetChar() ---> 文字
+
+用例:
+
+.. code-block:: ring
+
+	While True
+		See "
+			Main Menu
+			(1) Say Hello
+			(2) Exit
+		    " 
+		Option = GetChar()
+		GetChar() GetChar()  # 改行
+
+		# 前述の二行は改行へ置換できます。
+		# Option を与えます。
+
+		if Option = 1
+			see "Enter your name : " give cName 
+			see "Hello " + cName
+		else
+			bye
+		ok
+	End
+
+.. index:: 
+	pair: 標準入力の取得; Input() 関数
+
+Input() 関数
+============
+
+Input() 関数はキーボードから標準入力を取得します。
+
+文法:
+
+.. code-block:: ring
+
+	Input(nCount) ---> 文字列
+
+この関数は nCount 文字 (最低でも) を読み取るまで待機します。
+
+用例:
+
+.. code-block:: ring
+
+	See "Enter message (30 characters) : " cMsg = input(30)
+	See "Message : " + cMsg

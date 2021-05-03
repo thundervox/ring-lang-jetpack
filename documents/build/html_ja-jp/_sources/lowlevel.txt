@@ -1,0 +1,1616 @@
+.. index:: 
+	single: 低水準関数; はじめに
+
+==========
+低水準関数
+==========
+
+低水準関数の用法です。
+
+.. code-block:: none
+
+	* callgarbagecollector()| callgc()
+	* variablepointer()	| varptr()
+	* space()
+	* nullpointer()		| nullptr()
+	* object2pointer()	| obj2ptr()
+	* pointer2object()	| ptr2obj()
+	* ispointer()		| isptr()
+	* pointercompare()	| ptrcmp()
+	* setpointer()		| setptr()
+	* getpointer()		| getptr()
+	* pointer2string()	| ptr2str()
+	* memorycopy()		| memcpy()
+	* ringvm_cfunctionslist() 
+	* ringvm_functionslist() 
+	* ringvm_classeslist() 
+	* ringvm_packageslist() 
+	* ringvm_memorylist() 
+	* ringvm_calllist() 
+	* ringvm_fileslist()
+	* ringvm_settrace()
+	* ringvm_tracedata()
+	* ringvm_traceevent()
+	* ringvm_tracefunc()
+	* ringvm_scopescount()
+	* ringvm_evalinscope() 
+	* ringvm_passerror()
+	* ringvm_hideerrorMsg()
+	* ringvm_callfunc()
+	* ringvm_see()
+	* ringvm_give()
+	* ringvm_info()
+
+.. index:: 
+	pair: 低水準関数; callgc()
+
+callgc() 関数
+=============
+
+文法:
+
+.. code-block:: ring
+
+	callgc()			# 略式名
+	callgarbagecollector()		# 正式名
+
+
+この関数は、関数実行中に代入操作では解放されない一時作業用変数を用いるループで強制的にガベージコレクター呼び出すために使用します。
+
+この関数が必要になることは非常に稀なことですが、ゲームエンジンでイベントループなどを作成して、
+関数を呼び出して即席でリストの作成を開始するときに便利です。
+
+用例
+
+.. code-block:: ring
+
+	While True
+
+		# イベントの処理
+		# 一時作業領域による関数の呼び出し。 myfunc(["temp list"]) などのリストです。
+
+		# ガベージコレクターの呼び出し
+		callgc()
+	End
+
+.. tip:: Ring のガベージコレクターは関数の実行終了後または、
+	 代入ステートメントを使用したときに自動的に動作します。
+
+.. index:: 
+	pair: 低水準関数; varptr()
+
+varptr() 関数
+=============
+
+varptr() 関数は C / C++ 関数へポインタを渡します。
+
+文法:
+
+.. code-block:: ring
+
+	varptr(cVariableName, cPointerType) ---> 低水準オブジェクト (C ポインタ)
+	variablepointer(cVariableName,cPointerType) ---> 低水準オブジェクト (C ポインタ)
+
+用例:
+
+.. code-block:: ring
+
+	r = 10
+	z = 20
+	see r + nl
+	see varptr("r","int") 
+	see varptr("z","int")
+
+実行結果:
+
+.. code-block:: ring
+
+	10
+	00E3C740
+	int
+	2
+	00E3BEC0
+	int
+	2
+
+.. note:: 低水準オブジェクトのリストには三つの項目 (ポインタ、型、ステータス) を有しています。
+
+
+.. index:: 
+	pair: 低水準関数; space()
+
+space() 関数
+============
+
+space() 関数は指定されたバイト数のメモリ領域を確保します。
+
+文法:
+
+.. code-block:: ring
+
+	Space(nBytesCount) ---> 文字列
+
+用例:
+
+.. code-block:: ring
+
+	mystring = space(200)
+	See "String Size : " + len(mystring) + nl
+	See "String : " + mystring + nl
+	See "String Pointer : " 
+	See varptr("mystring",:char)
+
+実行結果:
+
+.. code-block:: ring
+
+	String Size : 200
+	String :                                                                                                            	String Pointer : 00FF8FE8
+	char
+	2
+
+.. note:: C 関数へバッファを渡すは space() と VarPtr() 関数が必要です。
+
+.. tip::  space() 関数で確保したメモリを解放するには、代入演算子を使います。
+
+.. code-block:: ring
+
+	mystring = space(1000)	# メモリの確保 (1000 バイト)
+	mystring = NULL 	# mystring で確保されたメモリの解放
+
+.. note:: ローカル変数は関数の実行終了後に自動解放されますのでメモリの手動解放は不要です。
+
+.. index:: 
+	pair: 低水準関数; nullpointer()
+
+nullpointer() 関数
+==================
+
+文法:
+
+.. code-block:: ring
+
+	nullptr()			# 略式名
+	nullpointer()		# 正式名
+
+仮引数でポインタを扱うことを想定しており、オプション扱いの仮引数に NULL ポインタを受け入れる場合は C 関数へ NULL ポインタを必ず渡してください。
+
+用例:
+
+この用例は LibSDL ライブラリから RingSDL にある SDL_BlitSurface() 関数を使用しています。
+この関数は第二仮引数、および最後の仮引数で SDL_Rect ポインタを受け入れます。
+また、関数は NULL ポインタを受け入れるために、 NULLPointer() 関数で NULL ポインタを渡せます。
+
+.. code-block:: ring
+
+	SDL_BlitSurface(text, nullpointer(), surface, nullpointer())
+
+.. note:: 前述のコードは単体では動作しません。最初に RingSDL の用法を学ぶ必要があります。
+
+.. tip:: NULLPointer() 関数の代わりに NULL を仮引数として渡せます。
+
+.. code-block:: ring
+
+	SDL_BlitSurface(text, NULL, surface, NULL)
+
+.. index:: 
+	pair: 低水準関数; object2pointer()
+
+object2pointer() 関数
+=====================
+
+この関数は Ring リスト用の C ポインタとオブジェクトを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	obj2ptr(List|Object) --> 低水準オブジェクト (C ポインタ)		# 略式名
+	object2pointer(List|Object) --> 低水準オブジェクト (C ポインタ)	# 正式名
+
+.. note:: メモリ上に存在する合法なポインタか必ず確認してください (解放したメモリのポインタは指さないでください)
+
+
+.. index:: 
+	pair: 低水準関数; pointer2object()
+
+pointer2object() 関数
+=====================
+
+この関数は低水準オブジェクト (C ポインタ) から Ring のリスト、および / またはオブジェクトを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	ptr2obj(Low Level Object) ---> リスト|オブジェクト			# 略式名
+	pointer2object(Low Level Object) ---> リスト|オブジェクト	# 正式名
+
+.. note:: メモリ上に存在する合法なポインタか必ず確認してください (解放したメモリのポインタは指さないでください)
+
+用例:
+
+.. code-block:: ring
+
+	# リストの作成
+	mylist = 1:5
+
+	# リストのポインタを作成
+	x = object2pointer(mylist)
+	see x
+
+	see nl
+
+	# リストへ項目を追加
+	mylist + "welcome"
+
+	# リストの項目を表示
+	y = pointer2object(x)
+	see y 
+
+実行結果:
+
+.. code-block:: ring
+
+	0069A5D8
+	OBJECTPOINTER
+	0
+
+	1
+	2
+	3
+	4
+	5
+	welcome
+
+.. note:: Ring の代入演算子は値によりリストとオブジェクトをコピーします。
+	参照によりコピーするには object2pointer() および pointer2object() 関数を使用します。
+
+.. tip:: object2pointer() および pointer2object() は stdlib で使用されています。
+	Tree クラスの実装では子ノード (別オブジェクト) は親ノード (オブジェクト) を参照して作成します。
+
+Object2Pointer() および Pointer2Object() 関数は低水準関数であるため、
+
+メモリの問題を防止するため使用時は十分な注意を払ってください。
+
+ローカル変数のポインタを作成した場合、
+
+このローカル変数はメソッドや関数の実行終了後にメモリから自動解放されます。
+
+つまり、 Object2Pointer() 関数でポインタを作成してしまうとダングリングポインタとなってしまいます。
+
+すなわち、ポインタが解放したメモリのメモリ番地を指してしまいます。
+
+このような誤った使いかたは不正なポインタの原因となりクラッシュやメモリ破壊が起きてしまいます。
+
+ポインタを使うときは (Using Object2Pointer() または Pointer2Object 関数の使用)、絶対に解放したメモリをポインタで指さないでください。
+
+簡潔に言うなら、メモリはそのままにしてください (まだ必要とされるものは絶対に削除しない)。
+
+すなわち、ローカル変数を使用してから削除するのではなく、クラス属性やグローバル変数をお使いください。
+
+.. index:: 
+	pair: 低水準関数; ispointer()
+
+ispointer() 関数
+================
+
+仮引数がポインタ (C オブジェクト) か検査します。
+
+文法:
+
+.. code-block:: none
+
+	IsPtr(vPara) ---> True|False		# 略式名
+	IsPointer(vPara) ---> True|False	# 正式名
+
+用例:
+
+.. code-block:: ring
+
+	fp = fopen(filename(),"r")
+
+	? type(fp)
+
+	? ispointer(fp)
+
+実行結果:
+
+.. code-block:: none
+
+	file
+	1
+
+.. index:: 
+	pair: 低水準関数; ptrcmp()
+
+ptrcmp() 関数
+=============
+
+ptrcmp() 関数はポインタ (C オブジェクト) 同士を比較します。
+
+文法:
+
+.. code-block:: ring
+
+	ptrcmp(oObject1,oObject2) ---> oObject1 と oObject2 が等しいならば値は 1
+				       oObject1 と oObject2 が等しくないならば値は 0
+	pointercompare(oObject1,oObject2) ---> oObject1 と oObject2 が等しいならば値は 1
+					       oObject1 と oObject2 が等しくないならば値は 0
+
+用例:
+
+.. code-block:: ring
+
+	fp = fopen("ptrcmp.ring","r")
+	fp2 = fp
+	fp3 = fopen("ptrcmp.ring","r")
+
+	see ptrcmp(fp,fp2) + nl
+	see ptrcmp(fp,fp3) + nl
+
+	fclose(fp)
+	fclose(fp3)
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	0
+
+.. index:: 
+	pair: 低水準関数; setpointer()
+
+setpointer() 関数
+=================
+
+ポインタのアドレスを別のポインタのアドレスへ設定します。
+
+文法:
+
+.. code-block:: ring
+
+	setptr(pointer,nNewAddress)			# 略式名
+	setpointer(pointer,nNewAddress)		# 正式名
+
+.. note:: setPointer() と getPointer() 関数を使うことでメモリのアドレスを変更できます。
+
+
+.. index:: 
+	pair: 低水準関数; getpointer()
+
+getpointer() 関数
+=================
+
+ポインタのアドレスを取得します。
+
+文法:
+
+.. code-block:: ring
+
+	getptr(pointer) ---> nAddress		# 略式名
+	getpointer(pointer) ---> nAddress	# 正式名
+
+用例:
+
+.. code-block:: ring
+
+	? "Sample about using setPointer() and getPointer() functions"
+	? copy("=",50)
+	pointer = NULLPOINTER()
+	? pointer
+	? "Type: " + type(pointer)
+	? "Address: " + Upper(hex(getpointer(pointer)))
+	? copy("=",50)
+	name = "ring"
+	pointer = varptr(:name,:char)
+	? pointer
+	? "Type: " + type(pointer)
+	? "Address: " + Upper(hex(getpointer(pointer)))
+	? copy("=",50)
+	setpointer(pointer, getpointer(pointer) + 1 )
+	? "After Update"
+	? "Address: " + Upper(hex(getpointer(pointer)))
+	? copy("=",50) 
+
+
+実行結果:
+
+.. code-block:: ring
+
+	==================================================
+	00000000
+	NULLPOINTER
+	0
+
+	Type: NULLPOINTER
+	Address: 0
+	==================================================
+	026E2BA8
+	char
+	0
+
+	Type: char
+	Address: 26E2BA8
+	==================================================
+	After Update
+	Address: 26E2BA9
+	==================================================
+
+
+.. index:: 
+	pair: 低水準関数; pointer2string()
+
+pointer2string() 関数
+=====================
+
+ポインタからバイナリデータの文字列へ変換します。
+
+文字列からポインタへ再変換したいときは VarPtr() 関数をお使いください。
+
+文法:
+
+.. code-block:: ring
+
+	ptr2str(pointer,nStart,nCount) ---> cString			# 略式名
+	pointer2string(pointer,nStart,nCount) ---> cString	# 正式名
+
+
+.. note:: pointer2String() はデータとして別領域にコピーを返します。
+
+.. note:: nStart が 0 ならば、一文字目が始点となります。
+
+用例:
+
+.. code-block:: ring
+
+	name = "ring"
+	pointer = varptr(:name,:char)
+	? pointer
+	? "Type: " + type(pointer)
+	? "Address: " + Upper(hex(getpointer(pointer)))
+
+	? "Get 4 bytes starting from the pointer address"
+	mystring = Pointer2String(pointer,0,4)
+	? mystring
+
+	? "Get 2 bytes starting from the pointer address + 1"
+	mystring2 = Pointer2String(pointer,1,2)
+	? mystring2
+
+実行結果:
+
+.. code-block:: ring
+
+	01E03380
+	char
+	0
+
+	Type: char
+	Address: 1E03380
+	Get 4 bytes starting from the pointer address
+	ring
+	Get 2 bytes starting from the pointer address + 1
+	in
+
+.. index:: 
+	pair: 低水準関数; memcpy()
+
+memcpy() 関数
+=============
+
+文法:
+
+.. code-block:: ring
+
+	memcpy(pDestinationPointer,cSourceString,nSize)		# 略式名
+	memorycopy(pDestinationPointer,cSourceString,nSize)	# 正式名
+
+用例:
+
+.. code-block:: ring
+
+	str = space(9)
+	pointer = varptr(:str,"char")
+	memcpy(pointer,"one",3)
+	? str
+	setPointer(pointer,getPointer(pointer)+3)
+	memcpy(pointer,"one",3)
+	? str
+	setPointer(pointer,getPointer(pointer)+3)
+	memcpy(pointer,"one",3)
+	? str
+
+実行結果:
+
+.. code-block:: ring
+
+	one
+	oneone
+	oneoneone
+
+.. index:: 
+	pair: 低水準関数; RingVM_CFunctionsList()
+
+ringvm_cfunctionslist() 関数
+============================
+
+C で記述された関数のリストを返す Ring 低水準関数です。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_CFunctionsList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	See RingVM_CFunctionsList()
+
+.. index:: 
+	pair: 低水準関数; RingVM_FunctionsList()
+
+ringvm_functionslist() 関数
+===========================
+
+Ring で記述された関数のリストを返す関数です。
+
+各リストメンバは次の項目のリストを有しています。
+
+* 関数名
+* プログラムカウンタ (PC) - バイトコードによる関数の位置
+* ソースコードファイル名
+* プライベートフラグ (クラスにあるプライベートメソッドならば)
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_FunctionsList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	test()
+
+	func test
+		see ringvm_functionslist()
+
+実行結果:
+
+.. code-block:: ring
+
+	test
+	8
+	B:/ring/tests/scripts/functionslist.ring
+	0
+
+.. index:: 
+	pair: 低水準関数; RingVM_ClassesList()
+
+ringvm_classeslist() 関数
+=========================
+
+クラスのリストを返す関数です。
+
+各リストメンバは次の項目のリストを有しています。
+
+* クラス名
+* プログラムカウンタ (PC) - バイトコードによるクラスの位置
+* 親クラス名
+* メソッドのリスト
+* フラグ (親クラス情報の収集)
+* パッケージへのポインタ (または未使用のパッケージならば NULL)
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_ClassesList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	see ringvm_classeslist()
+
+	class class1
+		func f1
+	class class2 from class1
+	class class3 from class1
+
+実行結果:
+
+.. code-block:: ring
+
+	class1
+	9
+
+	f1
+	13
+	B:/ring/tests/scripts/classeslist.ring
+	0
+	0
+	00000000
+	class2
+	16
+	class1
+	0
+	00000000
+	class3
+	20
+	class1
+	0
+	00000000
+
+.. index:: 
+	pair: 低水準関数; RingVM_PackagesList()
+
+ringvm_packageslist() 関数
+==========================
+
+パッケージのリストを返す関数です。
+
+各リストメンバは次の項目のリストを有しています。
+
+* パッケージ名
+* クラスのリスト
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_PackagesList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	see ringvm_packageslist()
+
+	package package1
+		class class1
+
+	package package2
+		class class1
+
+	package package3
+		class class1
+
+実行結果:
+
+.. code-block:: ring
+
+	package1
+	class1
+	11
+
+	0
+	00FEF838
+	package2
+	class1
+	17
+
+	0
+	00FEF978
+	package3
+	class1
+	23
+
+	0
+	00FEFF68
+
+.. index:: 
+	pair: 低水準関数; RingVM_MemoryList()
+
+ringvm_memorylist() 関数
+========================
+
+メモリのスコープと変数のリストを返す関数です。
+
+各リストメンバには、次の異なるスコープにある変数のリストを有しています。
+
+スコープリストにある各項目のリストには次の項目があります。
+
+* 変数の名前
+* 変数の型
+* 変数の値
+* 値がリストの場合はポインタの型 (リスト/項目)
+* プライベートフラグ (変数がクラスの属性ならば)
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_MemoryList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	x = 10
+	test()
+	func test
+		y = 20
+		see ringvm_memorylist()
+
+実行結果:
+
+.. code-block:: ring
+
+	true
+	2
+	1
+	0
+	0
+	false
+	2
+	0
+	0
+	0
+	nl
+	1
+
+
+	0
+	0
+	null
+	1
+
+	0
+	0
+	ring_gettemp_var
+	4
+	00000000
+	0
+	0
+	ccatcherror
+	1
+	NULL
+	0
+	0
+	ring_settemp_var
+	4
+	00000000
+	0
+	0
+	ring_tempflag_var
+	2
+	0
+	0
+	0
+	stdin
+	3
+	50512DB8
+	file
+	0
+	0
+	0
+	stdout
+	3
+	50512DD8
+	file
+	0
+	0
+	0
+	stderr
+	3
+	50512DF8
+	file
+	0
+	0
+	0
+	this
+	4
+	00000000
+	0
+	0
+	sysargv
+	3
+	B:/ring/bin/ring
+	B:/ring/tests/scripts/memorylist.ring
+	0
+	0
+	x
+	2
+	10
+	0
+	0
+	y
+	2
+	20
+	0
+	0
+
+.. index:: 
+	pair: 低水準関数; RingVM_CallList()
+
+ringvm_calllist() 関数
+======================
+
+関数呼び出しリストのリストを返す関数です。
+
+各リストメンバは次の項目のリストを有しています。
+
+* 関数の型
+* 関数の名前
+* プログラムカウンタ (PC)
+* スタックポインタ (SP)
+* 一時作業用。メモリのリスト
+* メソッドまたは関数のフラグ
+* 呼び出し元のプログラムカウンタ (PC)
+* FuncExec フラグ
+* ListStart フラグ
+* 多重リストのポインタ
+* ステートリスト
+
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_CallList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	hello()
+	func hello
+		test()
+
+	func test
+		mylist = ringvm_calllist()
+		for t in mylist see t[2] + nl next
+
+実行結果:
+
+.. code-block:: ring
+
+	function hello() in file B:/ring/tests/scripts/calllist.ring
+	called from line 1
+	function test() in file B:/ring/tests/scripts/calllist.ring
+	called from line 3
+	ringvm_calllist
+
+
+.. index:: 
+	pair: 低水準関数; RingVM_FilesList()
+
+ringvm_fileslist() 関数
+=======================
+
+Ring ファイルのリストを返す関数です。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_FilesList() ---> リスト
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+	see ringvm_fileslist()
+
+実行結果:
+
+.. code-block:: ring
+
+	C:/ring/tests/scripts/fileslist.ring
+	C:\ring\bin\stdlib.ring
+	eval
+	stdlib.ring
+	stdlib.rh
+	stdclasses.ring
+	stdfunctions.ring
+	stdbase.ring
+	stdstring.ring
+	stdlist.ring
+	stdstack.ring
+	stdqueue.ring
+	stdmath.ring
+	stddatetime.ring
+	stdfile.ring
+	stdsystem.ring
+	stddebug.ring
+	stddatatype.ring
+	stdconversion.ring
+	stdodbc.ring
+	stdmysql.ring
+	stdsecurity.ring
+	stdinternet.ring
+	stdhashtable.ring
+	stdtree.ring
+
+.. index:: 
+	pair: 低水準関数; ringvm_settrace()
+
+ringvm_settrace() 関数
+======================
+
+ringvm_settrace() はトレース関数名を決定する関数です。
+
+トレース関数は Ring
+関数でありイベントごとに呼び出されます。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_SetTrace(cCode)
+
+.. index:: 
+	pair: 低水準関数; ringvm_tracedata()
+
+ringvm_tracedata() 関数
+=======================
+
+関数内でイベントをトレースします。
+
+ringvm_tracedata() 関数はイベントデータを取得します。
+
+イベントデータのリストには次の項目があります。
+
+* ソースコードの行番号
+* ソースファイル名
+* 関数またはメソッド名
+* メソッドまたは関数 (Bool : True=メソッド、 False=関数またはファイル)
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_TraceData() ---> aDataList
+
+.. index:: 
+	pair: 低水準関数; ringvm_traceevent()
+
+ringvm_traceevent() 関数
+========================
+
+関数内でイベントをトレースします。
+
+ringvm_traceevent() 関数はイベントの種類を検出します。
+
+* 改行
+* 関数の前
+* 関数の後
+* ランタイムエラー
+* C 関数の前
+* C 関数の後
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_TraceEvent() ---> nTraceEvent
+
+.. index:: 
+	pair: 低水準関数; ringvm_tracefunc()
+
+ringvm_tracefunc() 関数
+=======================
+
+この関数はイベントのトレースで使用する関数名を返します。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_TraceEvent() ---> cCode
+
+.. index:: 
+	pair: 低水準関数; ringvm_scopescount()
+
+ringvm_scopescount() 関数
+=========================
+
+RingVM_ScopesCount() 関数は、
+アプリケーションで使用されているスコープの本数を検出します。
+
+プログラムの開始時において、スコープは存在します (グローバルスコープのみ)。
+
+関数の呼び出し時に、新しいスコープが作成されます。
+
+関数実行終了後は、関数のスコープは削除されます。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_ScopesCount() ---> nScopes
+
+.. index:: 
+	pair: 低水準関数; ringvm_evalinscope()
+
+ringvm_evalinscope() 関数
+=========================
+
+ringvm_evalinscope() は eval() 関数と類似する関数です。
+
+eval() とは異なり、現在のスコープにあるコードを実行します。
+
+RingVM_EvalInScope() は指定されたスコープにあるコードを実行します。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_EvalInScope(nScope,cCode)
+
+.. index:: 
+	pair: 低水準関数; ringvm_passerror()
+
+ringvm_passerror() 関数
+=======================
+
+ランタイムエラーが発生した時はエラーメッセージを表示後に
+Ring はプログラムの実行を終了します。
+
+ringvm_passerror() 関数を使うと、
+前述の動作を回避してプログラムの実行を継続できます。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_PassError()
+
+.. index:: 
+	pair: 低水準関数; ringvm_hideerrorMsg()
+
+ringvm_hideerrormsg() 関数
+==========================
+
+RingVM_HideErrorMsg() 関数は、
+ランタイムエラーメッセージの表示を有効または無効化します。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_HideErrorMsg(lStatus)
+
+.. index:: 
+	pair: 低水準関数; ringvm_callfunc()
+
+ringvm_callfunc() 関数
+======================
+
+eval() 関数ではなく ringvm_callfunc() 関数を使うと、
+文字列から関数を呼び出します。
+
+文法:
+
+.. code-block:: ring
+
+	RingVM_CallFunc(cFuncName)
+
+
+.. index:: 
+	pair: 低水準関数; 用例 - トレース関数の用法
+	
+用例 - トレース関数の用法
+=============================
+
+この用例では、プログラムのイベントをトレースするためにトレース関数を使用しています！
+
+トレースライブラリは低水準関数よりも実用的です！
+
+.. code-block:: ring
+
+	load "tracelib.ring"
+
+	ringvm_settrace("mytrace()")
+
+	see "Hello, world!" + nl
+	see "Welcome" + nl
+	see "How are you?" +nl
+	mytest()
+	new myclass { mymethod() }
+
+	func mytest
+		see "Message from mytest" + nl
+
+	func mytrace
+		see "====== The Trace function is Active ======" + nl +
+			"Trace Function Name : " + ringvm_TraceFunc() + nl +
+			"Trace Event : " 
+		switch ringvm_TraceEvent()
+			on TRACEEVENT_NEWLINE 		see "New Line" 
+			on TRACEEVENT_NEWFUNC		see "New Function"
+			on TRACEEVENT_RETURN		see "Return"
+			on TRACEEVENT_ERROR		see "Error"
+			on TRACEEVENT_BEFORECFUNC	see "Before C Function"
+			on TRACEEVENT_AFTERCFUNC	see "After C Function"
+		off
+		see nl +
+			"Line Number : " + ringvm_tracedata()[TRACEDATA_LINENUMBER] + nl +
+			"File Name   : " + ringvm_tracedata()[TRACEDATA_FILENAME] + nl +
+			"Function Name : " + ringvm_tracedata()[TRACEDATA_FUNCNAME] + nl +
+			"Method or Function : " 
+			if ringvm_tracedata()[TRACEDATA_METHODORFUNC] =
+					 TRACEDATA_METHODORFUNC_METHOD
+				see "Method"
+			else
+				if ringvm_tracedata()[TRACEDATA_FUNCNAME] = NULL
+					see "Command"
+				else
+					see "Function"
+				ok
+			ok		
+			see nl + Copy("=",42) + nl
+
+	class myclass
+		func mymethod
+			see "Message from mymethod" + nl
+
+実行結果:
+
+.. code-block:: none
+
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 3
+	File Name   : test1.ring
+	Function Name : ringvm_settrace
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 5
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	Hello, world!
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 6
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	Welcome
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 7
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	How are you?
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 8
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Function
+	Line Number : 8
+	File Name   : test1.ring
+	Function Name : mytest
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 12
+	File Name   : test1.ring
+	Function Name : mytest
+	Method or Function : Function
+	==========================================
+	Message from mytest
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 14
+	File Name   : test1.ring
+	Function Name : mytest
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Return
+	Line Number : 8
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 43
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Before C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : mymethod
+	Method or Function : Method
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 44
+	File Name   : test1.ring
+	Function Name : mymethod
+	Method or Function : Method
+	==========================================
+	Message from mymethod
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Return
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Before C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : Before C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : After C Function
+	Line Number : 9
+	File Name   : test1.ring
+	Function Name : ismethod
+	Method or Function : Function
+	==========================================
+	====== The Trace function is Active ======
+	Trace Function Name : mytrace()
+	Trace Event : New Line
+	Line Number : 11
+	File Name   : test1.ring
+	Function Name :
+	Method or Function : Command
+	==========================================
+
+
+.. index:: 
+	pair: 低水準関数; 用例 - トレースライブラリ
+	
+用例 - トレースライブラリ
+===========================
+
+この用例では、トレースライブラリ作成用のトレース関数を使用します。
+
+トレースライブラリにより、
+すばらしいトレースツールとインタラクティブデバッガを利用できます。
+
+.. code-block:: ring
+
+	# イベントのトレース
+	TRACEEVENT_NEWLINE 	= 1
+	TRACEEVENT_NEWFUNC 	= 2
+	TRACEEVENT_RETURN 	= 3
+	TRACEEVENT_ERROR 	= 4
+	TRACEEVENT_BEFORECFUNC 	= 5
+	TRACEEVENT_AFTERCFUNC 	= 6
+
+	# データのトレース
+	TRACEDATA_LINENUMBER  	= 1
+	TRACEDATA_FILENAME 	= 2
+	TRACEDATA_FUNCNAME 	= 3
+	TRACEDATA_METHODORFUNC 	= 4
+
+	# 関数のメソッド
+	TRACEDATA_METHODORFUNC_METHOD 		= TRUE
+	TRACEDATA_METHODORFUNC_NOTMETHOD	= FALSE
+
+	TRACE_BREAKPOINTS = TRUE
+
+	TRACE_TEMPLIST = []
+
+	func Trace cType
+		switch trim(lower(cType))
+		on :AllEvents
+			ringvm_settrace("TraceLib_AllEvents()")
+		on :Functions 
+			ringvm_settrace("TraceLib_Functions()")
+		on :PassError
+			ringvm_settrace("TraceLib_PassError()")
+		on :Debugger 
+			ringvm_settrace("TraceLib_Debugger()")
+		on :LineByLine
+			ringvm_settrace("TraceLib_LineByLine()")
+		off
+
+	func TraceLib_AllEvents
+		if right(ringvm_tracedata()[TRACEDATA_FILENAME],13) = "tracelib.ring"
+			return 
+		ok
+		see "====== The Trace function is Active ======" + nl +
+			"Trace Function Name : " + ringvm_TraceFunc() + nl +
+			"Trace Event : " 
+		switch ringvm_TraceEvent()
+			on TRACEEVENT_NEWLINE 		see "New Line" 
+			on TRACEEVENT_NEWFUNC		see "New Function"
+			on TRACEEVENT_RETURN		see "Return"
+			on TRACEEVENT_ERROR		see "Error"
+			on TRACEEVENT_BEFORECFUNC	see "Before C Function"
+			on TRACEEVENT_AFTERCFUNC	see "After C Function"
+		off
+		see nl +
+			"Line Number : " + ringvm_tracedata()[TRACEDATA_LINENUMBER] + nl +
+			"File Name   : " + ringvm_tracedata()[TRACEDATA_FILENAME] + nl +
+			"Function Name : " + ringvm_tracedata()[TRACEDATA_FUNCNAME] + nl +
+			"Method or Function : " 
+			if ringvm_tracedata()[TRACEDATA_METHODORFUNC] =
+					 TRACEDATA_METHODORFUNC_METHOD
+				see "Method"
+			else
+				if ringvm_tracedata()[TRACEDATA_FUNCNAME] = NULL
+					see "Command"
+				else
+					see "Function"
+				ok
+			ok		
+			see nl + Copy("=",42) + nl
+
+	func TraceLib_Functions
+		if right(ringvm_tracedata()[TRACEDATA_FILENAME],13) = "tracelib.ring"
+			return 
+		ok
+		switch ringvm_TraceEvent() 
+			on TRACEEVENT_NEWFUNC
+				see "Open Func : " + 
+				ringvm_TraceData()[TRACEDATA_FUNCNAME] + nl
+			on TRACEEVENT_RETURN
+				see "Return to Func : " + 
+				ringvm_TraceData()[TRACEDATA_FUNCNAME] + nl
+		off
+
+	func TraceLib_PassError
+		if right(ringvm_tracedata()[TRACEDATA_FILENAME],13) = "tracelib.ring"
+			return 
+		ok
+		switch ringvm_TraceEvent() 
+			on  TRACEEVENT_ERROR
+				see nl
+				see "TraceLib : After Error !" + nl
+				ringvm_passerror()
+		off
+
+	func TraceLib_Debugger
+		if right(ringvm_tracedata()[TRACEDATA_FILENAME],13) = "tracelib.ring"
+			return 
+		ok
+		switch ringvm_TraceEvent() 
+			on  TRACEEVENT_ERROR
+				_BreakPoint()
+		off
+
+	func TraceLib_LineByLine
+		if right(ringvm_tracedata()[TRACEDATA_FILENAME],13) = "tracelib.ring" or
+			ringvm_TraceEvent() != TRACEEVENT_NEWLINE
+			return 
+		ok
+		aList = ringvm_tracedata()
+		see "Before Line : " + aList[TRACEDATA_LINENUMBER] + nl 
+		_BreakPoint()
+
+	func BreakPoint
+		if not TRACE_BREAKPOINTS
+			return 
+		ok
+		_BreakPoint()
+
+	func _BreakPoint 
+		see nl+nl+Copy("=",60) + nl +
+		Copy(" ",20)+"Interactive Debugger" + nl +
+		Copy("=",60) + nl +
+		"Command (Exit)        : End Program" + nl +
+		"Command (Cont)        : Continue Execution" + nl +
+		"Command (Locals)      : Print local variables names" + nl +
+		"Command (LocalsData)  : Print local variables data" + nl +
+		"Command (Globals)     : Print global variables names" + nl +
+		"We can execute Ring code" + nl +
+		Copy("=",60) + nl 
+		while true
+				see nl + "code:> "
+				give cCode
+			cmd = trim(lower(cCode))
+			if cmd = "exit" or cmd = "bye"
+				shutdown()
+			ok 
+			nScope = ringvm_scopescount()-2
+			switch cmd
+				on "locals"			
+					ringvm_EvalInScope(nScope,"see locals() callgc()")
+					loop
+				on "localsdata"
+					PrintLocalsData(nScope)
+					loop
+				on "globals"			
+					ringvm_EvalInScope(nScope,"see globals() callgc()")
+					loop
+				on "cont"
+					ringvm_passerror()
+					exit
+			off
+			Try
+				ringvm_EvalInScope(nScope,cCode)
+				catch
+						see cCatchError
+				done
+		end
+
+	func NoBreakPoints
+		TRACE_BREAKPOINTS = FALSE
+
+
+	func PrintLocalsData nScope
+		if nScope = 1	# グローバル
+			ringvm_Evalinscope(nScope,'TRACE_TEMPLIST = globals()')
+		else
+			ringvm_Evalinscope(nScope,'TRACE_TEMPLIST = locals() callgc()')
+		ok
+		see nl 
+		aTempList = TRACE_TEMPLIST
+		TRACE_TEMPLIST = []
+		nSpaces = 5
+		for TRACE_ITEM in aTempList
+			if len(TRACE_ITEM) + 5 > nSpaces
+				nSpaces = len(TRACE_ITEM) + 5
+			ok
+		next
+		for TRACE_ITEM in aTempList
+			see "Variable : " +  TRACE_ITEM
+			cVarName = TRACE_ITEM
+			see copy(" ",nSpaces-len(cVarName)) + " Type : " 
+			ringvm_Evalinscope(nScope,"see type(" +  TRACE_ITEM +")")
+			ringvm_Evalinscope(nScope,"see Copy(' ',fabs(15-len(type(" +
+						  TRACE_ITEM +"))))")
+			see " Value : " 
+			ringvm_Evalinscope(nScope,"see " +  TRACE_ITEM)
+			see nl
+		next
+
+
+.. index:: 
+	pair: 低水準関数; ringvm_see()
+
+ringvm_see() 関数
+=================
+
+ringvm_see() 関数は See 命令の挙動を変更します。
+
+また ring_see() 関数は元の挙動を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	see "Hello world" + nl
+	see 123 + nl
+	see ["one","two","three"]
+	see new point {x=10 y=20 z=30} 
+
+	func ringvm_see t
+		ring_see("We want to print: ")
+		ring_See(t)
+
+	class point x y z
+
+実行結果:
+
+.. code-block:: none
+
+	We want to print: Hello world
+	We want to print: 123
+	We want to print: one
+	two
+	three
+	We want to print: x: 10.000000
+	y: 20.000000
+	z: 30.000000
+
+.. index:: 
+	pair: 低水準関数; ringvm_give()
+
+ringvm_give() 関数
+==================
+
+ringvm_give() 関数は Give 命令の挙動を変更します。
+
+また ring_give() 関数は元の挙動を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	see "Name: " give name
+	see "Hello " + name
+
+	func ringvm_give
+		see "Mahmoud" + nl
+		return "Mahmoud"
+
+実行結果:
+
+.. code-block:: ring
+
+	Name: Mahmoud
+	Hello Mahmoud
+
+.. index:: 
+	pair: 低水準関数; ringvm_info()
+
+ringvm_info() 関数
+==================
+
+ringvm_info () は Ring VM 構造体に関する情報をリストとして返す内部関数です。
+
+この関数は Ring チームが VM の状態を調査するための高度な検証に限り使用されています。
+
+文法:
+
+.. code-block:: ring
+
+	ringvm_info() ---> VM 構造体に関する情報のリスト
+

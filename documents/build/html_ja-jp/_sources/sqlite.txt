@@ -1,0 +1,139 @@
+.. index:: 
+	single: SQLite; はじめに
+
+===========
+SQLite 関数
+===========
+
+SQL データベースの用法です。
+
+使用前に sqlitelib.ring ライブラリを読み込みます。
+
+.. code-block:: ring
+
+	load "sqlitelib.ring"
+	# SQLite 関数の使用
+
+.. index:: 
+	pair: SQLite; sqlite_init()
+
+sqlite_init() 関数
+==================
+
+文法:
+
+.. code-block:: ring
+
+	sqlite_init() ---> SQLite オブジェクト
+
+.. index:: 
+	pair: SQLite; sqlite_open()
+
+sqlite_open() 関数
+==================
+
+文法:
+
+.. code-block:: ring
+
+	sqlite_open(SQLite オブジェクト,cFileName)
+
+.. index:: 
+	pair: SQLite; sqlite_execute()
+
+sqlite_execute() 関数
+=====================
+
+文法:
+
+.. code-block:: ring
+
+	sqlite_execute(SQLite オブジェクト,cSQLStatement)
+
+.. index:: 
+	pair: SQLite; sqlite_close()
+
+sqlite_close() 関数
+===================
+
+文法:
+
+.. code-block:: ring
+
+	sqlite_close(SQLite オブジェクト)
+
+用例
+====
+
+このコードは SQL データベースの作成を行い、新しいデータを追加した後にデータを表示します。
+
+.. code-block:: ring
+
+	load "sqlitelib.ring"
+
+	oSQLite = sqlite_init()
+
+	sqlite_open(oSQLite,"mytest.db") 
+
+	sql = "
+		 CREATE TABLE COMPANY (
+        	 ID INT PRIMARY KEY     NOT NULL,
+	         NAME           TEXT    NOT NULL,
+        	 AGE            INT     NOT NULL,
+	         ADDRESS        CHAR(50),
+	         SALARY         REAL );
+	"
+	sqlite_execute(oSQLite,sql) 
+
+	sql = "
+		INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) 
+		VALUES  (1, 'Mahmoud' , 29, 'Jeddah', 20000.00 ),
+			(2, 'Ahmed'   , 27, 'Jeddah', 15000.00 ),
+			(3, 'Mohammed', 31, 'Egypt' , 20000.00 ),
+			(4, 'Ibrahim' , 24, 'Egypt ', 65000.00 );
+	"
+
+	sqlite_execute(oSQLite,sql)
+
+	aResult =  sqlite_execute(oSQLite,"select * from COMPANY") 
+	for x in aResult
+		for t in x
+			? t[2] + nl
+		next
+	next
+	? copy("*",50) 
+	for x in aResult
+		? x[:name] 
+	next
+	sqlite_close(oSQLite) 
+
+実行結果:
+
+.. code-block:: ring
+
+	1
+	Mahmoud
+	29
+	Jeddah
+	20000.0
+	2
+	Ahmed
+	27
+	Jeddah
+	15000.0
+	3
+	Mohammed
+	31
+	Egypt
+	20000.0
+	4
+	Ibrahim
+	24
+	Egypt
+	65000.0
+	**************************************************	
+	Mahmoud
+	Ahmed
+	Mohammed
+	Ibrahim
+

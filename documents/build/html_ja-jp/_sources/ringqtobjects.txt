@@ -1,0 +1,227 @@
+﻿.. index:: 
+	single: RingQt アプリケーション用のオブジェクトライブラリ; はじめに
+
+=================================================
+RingQt アプリケーション用のオブジェクトライブラリ
+=================================================
+
+オブジェクトライブラリと GUI アプリケーションの作成方法です。
+
+ウィンドウオブジェクトへのグローバル変数の使用、およびオブジェクト名でイベントをオブジェクトへ接続するのではなく、
+このライブラリは GUI オブジェクトのリストを管理します。また、同一クラスから複数ウィンドウを手軽に作成するために、普遍的な API を実装しています。
+
+さらにオブジェクトライブラリでは、イベントが発行されたときに実行されるメソッドを手軽に設定する方法があります。
+同様に子またはサブウィンドウ、あるいはそれ以外の関連する方法により、親または呼び出し元のウィンドウを手軽に使える違和感のないインタフェースを実装しています。
+
+オブジェクトライブラリは MVC デザインパターンで設計しています。
+
+オブジェクトライブラリはリフレクションとメタプログラミングで実装しており Controller クラスへ新規メソッドを追加するとクラス間の通信方法が簡単になります。
+
+オブジェクトライブラリは GUILib から自動的に呼び出されます。
+
+次のコマンドにより単独で呼び出せます。
+
+.. code-block:: ring
+
+	load "objectslib.ring"
+
+ObjectsLib には openObject(), lastObject() などの関数とクラスから呼び出される ObjectsParent があります。
+
+GUILib には openWindow(), lastWindow() などの GUI アプリケーションに特化した斬新な機能があります。
+
+.. index:: 
+	pair: RingQt アプリケーション用のオブジェクトライブラリ; GUI アプリケーションによるライブラリの用法
+
+GUI アプリケーションによるライブラリの用法
+==========================================
+
+* openWindow(cWindowControllerClassName) 関数で新しいウィンドウを開きます。
+* 最低でも Controller と View のクラス二本をウィンドウごとに作成してください。
+* WindowsControllerParent クラスから各 Controller クラスを作成します。
+* WindowsViewParent クラスから各 View クラスを作成します。
+* lastWindow() 関数は最後に作成されたウィンドウのオブジェクト (Controller オブジェクト) を取得します。
+* サブウィンドウを呼び出すときは SetParentObject() メソッドの使用、および Self オブジェクトを渡します。
+* View クラスでは、イベントメソッドを決定するために Method(cMethodName) 関数を使用します。
+* Method(cMethodName) 関数を実行することで Controller クラスでメソッドを決定します。
+* 各 Controller クラスはデフォルトで CloseAction() クラスがあり、呼び出すことでウィンドウを閉じます。
+* ウィンドウごとの Show() メソッドの呼び出しは不要です。 openWindow() の使用時に呼び出します。
+* View クラスでは GUI ウィンドウオブジェクトを win 属性で定義します。
+* openWindowNoShow() 関数はウィンドウを非表示にします。
+* openWindowAndLink() を使うとメソッドからウィンドウへ手軽にアクセスできます。
+
+
+.. index:: 
+	pair: RingQt アプリケーション用のオブジェクトライブラリ; 用例
+
+用例
+====
+
+この用例では、二種類のウィンドウを作成します。
+
+* メインウィンドウにはボタンがあります。ユーザがボタンをクリックしたときにサブウィンドウが開かれます。
+* ユーザは複数のサブウィンドウを開くためにボタンを何回もクリックできます。
+* サブウィンドウごとに二つのボタンがあります。
+* 最初のボタンはサブウィンドウにありメイン、およびサブウィンドウのタイトルのタイトルを変更します。
+* 次のボタンはサブウィンドウにありサブウィンドウを閉じます。
+
+.. code-block:: ring
+
+	load "guilib.ring"
+
+	new qApp {
+		openWindow( :MainWindowController )
+		exec()
+	}
+
+	class MainWindowController from WindowsControllerParent
+		oView = new MainWindowView
+		func SubWindowAction
+			openWindow( :SubWindowController )
+			lastWindow().SetParentObject(self)
+
+	class MainWindowView from WindowsViewParent
+		win = new qWidget() {
+			SetWindowTitle("Main Window")
+			btnSub = new qPushButton(win) {
+				setText("Sub Window")
+				setClickEvent( Method( :SubWindowAction ) )
+			}
+			resize(400,400)
+		}
+
+	class SubWindowController from WindowsControllerParent
+		oView = new SubWindowView
+		func SetMainWindowTitleAction
+			Parent().oView.win.SetWindowTitle("Message from the Sub Window")
+			oView.win.SetWindowTitle("Click Event Done!")
+
+	class SubWindowView from WindowsViewParent
+		win = new qWidget() {
+			SetWindowTitle("Sub Window")
+			btnMsg = new qPushButton(win) {
+				setText("Set Main Window Title")
+				setClickEvent( Method( :SetMainWindowTitleAction ) )
+			}
+			btnClose = new qPushButton(win) {
+				Move(200,0)
+				setText("Close")
+				setClickEvent( Method( :CloseAction ) )
+			}
+			resize(400,400)
+		}
+
+このスクリーンショットはサブウィンドウを三枚作成しています。
+
+.. image:: objectslib1.png
+	:alt: オブジェクトライブラリの用例 - スクリーンショット 1
+
+このスクリーンショットはサブウィンドウごとにボタンをクリックしています。
+
+.. image:: objectslib2.png
+	:alt: オブジェクトライブラリの用例 - スクリーンショット 2
+
+.. index:: 
+	pair: RingQt アプリケーション用のオブジェクトライブラリ; openWindowAndLink() 関数
+
+openWindowAndLink() 関数
+=========================
+
+openWindowAndLink() 関数はアプリケーションウィンドウとの間を接続することにより、オブジェクトとの間でメッセージ (メッセージの呼び出し) を渡せます。
+
+この関数は、ほかのウィンドウの作成で動的オブジェクトを使うために、メタプログラミングによる呼び出し元クラスで動的メソッドの定義で使用します。
+
+用例 : (フォームデザイナーを使用しています)
+
+最初のウィンドウ
+
+(1) https://github.com/ring-lang/ring/blob/master/samples/UsingFormDesigner/twowindowspart5/firstwindowView.ring
+
+(2) https://github.com/ring-lang/ring/blob/master/samples/UsingFormDesigner/twowindowspart5/firstwindowController.ring
+
+次のウィンドウ
+
+(1) https://github.com/ring-lang/ring/blob/master/samples/UsingFormDesigner/twowindowspart5/secondwindowView.ring
+
+(2) https://github.com/ring-lang/ring/blob/master/samples/UsingFormDesigner/twowindowspart5/secondwindowController.ring
+
+このコードの用例では (FirstWindowController.ring より引用)
+
+openWindowAndLink() は SecondWindowController クラスからオブジェクトを作成します。
+
+そして FirstWindowController クラスへ SecondWindow(), IsSecondWindow() メソッドを追加します。
+
+さらに SecondWindowController クラスへ FirstWindow() と IsFirstWindow() 
+メソッドを追加します。
+
+これにより FirstWindowController クラスにある SendMessage() メソッドは
+SecondWindow() メソッドでオブジェクトにアクセスするために使えます。
+
+これは lastWindow(), Parent() および
+SetParentObject() メソッドを使用するよりも簡単です。
+
+.. code-block:: ring
+
+	class firstwindowController from windowsControllerParent
+
+	    oView = new firstwindowView
+
+	    func OpenSecondWindow
+        	openWindowAndLink(:SecondWindowController,self)
+
+	    func SendMessage
+        	if IsSecondWindow() 
+	            SecondWindow().setMessage("Message from the first window")
+	        ok
+
+	    func setMessage cMessage
+        	oView.Label1.setText(cMessage)
+
+.. index:: 
+	pair: RingQt アプリケーション用のオブジェクトライブラリ; openWindowInPackages() 関数
+
+openWindowInPackages() 関数
+============================
+
+openWindowInPackages() 関数は openWindow() と同じですが、
+ウィンドウを開く前にインポートを行うパッケージの追加リストを決定します。
+
+文法:
+
+.. code-block:: ring
+
+	openWindowInPackages(cClassName,aPackagesList)
+
+用例:
+
+この用例はフォームデザイナーのソースコードからの引用です。
+openWindowInPackages() 関数でウィンドウフラグのウィンドウを開きます。
+
+クラス名 “WindowFlagsController” とパッケージの名前を決定します。
+
+ウィンドウフラグのウィンドウでは FormDesigner および System.GUI パッケージを使用しています。
+
+.. code-block:: ring
+
+	openWindowInPackages(:WindowFlagsController,[
+		"formdesigner",
+		"System.GUI"
+	])
+
+.. index:: 
+	pair: RingQt アプリケーション用のオブジェクトライブラリ; オブジェクトライブラリのソースコード
+
+オブジェクトライブラリのソースコード
+====================================
+
+ライブラリのソースコードは非常に単純です。ソースコードファイルを確認できます。
+
+オブジェクトライブラリのソースコード (GUILib なしで使用可能)
+
+* https://github.com/ring-lang/ring/blob/master/libraries/objectslib/objects.ring
+* https://github.com/ring-lang/ring/blob/master/libraries/objectslib/objectslib.ring
+
+GUILib における MVC クラスのソースコード
+
+* https://github.com/ring-lang/ring/blob/master/libraries/guilib/mvc/controllerparent.ring
+* https://github.com/ring-lang/ring/blob/master/libraries/guilib/mvc/viewparent.ring
+

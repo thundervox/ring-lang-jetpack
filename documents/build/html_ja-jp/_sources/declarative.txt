@@ -1,0 +1,346 @@
+.. index:: 
+	single: 宣言型プログラミング; はじめに
+
+==============================
+多重構造の宣言型プログラミング
+==============================
+
+オブジェクト指向による多重構造の宣言型プログラミング環境の構築方法です。
+
+* リストへオブジェクトを作成するには
+* コンポジションと参照によりオブジェクトとリストを返すには
+* オブジェクトのアクセス完了後にコードを実行するには
+* オブジェクト指向による宣言型プログラミング
+
+.. index:: 
+	pair: 宣言型プログラミング; リストへオブジェクトを作成するには
+
+リストへオブジェクトを作成するには
+==================================
+
+リストの定義時にリストへオブジェクトを作成できます。
+
+Add() 関数、または + 演算子により、必要なときにオブジェクトをリストへ追加できます。
+
+用例:
+
+.. code-block:: ring
+
+	alist = [new point, new point, new point]	# # オブジェクトが三つあるリストを作成します。
+
+	alist + [1,2,3]					# 別の項目をリストへ追加します。
+
+	see "Item 4 is a list contains 3 items" + nl
+	see alist[4] 
+
+	add(alist , new point)
+	alist + new point
+
+	alist[5] { x = 100 y = 200 z = 300 }
+	alist[6] { x = 50 y = 150 z = 250 }
+
+	see "Object inside item 5" + nl
+	see alist[5]
+	see "Object inside item 6" + nl
+	see alist[6]
+
+	class point x y z
+
+実行結果:
+
+.. code-block:: ring
+
+	Item 4 is a list contains 3 items
+	1
+	2
+	3
+	Object inside item 5
+	x: 100.000000
+	y: 200.000000
+	z: 300.000000
+	Object inside item 6
+	x: 50.000000
+	y: 150.000000
+	z: 250.000000
+
+.. index:: 
+	pair: 宣言型プログラミング; 参照によりオブジェクトを返すには
+
+コンポジションと参照によりオブジェクトとリストを返すには
+========================================================
+
+コンポジションの使用とクラス属性のオブジェクトがある場合、オブジェクトの返値は参照で返します。
+
+呼び出し元で代入演算子を使う場合は、オブジェクトのコピーを作成します。
+
+呼び出し元で代入演算子を使わない場合は、参照で返されたオブジェクトへアクセスできます。
+
+また、属性がリスト (オブジェクトではありません) でも同じ処理が適用されます。
+
+.. note:: オブジェクト、およびリストは同じ規則で処理します。
+	関数へ渡すときは、参照渡しになります。
+	関数から返すときは、参照で返されたオブジェクト属性を除き値返しになります。
+
+用例:
+
+.. code-block:: ring
+
+	o1 = new Container
+	myobj = o1.addobj()	# 別のコピーを代入で作成します。
+	myobj.x = 100
+	myobj.y = 200
+	myobj.z = 300
+	see o1.aobjs[1]		# コンテナにあるオブジェクトを表示します。
+	see myobj		# コピーの表示
+
+	Class Container
+		aObjs = []
+		func addobj
+			aobjs + new point
+			return aobjs[len(aobjs)]	# オブジェクトを参照で返します。
+
+	Class point 
+		x  = 10
+		y  = 20
+		z  = 30
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 10.000000
+	y: 20.000000
+	z: 30.000000
+	x: 100.000000
+	y: 200.000000
+	z: 300.000000
+
+用例②:
+
+.. code-block:: ring
+
+	func main
+		o1 = new screen  {
+			content[point()] { 
+				x = 100 
+				y = 200
+				z = 300		
+			}
+			content[point()] { 
+				x = 50 
+				y = 150
+				z = 250		
+			}
+		}
+		see o1.content[1]
+		see o1.content[2]
+
+	Class Screen
+		content = []
+		func point
+			content + new point
+			return len(content)
+
+	Class point 
+		x  = 10
+		y  = 20
+		z  = 30
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 100.000000
+	y: 200.000000
+	z: 300.000000
+	x: 50.000000
+	y: 150.000000
+	z: 250.000000
+
+用例③:
+
+.. code-block:: ring
+
+	func main
+		o1 = New Screen  {
+			point() { 		# 参照でオブジェクトへアクセスします。
+				x = 100 
+				y = 200
+				z = 300		
+			}
+			point() { 		# 参照でオブジェクトへアクセスします。
+				x = 50 
+				y = 150
+				z = 250		
+			}
+		}
+		see o1.content[1]		
+		see o1.content[2]
+
+	Class Screen
+		content = []
+		func point
+			content + new point
+			return content[len(content)]	# オブジェクトを参照で返します。
+
+	Class point x=10 y=20 z=30
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 100.000000
+	y: 200.000000
+	z: 300.000000
+	x: 50.000000
+	y: 150.000000
+	z: 250.000000
+
+
+.. index:: 
+	pair: 宣言型プログラミング; オブジェクトのアクセス完了後にコードを実行するには
+
+オブジェクトのアクセス完了後にコードを実行するには
+==================================================
+
+オブジェクト属性とメソッドを使うには { } でオブジェクトへアクセスします。
+
+オブジェクトに BraceEnd() メソッドがある場合は、オブジェクトのアクセス完了直前に実行します。
+
+用例:
+
+.. code-block:: ring
+
+	New Point { See "How are you?" + nl }
+
+	Class Point x y z
+		func braceend
+			see "I'm fine, Thank you!" + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	How are you?
+	I'm fine, Thank you!
+
+
+.. index:: 
+	pair: 宣言型プログラミング; オブジェクト指向による宣言型プログラミング
+
+オブジェクト指向による宣言型プログラミング
+==========================================
+
+この機能はオブジェクト指向による多重構造の宣言型プログラミング環境の構築と使用を可能にします。
+
+* { } によるオブジェクト属性、およびメソッドへのアクセス
+* BraceEnd() メソッド
+* 参照によるオブジェクト返し
+* Setter (セッター) / Getter (ゲッター) メソッド (オプション扱い)
+
+用例:
+
+.. code-block:: ring
+
+	# 宣言型プログラミング (多重構造)
+
+	Screen() 
+	{
+
+		point() 
+		{ 			
+			x = 100 
+			y = 200
+			z = 300		
+		}
+
+		point() 
+		{ 			 
+			x = 50 
+			y = 150
+			z = 250		
+		}
+	}
+
+	# 関数とクラス
+
+	Func screen return new screen
+
+	Class Screen
+
+		content = []
+
+		func point
+			content + new point
+			return content[len(content)]	
+
+		func braceend
+			see "I have " + len(content) + " points!"
+
+	Class point 
+
+		x=10 y=20 z=30
+
+		func braceend		
+			see self	
+
+実行結果:
+
+.. code-block:: ring
+
+	x: 100.000000
+	y: 200.000000
+	z: 300.000000
+	x: 50.000000
+	y: 150.000000
+	z: 250.000000
+	I have 2 points!
+
+.. index:: 
+	pair: 宣言型プログラミング; コード品質の向上
+
+コード品質の向上
+================
+
+メソッドで仮引数を使わないときは、メソッド名末尾の () を省略できます。これにより、コード品質の向上になります。 
+この機能はオブジェクトメソッドとオブジェクト属性との機能に違いがあるため Ring では使えません。
+オブジェクト属性へ Getter メソッドを定義するとき、同様の効果をコードの構文で実現できます。
+例えば point() メソッドの定義ではなく point 属性値の取得で実行される
+getpoint() メソッドを point 属性として定義します。変数名は () を省略できるため、
+point() ではなく point と記述します。
+getpoint() メソッドはオブジェクトの作成、およびオブジェクトの参照を返します。
+
+用例:
+
+.. code-block:: ring
+
+	new Container 
+	{
+		Point 
+		{ 
+			x=10 
+			y=20 
+			z=30 
+		}
+	}
+
+	Class Container
+		aObjs = []
+		point
+		func getpoint
+			aObjs + new Point
+			return aObjs[len(aObjs)]
+
+	Class Point x y z
+		func braceend
+			see "3D Point" + nl + x + nl + y + nl + z + nl
+
+実行結果:
+
+.. code-block:: ring
+
+	3D Point
+	10
+	20
+	30
+

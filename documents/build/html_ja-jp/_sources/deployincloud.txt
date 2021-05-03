@@ -1,0 +1,200 @@
+.. index:: 
+	single: クラウド経由でのウェブアプリケーションの配布方法; はじめに
+
+================================================
+クラウド経由でのウェブアプリケーションの配布方法
+================================================
+
+
+Heroku における Ring ウェブアプリケーションの配布方法です。
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; はじめに
+
+はじめに
+========
+
+これは新規プロジェクトの作成方法、およびクラウドサービスである Heroku で Ring ウェブアプリケーションを配布する方法を解説するためのチュートリアルです。
+
+デモ : http://testring.herokuapp.com/
+
+プロジェクト : https://github.com/ring-lang/RingWebAppOnHeroku
+
+Heroku ウェブサイト : https://www.heroku.com/
+
+.. image:: ringincloud.png
+	:alt: クラウドでの Ring ウェブアプリケーション
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; 用法
+
+用法
+====
+
+このプロジェクトを Heroku へ配布するには
+
+(1) Heroku アカウントを作成します
+
+(2) Heroku アカウントを開きアプリケーションの新規作成をします
+
+用例 : testring
+
+.. note:: 自作アプリケーションでは、必ず唯一無二の名前を選んでください。
+
+(3) コマンドプロンプトを開いて、新規フォルダを作成します : MyApp
+
+.. code-block:: none
+
+	md MyApp
+
+(4) アプリケーションのフォルダを開きます
+
+.. code-block:: none
+
+	cd MyApp	
+
+(5) このプロジェクトを Git でクローンします (カレントディレクトリへクローンするときは、末尾にドットを付けるのをお忘れなく)
+
+.. code-block:: none
+
+	git clone https://github.com/ring-lang/RingWebAppOnHeroku .
+
+(6) Heroku へログインします (電子メートアドレスとパスワードを入力します)
+
+.. code-block:: none
+
+	heroku login
+
+(7) heroku (リモート) へ Git プロジェクトを追加します
+
+testring から自作アプリケーションの名前へ変更します
+
+.. code-block:: none
+
+	heroku git:remote -a testring
+
+(8) buildpacks (ビルトパックス) を設定します (こうすることで Heroku はプロジェクトへの対応方法を認識できるようになります)
+
+.. code-block:: none
+
+	heroku buildpacks:add --index 1 https://github.com/ring-lang/heroku-buildpack-apt
+	heroku buildpacks:add --index 2 https://github.com/ring-lang/heroku-buildpack-ring
+
+(9) プロジェクトのビルトと配布をします
+
+.. code-block:: none
+
+	git push heroku master
+
+(10) プロジェクトのテスト (ブラウザで行います)
+
+.. code-block:: none
+
+	heroku open
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; Ring ソースコードファイルとパーミッション
+
+Ring ソースコードファイルとパーミッション
+=========================================
+
+新規 Ring スクリプトを実行可能にするには Git で実行可能ファイルのパーミッションを設定します。
+
+例えば、 myscript.ring を作成した場合は
+
+.. code-block:: none
+
+	git update-index --chmod=+x myscript.ring 
+	git commit -m "Update file permission" 	
+
+TortoiseGit の場合は、 Windows エクスプローラでファイルを選択して
+
+右クリック ---> プロパティ ---> Git ---> 実行 (+x)
+
+その後、コミットと配布が行われます！
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; Hello World プログラム
+
+Hello World プログラム
+======================
+
+ファイル : ringapp/helloworld.ring
+
+実行先 : http://testring.herokuapp.com/ringapp/helloworld.ring
+
+.. code-block:: ring
+
+	#!/app/runring.sh -cgi
+
+	see "content-type: text/html" +nl+nl	
+	see "Hello, World!" + nl
+
+ファイル : ringapp/helloworld2.ring
+
+実行先 : http://testring.herokuapp.com/ringapp/helloworld2.ring
+
+.. code-block:: ring
+
+	#!/app/runring.sh -cgi
+	load "weblib.ring"
+	import System.Web
+	new page {
+		text("Hello, World!")
+	}
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; アプリケーションのデータベース
+
+アプリケーションのデータベース
+==============================
+
+アプリケーションを配布をする場合、そのまますべて動作します！
+
+変更は不要ですが、実際はデータベースを使用するために、下記のファイルを更新してください。
+
+データベースと相互作用する 2 本のスクリプトがあります (今回のクラウドでは PostgreSQL を使います)。
+
+別のデータベースを使用する場合は、下記のファイルに記載されている接続文字列の更新が必要です。
+
+* ファイル: ringapp/database/newdb.ring (テーブルを一括作成するにはブラウザで実行します)
+* ファイル: ringapp/datalib.ring (Database クラス)
+
+実プロジェクトでは、より優れたコードを記述できます (データベースは変更可能であるため)。
+
+また、設定ファイルを作成できます (ある場所に接続文字列を記述するために)。
+
+データベースサービス : https://www.heroku.com/postgres
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; 配布後の更新
+
+配布後の更新
+============
+
+Git でコミット後に heroku へ push (プッシュ) します。
+
+ファイル: 手軽にテストができるよう build.bat には下記のコマンドが記載されています。
+
+.. code-block:: none
+
+	git add .
+	git commit -m "Update RingWebAppOnHeroku"
+	git push heroku master
+	heroku open
+
+.. index:: 
+	pair: クラウド経由でのウェブアプリケーションの配布方法; ローカルテスト
+
+ローカルテスト
+==============
+
+ローカルテストを行うには Windows で Ring ノートパッドを使用します (ローカルの Apache ウェブサーバーで試験実行)
+
+ringapp/index.ring ファイルの一行目を置換します:
+
+.. code-block:: ring
+
+	#!ring -cgi 
+	
+そして Ring ノートパッドから実行します (Ctrl+F6)

@@ -1,0 +1,2443 @@
+.. index::
+	single: ウェブ開発 (CGI ライブラリ); はじめに
+
+===========================
+ウェブ開発 (CGI ライブラリ)
+===========================
+
+Ring 製 CGI ライブラリによるウェブアプリケーションの開発方法です。
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Apache ウェブサーバーの設定
+
+Apache ウェブサーバーの設定
+===========================
+
+Apache HTTP サーバーで Ring を動作させる方法を解説します。 CGI の実行に対応しているウェブサーバーでも Ring を使えます。
+
+.. note:: Ring ノートパッドでアプリケーションを開発しているのでしたら、手作業での Apache の設定は不要です。
+
+.. index::
+	pair: Apache ウェブサーバーの設定; XAMPP Apache ウェブサーバーの用法
+
+XAMPP Apache ウェブサーバーの用法
+---------------------------------
+
+この時点で XAMPP アプリケーションをお使いならば Apache ウェブサーバーのインストールは済んでいます。そうでなければ、こちらから XAMPP をダウンロードしてください。
+
+XAMPP : https://www.apachefriends.org/download.html
+
+インストール後に XAMPP アプリケーションから構成ファイルを開くか、お使いのオペレーティングシステムの種類を選んでから以下の場所を検索します。
+
+Windows:
+
+.. code-block:: none
+
+    xampp\apache\conf\httpd.conf
+
+Linux:
+
+.. code-block:: none
+
+    /opt/lampp/etc/httpd.conf
+
+macOS:
+
+.. code-block:: none
+
+    /Applications/XAMPP/xamppfiles/etc/httpd.conf
+
+この行を検索してコメントアウトされていないことを確認してください。
+
+.. code-block:: none
+
+	LoadModule cgi_module modules/mod_cgi.so
+
+この行を検索します : AddHandler cgi-script
+
+次に CGI 拡張機能を拡張子 ".ring" へ対応させます。
+
+用例:
+
+.. code-block:: none
+
+	AddHandler cgi-script .cgi .ring
+
+用例:
+
+.. code-block:: none
+
+	AddHandler cgi-script .cgi .pl .asp .ring
+
+XAMPP の"Manage Servers" または "Services" セクションからサーバーの再起動 (Restart) か開始 (Start) をします。
+
+Web サーバーが対応している CGI ディレクトリへウェブアプリケーションを作成します。
+
+Windows:
+
+.. code-block:: none
+
+    xampp\htdocs\mywebapplicationfolder
+
+Linux:
+
+.. code-block:: none
+
+    /opt/lampp/htdocs/mywebapplicationfolder
+
+macOS:
+
+.. code-block:: none
+
+    XAMPP アプリケーションを開き "Volumes" セクションへ移動します。
+
+    "/opt/lampp" ボリュームをマウントします。
+
+    Finder (ファインダー) を開き、左側のメニュー "Locations" からマウント済みの IP アドレスを見つけます。
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); shebang (シェバン) 行の設定
+
+shebang (シェバン) 行の設定
+===========================
+
+Ring ファイルを CGI で正常に実行するためにシェバン行に Ring 実行可能ファイルの場所を指定してください。つまり、ソースコードファイル (\*.ring) の先頭一行目に下記を追加します。
+
+Windows:
+
+.. code-block:: none
+
+    #!ring -cgi
+
+Linux:
+
+.. code-block:: none
+
+    #!/usr/bin/ring -cgi
+
+macOS:
+
+.. code-block:: none
+
+    #!/usr/local/bin/ring -cgi
+
+.. note:: 前述の行はマシンにインストールされている ring 実行可能ファイルのパスへ変更してください。
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Ring ファイルの実行可能権限を許可するには
+
+Ring ファイルの実行可能権限を許可するには
+=========================================
+
+Linux と macOS オペレーティングシステムでは実行可能権限を許可しない限り CGI で Ring ソースファイルを正常に実行できません。この設定はファイルマネージャーのプロパティセクション、あるいはターミナルで行います:
+
+.. code-block:: none
+
+	sudo chmod +x ringAppFile.ring
+
+.. note:: Ring ノートパッドでアプリケーションを開発しているのでしたら、この権限は自動で設定します。
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Ring CGI - Hello World  プログラム
+
+Ring CGI - Hello World  プログラム
+==================================
+
+このプログラムは、 Hello World プログラムです。
+
+.. code-block:: ring
+
+	#!ring -cgi
+
+	See "content-type: text/html" +nl+nl+
+	    "Hello World!" + nl
+
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); ウェブライブラリ版 Hello World プログラム
+
+ウェブライブラリ版 Hello World プログラム
+=========================================
+
+ウェブライブラリで手軽に CGI ウェブアプリケーションを記述できます。
+
+用例① :
+
+.. code-block:: ring
+
+	#!ring -cgi
+
+	Load "weblib.ring"
+
+	Import System.Web
+
+	New Page
+	{
+		Text("Hello World!")
+	}
+
+
+用例② :
+
+.. code-block:: ring
+
+	#!ring -cgi
+
+	Load "weblib.ring"
+
+	Import System.Web
+
+	WebPage()
+	{
+		Text("Hello World!")
+	}
+
+.. tip:: 用例①と用例②の違いは、新しいステートメントでオブジェクトを作成するのではなく、
+	WebPage() 関数でページオブジェクトを返すことです。
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); ウェブライブラリの機能
+
+ウェブライブラリの機能
+======================
+
+この機能は手軽にウェブアプリケーションを作成するために、ウェブライブラリに実装されています。
+
+* 関数版 HTML ページ
+* オブジェクト版 HTML ページ
+* HTTP Get
+* HTTP Post
+* ファイルのアップロード
+* URL エンコード
+* テンプレート
+* CRUD MVC のサンプル
+* ユーザのロジックと登録のサンプル
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HTTP Get の用例
+
+HTTP Get の用例
+===============
+
+ページのユーザインタフェース
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+	New Page
+	{
+	  Title = "Test HTTP Get"
+	  divstart([ :style = StyleSizeFull() ] )
+	  boxstart()
+		text( "Test HTTP GET" )
+		newline()
+	  boxend()
+	  divstart([ :style = Styledivcenter("600px","550px") +
+			      StyleGradient(21) ])
+	  divstart([:style = stylefloatleft() + stylesize("100px","100%") +
+			     stylecolor("black") + stylegradient(58)])
+	  formstart("ex5.ring")
+		tablestart([ :style = stylesize("65%","90%") +
+				      stylemarginleft("35%") +
+				      stylemargintop("30%") ])
+		  rowstart([])
+			cellstart([])
+			  text ( "Name : "  )
+			cellend()
+			cellstart([])
+			  cTextboxStyle = StyleMarginLeft("5%") +
+					  StyleWidth("250px") +
+					  StyleColor("black") +
+					  StyleBackColor("white")
+			  textbox([ :name = "Name", :style = cTextboxStyle ] )
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			  text ( "Address : " )
+			cellend()
+			cellstart([])
+			  textbox([ :name = "Address", :style = cTextboxStyle] )
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			  text ( "Phone : " )
+			cellend()
+			cellstart([])
+			  textbox([ :name = "Phone", :style = cTextboxStyle ])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			  text ( "Age : "  )
+			cellend()
+			cellstart([])
+			  textbox([ :name = "Age", :style = cTextboxStyle ])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			  text ( "City: " )
+			cellend()
+			cellstart([])
+			  listbox([ :name = "City", :items = ["Cairo","Riyadh","Jeddah"],
+				 :style = stylemarginleft("5%") + stylewidth("400px") ] )
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			  text ( "Country : " )
+			cellend()
+			cellstart([])
+			  combobox([ :name = "Country",
+				 :items = ["Egypt","Saudi Arabia","USA"],
+				 :style = stylemarginleft("5%") +
+					  stylewidth("400px")+
+					  stylecolor("black")+
+					  stylebackcolor("white")+
+					  stylefontsize("14px") ])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			  text ( "Note : " )
+			cellend()
+			cellstart([])
+			  editbox([ :name = "Notes",
+				:style = stylemarginleft("5%") +
+					 stylesize("400px","100px")+
+					 stylecolor("black")+
+					 stylebackcolor("white") ,
+				:value = "write comments here..." ] )
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([])
+			cellend()
+			cellstart([])
+			  submit([ :value = "Send" , :Style = stylemarginleft("5%") ])
+			cellend()
+		  rowend()
+		tableend()
+	  formend()
+	  divend()
+	  divend()
+	  divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex4.jpg
+	:alt: HTTP Get
+
+応答:
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+	New Page
+	{
+	 divstart([ :style = styledivcenter("800px","500px") ])
+	  boxstart()
+		text ( "HTTP GET Response" )  newline()
+	  boxend()
+	  divstart([ :style = stylefloatleft()+stylewidth("10%")+
+			      stylecolor("black")+stylegradient(58) ])
+		newline()
+		text ( "Name : "   )
+		newline() newline()
+		text ( "Address : "  )
+		newline() newline()
+		text ( "Phone : "   )
+		newline() newline()
+		text ( "Age : "   )
+		newline() newline()
+		text ( "City : "   )
+		newline() newline()
+		text ( "Country : "   )
+		newline() newline()
+		text ( "Note : "   )
+		newline() newline()
+	  divend()
+	  divstart([ :style = stylefloatleft()+stylewidth("90%")+
+			      stylecolor("black")+stylegradient(47) ])
+		divstart([ :style = stylefloatleft() + stylewidth("1%") ])
+		  newline()
+		divend()
+		divstart([ :style = stylefloatleft() + stylewidth("95%") ])
+		  newline()
+		  text ( aPageVars["Name"] )
+		  newline() newline()
+		  text ( aPageVars["Address"] )
+		  newline() newline()
+		  text ( aPageVars["Phone"] )
+		  newline() newline()
+		  text (  aPageVars["Age"] )
+		  newline() newline()
+		  text ( aPageVars["City"] )
+		  newline() newline()
+		  text (aPageVars["Country"] )
+		  newline() newline()
+		  text ( aPageVars["Notes"] )
+		  newline() newline()
+		divend()
+	  divend()
+	 divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex5.jpg
+	:alt: HTTP Get
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HTTP POST の用例
+
+HTTP POST の用例
+================
+
+ページのユーザインタフェース
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+	New Page
+	{
+		boxstart()
+			text( "Post Test")
+			newline()
+		boxend()
+		divstart([ :style=StyleFloatLeft()+StyleWidth("100px") ])
+			newline()
+			text( "Number1 : " )  	newline() newline()
+			text( "Number2 : " ) 	newline() newline()
+		divend()
+		formpost("ex7.ring")
+			divstart([ :style = styleFloatLeft()+StyleWidth("200px") ])
+				newline()
+				textbox([ :name = "Number1" ]) 	newline() newline()
+				textbox([ :name = "Number2" ]) 	newline() newline()
+				submit([ :value = "Send" ] )
+			divend()
+		formend()
+	}
+
+
+スクリーンショット:
+
+.. image:: ex6.jpg
+	:alt: HTTP Post
+
+応答:
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+	New Page
+	{
+		boxstart()
+			text( "Post Result" )
+			newline()
+		boxend()
+		divstart([ :style = styleFloatLeft()+styleWidth("200px") ])
+			newline()
+			text( "Number1 : " + aPageVars["Number1"] )
+			newline() newline()
+			text( "Number2 : " + aPageVars["Number2"] )
+			newline() newline()
+			text( "Sum : " + (0 + aPageVars["Number1"] + aPageVars["Number2"] ) )
+			newline()
+		divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex7.jpg
+	:alt: HTTP Post
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Upload Files
+
+ファイルのアップロード
+======================
+
+ページのユーザインタフェース
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+	New page
+	{
+		boxstart()
+			text( "Upload File" )
+			newline()
+		boxend()
+		for x = 1 to 3 newline() next
+		formupload("ex9.ring")
+			text( "Customer Name : " )
+			textbox([ :name = "custname" ])
+			newline() newline()
+			divstart([ :style = styleFloatLeft() + styleWidth("90px") ])
+				uploadfile("file")  newline() newline()
+				uploadfile("file2") newline() newline()
+				submit([ :value = "Send" ])
+			divend()
+		formend()
+	}
+
+スクリーンショット:
+
+.. image:: ex8.jpg
+	:alt: ファイルのアップロード
+
+応答:
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	cUploadPath = "C:/Apache2.2/htdocs/ringapp/upload/"
+	cUploadFolder = "/ringapp/upload/"
+
+	New page
+	{
+		boxstart()
+			text( "Upload Result" )
+			newline()
+		boxend()
+		newline()
+		divstart([ :style=  styleFloatLeft() + styleWidth("100px") ])
+			text( "Name : " + aPageVars["custname"] )
+			newline()
+		divend()
+		if aPageVars["file"] != char(13)
+			getuploadedfile(self,"file")
+		ok
+		if aPageVars["file2"] != char(13)
+			getuploadedfile(self,"file2")
+		ok
+	}
+
+	Func getuploadedfile oObj,cFile
+		# ここで object.プロパティ を使用
+		# オブジェクトの代わりに { } を使うと braceend メソッドの実行を回避します。
+		cFileName = cUploadPath + oObj.getfilename(aPageVars,cFile)
+		write(cFileName,aPageVars[cFile])
+		system("chmod a+x "+cFileName)
+		oObj.newline()
+		oObj.text( "File "+cFileName+ " Uploaded ..." )
+		oObj.newline()
+		imageURL = cUploadFolder + oObj.getfilename(aPageVars,cFile)
+		oObj.link([ :url = imageURL, :title = "Download" ])
+		oObj.newline()
+		oObj.image( [ :url = imageURL , :alt = :image  ] )
+		oObj.newline()
+
+スクリーンショット:
+
+.. image:: ex9.jpg
+	:alt: ファイルのアップロード
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Cookies (クッキー)
+
+Cookies (クッキー)
+==================
+
+ページのユーザインタフェース
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New page
+	{
+		boxstart()
+			text( "Cookie Test" )
+			newline()
+		boxend()
+		newline()
+		link([ :url = "ex11.ring", :title = "Use Cookies" ])
+		cookie("custname","Mahmoud Fayed")
+		cookie("custage",28)
+	}
+
+スクリーンショット:
+
+.. image:: ex10.jpg
+	:alt: Cookies
+
+応答:
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New Page
+	{
+		boxstart()
+			text( "Cookies Values" )
+			newline()
+		boxend()
+		link([ :url = "ex10.ring", :title = "back" ])
+		newline()
+		divstart([:style="float:left;width:200px"])
+			text( "Name : " + aPageVars["custname"] )
+			newline()
+			text( "Age : " + aPageVars["custage"] )
+			newline()
+		divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex11.jpg
+	:alt: Cookies
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); URL エンコード
+
+URL エンコード
+==============
+
+ページのユーザインタフェース
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New Page
+	{
+		boxstart()
+			text( "URLEncode" )
+			newline()
+		boxend()
+		link([ :url = "ex5.ring?Name="+URLEncode("-*{Mahmoud}*-")+
+			      "&Address=Egypt&Phone=123456&Age=28&Notes=Programmer",
+			      :title = "Test URL Encode" ])
+	}
+
+スクリーンショット:
+
+.. image:: ex12.jpg
+	:alt: URL エンコード
+
+スクリーンショット:
+
+.. image:: ex12r.jpg
+	:alt: URL エンコード
+
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); テンプレート
+
+テンプレート
+============
+
+テンプレートで HTML ファイルの内側に Ring コードを記述できます。
+
+文法:
+
+.. code-block:: html
+
+	<%= Ring 式 %>
+	<%  Ring ステートメント %>
+
+HTML コード
+
+.. code-block:: html
+
+	<h1>Listing Numbers</h1>
+	<table>
+	  <tr>
+	    <th> <%= myheader.cColumn1 %> </th>
+	    <th> <%= myheader.cColumn2 %> </th>
+	    <th></th>
+	    <th></th>
+	    <th></th>
+	  </tr>
+	<% for x in aNumbers %>
+	  <tr>
+	    <td> <%= x.nValue  %> </td>
+	    <td> <%= x.nSquare %> </td>
+	  </tr>
+	<% next %>
+	</table>
+
+Ring コード
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New NumbersController { start() }
+
+	Class NumbersController
+
+		MyHeader aNumbers
+
+		Func Start
+
+			MyHeader = New Header
+			{
+				cColumn1 = "Number" cColumn2 = "Square"
+			}
+
+			aNumbers = list(20)
+
+			for x = 1 to len(aNumbers)
+				aNumbers[x] = new number
+				{
+					nValue  = x   nSquare = x*x
+				}
+			next
+
+			cTemp = Template("mynumbers.html",self)
+
+			New Page
+			{
+				boxstart()
+					text( "Test Templates" )
+					newline()
+				boxend()
+				html(cTemp)
+			}
+
+	Class Header cColumn1 cColumn2
+	Class Number nValue   nSquare
+
+スクリーンショット:
+
+.. image:: ex13.jpg
+	:alt: テンプレート
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HTML の特殊文字
+
+HTML の特殊文字
+===============
+
+text() 関数は HTML の特殊文字を表示します。
+
+HTML コードを記述するには html() 関数を使います。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New Page
+	{
+		boxstart()
+			text("HTML Special Characters")
+			newline()
+		boxend()
+		text('
+			<html>
+				<body>
+					<p> "hello world" </p>
+				</body>
+			</html>
+		')
+	}
+
+スクリーンショット:
+
+.. image:: ex14.jpg
+	:alt: HTML の特殊文字
+
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); ハッシュ関数
+
+ハッシュ関数
+============
+
+ページのユーザインタフェース
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New Page
+	{
+		boxstart()
+			text( "Hash Test")
+			newline()
+		boxend()
+		divstart([ :style = StyleFloatLeft() + StyleWidth("100px") ])
+			newline()
+			text( "Value : " )
+			newline() newline()
+		divend()
+		formpost("ex16.ring")
+			divstart([ :style = StyleFloatLeft() + StyleWidth("300px") ])
+				newline()
+				textbox([ :name = "Value" ])
+				newline() newline()
+				submit([ :value = "Send" ])
+			divend()
+		formend()
+	}
+
+スクリーンショット:
+
+.. image:: ex15.jpg
+	:alt: ハッシュ関数
+
+応答:
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	New Page
+	{
+		boxstart()
+			text( "Hash Result" )
+			newline()
+		boxend()
+		divstart([ :style = styleFloatLeft() + styleWidth("100%") ])
+			newline()
+			text( "Value : "  + aPageVars["Value"] )
+			newline()
+			text( "MD5 : "    + MD5(aPageVars["Value"]) )
+			newline()
+			text( "SHA1 : "   + SHA1(aPageVars["Value"]) )
+			newline()
+			text( "SHA256 : " + SHA256(aPageVars["Value"]) )
+			newline()
+			text( "SHA224 : " + SHA224(aPageVars["Value"]) )
+			newline()
+			text( "SHA384 : " + SHA384(aPageVars["Value"]) )
+			newline()
+			text( "SHA512 : " + SHA512(aPageVars["Value"]) )
+			newline()
+		divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex16.jpg
+	:alt: ハッシュ関数
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); 画像の無作為表示
+
+画像の無作為表示
+================
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	cUploadPath = "C:/Apache2.2/htdocs/ringapp/upload/"
+
+	New Page
+	{
+		boxstart()
+			text( "Random Test")
+			newline()
+		boxend()
+		divstart([ :style = styleFloatLeft() + styleWidth("400px") ])
+			newline()
+			aList = dir(cUploadPath)
+			if len(aList) > 0
+				nIndex = random(len(aList))
+				if nindex = 0 nIndex = 1 ok
+				cItem = "upload/" + aList[nIndex][1]
+				newline()
+				image( [ :url = cItem , :alt = :image  ] )
+			else
+				text("No images!") newline()
+			ok
+		divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex17.jpg
+	:alt: 画像の無作為表示
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HTML のリスト
+
+HTML のリスト
+=============
+
+この用例では、 1 ～ 10 までの数値があるリストの内容を表示します。
+
+そして Ring のリストからリストを表示します。
+
+最終的にボタンのリストがあり、ボタンが押されてクリックしたときに
+ボタンの番号に割り当てられたメッセージを取得します。
+
+リストの開始は ulstart() 関数、リストの終了は ulend() 関数を使います。
+
+listart() と liend() 関数でリストの項目を決定します。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+		New Page
+		{
+			ulstart([])
+				for x = 1 to 10
+					listart([])
+						text(x)
+					liend()
+				next
+			ulend()
+			list2ul(["one","two","three","four","five"])
+			ulstart([])
+				for x = 1 to 10
+					listart([])
+						cFuncName = "btn"+x+"()"
+						button([ :onclick = cFuncName , :value = x])
+						script(scriptfuncalert(cFuncName,string(x)))
+					liend()
+				next
+			ulend()
+		}
+
+スクリーンショット:
+
+.. image:: ex18.jpg
+	:alt: のリスト
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HTML のテーブル
+
+HTML のテーブル
+===============
+
+この用例では tablestart(), tableend(), rowstart(), rowend(),headerstart(),
+headerend(), cellstart() および cellend() 関数版 HTML テーブルの生成方法です。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+		New Page
+		{
+			divstart([ :style = styledivcenter("400px","500px") ] )
+				style(styletable() + styletablerows("t01"))
+				tablestart([ :id = :t01 , :style = stylewidth("100%") ])
+					rowstart([])
+						headerstart([]) text("Number") headerend()
+						headerstart([]) text("square") headerend()
+					rowend()
+					for x = 1 to 10
+						rowstart([])
+							cellstart([]) text(x) 	cellend()
+							cellstart([]) text(x*x) cellend()
+						rowend()
+					next
+				tableend()
+			divend()
+		}
+
+スクリーンショット:
+
+.. image:: ex19.jpg
+	:alt: HTML のテーブル
+
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); グラデーション
+
+グラデーション
+==============
+
+この用例では StyleGradient() 関数の用法です。
+
+関数の入力としてスタイルを数値で指定します (1 から 60 までの範囲)。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+		New Page
+		{
+			boxstart()
+				text("StyleGradient() Function")
+			boxend()
+			for x = 1 to 60
+				divstart([ :id = x , :align = "center" ,
+					   :style = stylefloatleft() +
+						    stylesize(string(100/60*6)+"%","50px") +
+						    stylegradient(x) ])
+					h3(x)
+				divend()
+			next
+		}
+
+スクリーンショット:
+
+.. image:: ex20.jpg
+	:alt: グラデーション
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); オブジェクト版ページ生成
+
+オブジェクト版ページ生成
+========================
+
+HTML ページを生成するために関数、メソッドではなく
+ページで要素ごとのオブジェクトを使えます。
+
+この選択をするとコードは綺麗になりますが、動作速度は遅くなります。
+
+最も高速な方法は関数の使用、次に早いのはテンプレートの使用、
+そして最後にオブジェクトを使用 (低速) して HTML コードを出力することです。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+
+	  WebPage()
+	  {
+		Title = "Using objects to create the Web Page content"
+		h1 { text("welcome") }
+		link
+		{
+		  Title = "Google"
+		  Link  = "http://www.google.com"
+		}
+		div
+		{
+		  id = "div1"
+		  style = stylegradient(30) + stylesize("50%","50%")
+		  text("Outer Div")
+		  div
+		  {
+			id = "div2"
+			color = "white"
+			backgroundcolor = "green"
+			width = "50%"
+			height = "50%"
+			marginleft = "5%"
+			margintop = "5%"
+			text("Inner Div")
+		  }
+		}
+		div
+		{
+		  id = "div3"
+		  color = "black"
+		  backgroundcolor = "silver"
+		  width = "100%"
+		  height = "100%"
+		  text("Form")
+		  form
+		  {
+			method = "POST"
+			Action = "helloworld.ring"
+			Table
+			{
+			  style = stylewidth("100%") + stylegradient(24)
+			  TR
+			  {
+				TD { WIDTH="10%" text("Name : " )  }
+				TD { Input { type = "text" } }
+			  }
+			  TR
+			  {
+				TD { WIDTH="10%" text("Email : " ) }
+				TD { Input { type = "text" } }
+			  }
+			  TR
+			  {
+				TD { WIDTH="10%" text("Password : " ) }
+				TD { Input { type = "password" } }
+			  }
+			  TR
+			  {
+
+				TD { WIDTH="10%" text("Notes") }
+				TD { TextArea { width="100%" rows = 10  cols = 10
+				   		text("type text here...") } }
+			  }
+			  TR
+			  {
+				TD { WIDTH="10%" text("Gender") }
+				TD {
+				  select
+				   {
+					 width = "100%"
+					 option { text("Male") }
+					 option { text("Female") }
+				   }
+				}
+			  }
+			  TR
+			  {
+				TD {   WIDTH="10%" text("Role") }
+				TD
+				{
+				  select
+				  {
+					 multiple = "multiple"
+					 width    = "100%"
+					 option { text("student") }
+					 option { text("admin") }
+				   }
+				}
+			  }
+			}
+			Input { type = "submit" value = "send" }
+			Image { src="upload/profile1.jpg" alt="profile"}
+			Input { type = "checkbox" value = "Old Member"} text("old member")
+			Input { type = "range" min=1 max=100}
+			Input { type = "number" min=1 max=100}
+			Input { type = "radio" color="black" name="one"
+				value = "one"} text("one")
+		  }
+		}
+		div
+		{
+		  color = "white"
+		  backgroundcolor = "blue"
+		  width = "100%"
+		  UL
+		  {
+			LI { TEXT("ONE") }
+			LI { TEXT("TWO") }
+			LI { TEXT("THREE") }
+		  }
+		}
+		div
+		{
+		  audio
+		  {
+			src = "horse.ogg"
+			type = "audio/ogg"
+		  }
+
+		  video
+		  {
+			 width = 320
+			 height = 240
+			 src = "movie.mp4"
+			 type = "video/mp4"
+		  }
+
+		  Input
+		  {
+			type = "color"
+			value = "#ff0000"
+			onchange = "clickColor(0, -1, -1, 5)"
+		  }
+		}
+	  }
+
+スクリーンショット:
+
+.. image:: ex21.jpg
+	:alt: オブジェクトの使用
+
+.. image:: ex21_2.jpg
+	:alt: オブジェクトの使用 - 第二部
+
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HtmlPage クラス
+
+HtmlPage クラス
+===============
+
+このクラスは標準出力を経由せずに HTML ドキュメントを作成します。
+
+ウェブアプリケーションだけで WebLib を使うときの代用になります。
+
+また、コンソール、 GUI、モバイル用のアプリケーションでも使えます。
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlib.ring"
+	load "weblib.ring"
+
+	import System.Web
+
+	func main
+
+		mypage = new HtmlPage {
+			h1 { text("Customers Report") }
+			Table
+		        {
+        		          style = stylewidth("100%") + stylegradient(4)
+                		  TR
+	                	  {
+        	                	TD { WIDTH="10%" text("Customers Count : " )  }
+	                	        TD { text (100) }
+		                  }
+        		}
+
+			Table
+        		{
+	                	  style = stylewidth("100%") + stylegradient(26)
+		                  TR
+        		          {
+					style = stylewidth("100%") + stylegradient(24)
+        	                	TD { text("Name " )  }
+	        	                TD { text("Age" ) }
+					TD { text("Country" ) }
+					TD { text("Job" ) }
+					TD { text("Company" ) }
+        		          }
+				  for x =  1 to 100
+	        	          	TR
+                		  	{
+                    			    	TD { text("Test" )  }
+                    				TD { text("30" ) }
+						TD { text("Egypt" ) }
+						TD { text("Sales" ) }
+						TD { text("Future" ) }
+        	          		}
+				  next
+		        }
+
+		}
+
+		write("report.html",mypage.output())
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); 関数版 Bootstrap ライブラリの用法
+
+関数版 Bootstrap ライブラリの用法
+=================================
+
+この用例は HTML ページ生成時に Bootstrap JavaScript ライブラリを使います。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+	  new BootstrapPage {
+		divstart([ :class = "container" ])
+		   divstart([ :class = "jumbotron"  ])
+			h1("Bootstrap Page")
+		  divend()
+		  divstart([ :class = :row ])
+			divstart([ :class = "col-sm-4" ])
+			  h3("Welcome to the Ring programming language")
+			  p([ :text = "Using a scripting language is very fun!" ])
+			divend()
+			divstart([ :class = "col-sm-4" ])
+			  h3("Welcome to the Ring programming language")
+			  p([ :text = "using a scripting language is very fun!" ])
+			divend()
+			divstart([ :class = "col-sm-4" ])
+			  h3("Welcome to the Ring programming language")
+			  p([ :text = "using a scripting language is very fun!" ])
+			divend()
+		  divend()
+		divend()
+	  }
+
+
+スクリーンショット:
+
+.. image:: ex22.jpg
+	:alt: Bootstrap
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); オブジェクト版 Bootstrap ライブラリの用法
+
+オブジェクト版 Bootstrap ライブラリの用法
+=========================================
+
+この用例では、 HTML ページの生成時に Bootstrap JavaScript ライブラリを使います。
+
+HTML 要素の生成関数ではなくオブジェクトを使います。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Import System.Web
+
+	Func Main
+	  BootStrapWebPage()
+	  {
+		div
+		{
+		  classname = :container
+		  div
+		  {
+			classname = :jumbotron
+			H1 {   text("Bootstrap Page")   }
+		  }
+		  div
+		  {
+			classname = :row
+			for x = 1 to 3
+			  div
+			  {
+				classname = "col-sm-4"
+				H3 { html("Welcome to the Ring programming language") }
+				P  { html("Using a scripting language is very fun!") }
+			  }
+			next
+		  }
+		  div
+		  {
+			classname = :row
+			div
+			{
+			  classname = "col-sm-4"
+			  Button
+			  {
+				classname = "btn btn-info btn-lg"
+				datatoggle= "modal"
+				datatarget = "#myModal"
+				text("Open Large Modal")
+			  }
+			}
+			div
+			{
+			  classname = "col-sm-4"
+			  Button {  classname = "btn btn-default btn-lg" text("default") }
+			  Button {  classname = "btn btn-primary btn-md" text("primary") }
+			  Button {  classname = "btn btn-sucess btn-sm"  text("sucess") }
+			  Button {  classname = "btn btn-info btn-xs"    text("info") }
+			  Button {  classname = "btn btn-warning"        text("warning") }
+			  Button {  classname = "btn btn-danger"         text("danger") }
+			  Button {  classname = "btn btn-link"           text("link") }
+			}
+			div
+			{
+			  classname = "col-sm-4"
+			  Button {  classname = "btn btn-default btn-block" text("default") }
+			  Button {  classname = "btn btn-primary btn-block" text("primary") }
+			  Button {  classname = "btn btn-sucess btn-block"  text("sucess") }
+			  Button {  classname = "btn btn-info btn-block"    text("info") }
+			  Button {  classname = "btn btn-warning btn-block" text("warning") }
+			  Button {  classname = "btn btn-danger btn-block"  text("danger") }
+			  Button {  classname = "btn btn-link btn-block"    text("link") }
+			}
+			div
+			{
+			  classname = "col-sm-4"
+			  div { classname = "btn-group"
+				button {  classname="btn btn-primary" text("one") }
+				button {  classname="btn btn-primary" text("two") }
+				button {  classname="btn btn-primary" text("three") }
+			  }
+			}
+			div
+			{
+			  classname = "col-sm-4"
+			  div { classname = "btn-group btn-group-lg"
+				button {  classname="btn btn-primary" text("one") }
+				button {  classname="btn btn-primary" text("two") }
+				button {  classname="btn btn-primary" text("three") }
+			  }
+			}
+			div
+			{
+			  classname = "col-sm-4"
+			  div {
+				classname = "btn-group-vertical btn-group-lg"
+				button {  classname="btn btn-primary" text("one") }
+				button {  classname="btn btn-primary" text("two") }
+				button {  classname="btn btn-primary" text("three") }
+			  }
+			}
+		  }
+		  div { classname="modal fade" id="myModal" role="dialog"
+			div { classname = "modal-dialog modal-lg"
+			  div { classname="modal-content"
+				div { classname="modal-header"
+				  button {  classname="close" datadismiss="modal"
+					html("&times")
+				  }
+				  h4 {  classname="modal-title"
+					text("Modal Header")
+				  }
+				}
+				div { classname = "modal-body"
+				  p { text("This is a large model.") }
+				}
+				div { classname="modal-footer"
+				  button { classname = "btn btn-default" datadismiss="modal"
+					text("close")
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  }
+
+スクリーンショット:
+
+.. image:: ex23.jpg
+	:alt: オブジェクト版 Bootstrap ページ
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); MVC 版 CRUD の用例
+
+MVC 版 CRUD の用例
+==================
+
+この用例では、 weblib.ring と datalib.ring を使います。
+
+datalib.ring には MVC パターンでデータベースアプリケーションを作成するためのクラスがあります。
+
+この用例では SalaryController クラスからオブジェクトを作成して Routing メソッドを呼び出します。
+
+ページの基本的な URL を保持するために変数 website を定義します。
+
+ModelBase クラスから SalaryModel クラスを作成する時に、テーブル salary が開かれ model クラスでカラムデータが属性として定義されます。
+
+SalaryView クラスは、変換用の SalaryLanguageEnglish クラスからオブジェクトを作成します。
+
+AddFuncScript メソッドはフォームへレコードデータを追加、または修正で使います。
+
+FormViewContent メソッドはフォームへレコードを追加、または修正時にコントロールの決定で使います。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+	Import System.Web
+
+	website = "ex24.ring"
+
+	New SalaryController { Routing() }
+
+	Class SalaryModel from ModelBase
+
+	Class SalaryController From ControllerBase
+
+	Class SalaryView From ViewBase
+
+	  oLanguage = new SalaryLanguageEnglish
+
+	  Func AddFuncScript oPage,oController
+		return   oPage.scriptfuncajax("myadd",oController.cMainURL+
+			 oController.cOperation+"=add","mysubpage")
+
+	  Func FormViewContent oController,oTranslation,oPage
+		return [
+				[ oTranslation.aColumnsTitles[2], "textbox", "name",
+				  oController.oModel.Name, oPage.stylewidth("100%")    ],
+				[ oTranslation.aColumnsTitles[3], "textbox", "salary",
+				  oController.oModel.Salary, oPage.stylewidth("50%") ]
+			   ]
+
+	Class SalaryLanguageEnglish
+	  cTitle = "Salary Table"
+	  cBack = "back"
+	  aColumnsTitles = ["ID","Name","Salary"]
+	  cOptions = "Options"
+	  cSearch = "Search"
+	  comboitems = ["Select Option...","Edit","Delete"]
+	  cAddRecord = "Add Record"
+	  cEditRecord = "Edit Record"
+	  cRecordDeleted = "Record Deleted!"
+	  aMovePages = ["First","Prev","Next","Last"]
+	  cPage = "Page"
+	  cOf = "of"
+	  cRecordsCount = "Records Count"
+	  cSave = "Save"
+	  temp = new page
+	  cTextAlign = temp.StyleTextRight()
+	  cNoRecords = "No records!"
+
+スクリーンショット:
+
+.. image:: ex24.jpg
+	:alt: 給与表
+
+.. image:: ex24_2.jpg
+	:alt: 給与表 - 検索
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); ユーザの登録とログイン
+
+ユーザの登録とログイン
+======================
+
+ユーザ名、および電子メールなど利用者のデータを扱うためにユーザクラス (Model,
+View および Controller) があります。
+
+このコードは ex25_users.ring として収録しています。
+
+.. code-block:: ring
+
+	Class UsersModel from ModelBase
+	  cSearchColumn = "username"
+
+	Class UsersController From ControllerBase
+	  aColumnsNames = ["id","username","email"]
+
+	  Func UpdateRecord
+		oModel.id = aPageVars[cRecID]
+		oModel.updatecolumn("username", aPageVars[:username] )
+		oModel.updatecolumn("email", aPageVars[:email] )
+		oView.UpdateView(self)
+
+	Class UsersView from ViewBase
+
+	  oLanguage = new UsersLanguageEnglish
+
+	  Func AddFuncScript oPage,oController
+		return   oPage.scriptfunc("myadd",oPage.scriptredirection("ex26.ring"))
+
+	  Func FormViewContent oController,oTranslation,oPage
+		return [
+				[oTranslation.aColumnsTitles[2],"textbox","username",
+				oController.oModel.UserName,oPage.stylewidth("100%")],
+				[oTranslation.aColumnsTitles[3],"textbox","email",
+				oController.oModel.Email,oPage.stylewidth("50%")]
+			   ]
+
+	Class UsersLanguageEnglish
+	  cTitle = "Users Table"
+	  cBack = "back"
+	  aColumnsTitles = ["ID","User Name","Email"]
+	  cOptions = "Options"
+	  cSearch = "Search"
+	  comboitems = ["Select Option...","Edit","Delete"]
+	  cAddRecord = "Add Record"
+	  cEditRecord = "Edit Record"
+	  cRecordDeleted = "Record Deleted!"
+	  aMovePages = ["First","Prev","Next","Last"]
+	  cPage = "Page"
+	  cOf = "of"
+	  cRecordsCount = "Records Count"
+	  cSave = "Save"
+	  temp = new page
+	  cTextAlign = temp.StyleTextRight()
+	  cNoRecords = "No records!"
+
+ファイル ex25.ring では ex25_users.ring を読み込み後に UsersController クラスからオブジェクトを作成します。
+
+作成されたオブジェクトで routing メソッドを呼び出します。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+	Load "ex25_users.ring"
+
+	Import System.Web
+	website = "ex25.ring"
+	New UsersController { Routing() }
+
+スクリーンショット:
+
+.. image:: ex25.jpg
+	:alt: 利用者表
+
+このコードは登録ページを示しています。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+	Import System.Web
+
+	website = "ex26.ring"
+
+	new page {
+	  boxstart()
+		text( "Register")
+		newline()
+	  boxend()
+	  divstart([:style = stylegradient(6) + stylesize("100%","95%") ])
+	  link([ :url = website, :title = "back" , :style = stylecolor("white")])
+	  newline()
+	  divstart([ :style= styledivcenter("500","160") + stylegradient(52) ])
+	  formpost("ex27.ring")
+		tablestart([ :Style =    stylemarginleft("2%") + stylemargintop("2%") +
+					 stylewidth("90%") ])
+		  rowstart([])
+			cellstart([:style = stylewidth("20%") + styleheight(30)])
+			  text("User Name")
+			cellend()
+			cellstart([ :style = stylewidth("80%")  ])
+			  textbox([:name = "username", :style = stylewidth("100%")])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([ :Style = styleheight(30)])
+			  text("Password")
+			cellend()
+			cellstart([])
+			  textbox([:name = "password" , :type = "password"])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([ :style = styleheight(30)])
+			  text("Email")
+			cellend()
+			cellstart([])
+			  textbox([:name = "email" , :style = stylewidth("100%")])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([ :style = styleheight(30)])
+			cellend()
+			cellstart([ :style = styleheight(30)])
+			  submit([:value = "Register"  ])
+			cellend()
+		  rowend()
+		tableend()
+	  formend()
+	  divend()
+	  divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex26.jpg
+	:alt: 登録ページ
+
+
+登録ページの応答
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+	Load "ex25_users.ring"
+
+	Import System.Web
+
+	oUser = new UsersModel
+	oUser.Connect()
+	if oUser.findwith("username",aPageVars["username"])
+		new page {
+			text("The user name is already registered")
+		}
+		return
+	ok
+	if oUser.findwith("email",aPageVars["email"])
+		new page {
+			text("This email is already registered")
+		}
+		return
+	ok
+
+	aPageVars["salt"] = str2hex(RandBytes(32))
+	aPageVars["pwhash"] = sha256(aPagevars["password"]+aPageVars["salt"])
+	aPageVars["sessionid"] = str2hex(randbytes(32))
+	oUser.Insert()
+	new page {
+		cookie("sessionid",aPageVars["sessionid"])
+		text("New User Created!")
+		newline()
+		text("User Name : " + aPageVars["username"])
+		newline()
+	}
+	oUser.Disconnect()
+
+このコードはログインページを示しています。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+
+	Import System.Web
+
+	website = "ex28.ring"
+
+	new page {
+	  boxstart()
+		text( "Login")
+		newline()
+	  boxend()
+	  divstart([:style = stylegradient(6) + stylesize("100%","95%") ])
+	  link([ :url = website, :title = "back" , :style = stylecolor("white")])
+	  newline()
+	  divstart([ :style= styledivcenter("500","130") + stylegradient(52) ])
+	  formpost("ex29.ring")
+		tablestart([ :Style =   stylemarginleft("2%") + stylemargintop("2%") +
+					stylewidth("90%") ])
+		  rowstart([])
+			cellstart([:style = stylewidth("20%") + styleheight(30)])
+			  text("User Name")
+			cellend()
+			cellstart([ :style = stylewidth("80%") ])
+			  textbox([:name = "username", :style = stylewidth("100%")])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([ :style = styleheight(30)])
+			  text("Password")
+			cellend()
+			cellstart([])
+			  textbox([:name = "password" , :type = "password"])
+			cellend()
+		  rowend()
+		  rowstart([])
+			cellstart([ :style = styleheight(30) ])
+			cellend()
+			cellstart([])
+			  submit([:value = "Login"  ])
+			cellend()
+		  rowend()
+		tableend()
+	  formend()
+	  divend()
+	  divend()
+	}
+
+スクリーンショット:
+
+.. image:: ex28.jpg
+	:alt: ログインページ
+
+
+ログインページの応答
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+	Load "ex25_users.ring"
+
+	Import System.Web
+
+	oUser = new UsersModel
+	oUser.Connect()
+	lResult = oUser.FindWith("username",aPageVars["username"])
+	new page {
+		if lResult
+			if sha256(aPagevars["password"]+oUser.Salt) = oUser.pwhash
+				text ("Correct Password!")
+				aPageVars["sessionid"] = str2hex(randbytes(32))
+				oUser.UpdateColumn("sessionid",aPageVars["sessionid"])
+				cookie("sessionid",aPageVars["sessionid"])
+			else
+				text ("Bad password!")
+			ok
+		else
+			text("Bad User Name!")
+		ok
+	}
+	oUser.Disconnect()
+
+このコードはユーザのログインが必要か確認するためのものです。
+
+.. code-block:: ring
+
+	#!ring -cgi
+	Load "weblib.ring"
+	Load "datalib.ring"
+	Load "ex25_users.ring"
+
+	Import System.Web
+
+	oUser = new UsersModel
+	oUser.Connect()
+	lResult = oUser.FindWith("sessionid",aPageVars["sessionid"])
+	new page {
+		if lResult
+			text("User Name : " + oUser.username )
+		else
+			text("Please Login First!")
+		ok
+	}
+	oUser.Disconnect()
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Database, ModelBase と ControllerBase クラス
+
+Database, ModelBase と ControllerBase クラス
+============================================
+
+datalib.ring からコードの一部を示します。
+
+このコードでは Database, ModelBase と ControllerBase クラスです。
+
+.. code-block:: ring
+
+	Import System.Web
+
+	Class Database
+
+	  cServer = "localhost"
+	  cUserName = "root"
+	  cPassword = "root"
+	  cDatabase = "mahdb"
+
+	  Func Connect
+
+		con = mysql_init()
+		mysql_connect(con, cServer, cUserName, cPassWord,cDatabase)
+
+	  Func Disconnect
+
+		mysql_close(con)
+
+	  Func Query cQuery
+
+		mysql_query(con,cQuery)
+
+	  Func QueryResult
+
+		return mysql_result(con)
+
+	  Func QueryResultWithColumns
+		# カラム名＋クエリの結果を返します。
+		return mysql_result2(con)
+
+	  Func QueryValue
+		aResult = mysql_result(con)
+		if islist(aResult) and len(aResult) >= 1
+		  aResult = aResult[1]
+		  if len(aResult) >= 1
+			return aResult[1]
+		  ok
+		ok
+		return 0
+
+	  Func EscapeString x
+		if isstring(x)
+		  return MySQL_Escape_String(con,x)
+		else
+		  return MySQL_Escape_String(con,string(x))
+		ok
+
+	  Private
+		con = NULL
+
+	Class ModelBase from Database
+
+	  cTableName = ""
+	  cSearchColumn = "name"
+	  aColumns = []
+	  aQueryResult = []
+	  ID = 0
+
+	  # クラス名からテーブル名を設定します。
+	  classname = lower(classname(self))
+	  if right(classname,5) = :model
+		cTablename = left(classname,len(classname)-5)
+	  ok
+
+	  Func Insert
+
+		cValues = ""
+		for x in aColumns
+		  cValues += "'" + EscapeString(aPageVars[x]) + "',"
+		Next
+		cValues = left(cValues,len(cValues)-1)  # 末尾のカンマを削除
+		cColumns = ""
+		for x in aColumns
+		  cColumns += x + ","
+		next
+		cColumns = left(cColumns,len(cColumns)-1)
+		query("insert into " + cTableName + "("+cColumns+") values (" +
+			 cValues + ")" )
+
+	  Func Update nID
+
+		cStr = ""
+		for x in aColumns
+		  cStr += x + " = '" + EscapeString(aPageVars[x]) + "' , "
+		# カンマの後にスペースは必要
+		Next
+		cStr = left(cStr,len(cStr)-2)
+		query("update " + cTableName + " set " + cStr + " where id = " + nID )
+
+	  Func UpdateColumn cColumn,cValue
+		query("update " + cTableName + " set " + cColumn + " = '" +
+	        EscapeString(cValue) + "' where id = " + self.ID )
+
+
+	  Func Count cValue
+
+		query("SELECT count(*) FROM " + cTableName +
+			 " where "+cSearchColumn+" like '" + EscapeString(cValue) + "%'")
+		return queryValue()
+
+	  Func Read nStart,nRecordsPerPage
+
+		query("SELECT * FROM "+ cTableName+" limit " + EscapeString(nStart) + "," +
+	        EscapeString(nRecordsPerPage) )
+		aQueryResult = queryResult()
+
+	  Func Search cValue,nStart,nRecordsPerPage
+
+		query("SELECT * FROM "+ cTableName+" where "+cSearchColumn+" like '" +
+	        EscapeString(cValue) + "%'" +
+		  " limit " + EscapeString(nStart) + "," + EscapeString(nRecordsPerPage) )
+		aQueryResult = queryResult()
+
+	  Func Find nID
+
+		query("select * from " + cTableName + " where id = " + EscapeString(nID) )
+		aResult = queryResult()[1]
+		# オブジェクトの属性から配列へ結果を移動
+		ID = nID
+		cCode = ""
+		for x = 2 to len(aResult)
+		  cCode += aColumns[x-1] + " = hex2str('" + str2hex(aResult[x]) + "')" + nl
+		next
+		eval(cCode)
+
+	  Func FindWith cColumn,cValue
+
+		query("select * from " + cTableName + " where "+cColumn+" = '" +
+	        EscapeString(cValue) + "'" )
+		aResult = queryResult()
+		if len(aResult) > 0
+		  aResult = aResult[1]
+		else
+		  return 0
+		ok
+		# オブジェクトの属性から配列へ結果を移動
+		ID = aResult[1]
+		cCode = ""
+		for x = 2 to len(aResult)
+		  cCode += aColumns[x-1] + " = hex2str('" + str2hex(aResult[x]) + "')" + nl
+		next
+		eval(cCode)
+		return 1
+
+	  Func Delete ID
+
+		query("delete from " + cTableName + " where id = " + EscapeString(ID) )
+
+	  Func Clear
+
+		cCode = ""
+		for x in aColumns
+		  cCode += x + ' = ""' + nl
+		next
+		eval(cCode)
+
+	  Func LoadModel
+
+		# カラム配列の作成
+		query("SELECT * FROM "+ cTableName + " limit 0,1")
+		aQueryResult = QueryResultWithColumns()[1]
+		for x = 2 to len(aQueryResult)
+		  aColumns + lower(trim(aQueryResult[x]))
+		next
+
+		# カラムごとの属性を作成
+		for x in aColumns
+		  addattribute(self,x)
+		next
+
+	  Func Connect
+
+		Super.Connect()
+		if nLoadModel = 0
+		  nLoadModel = 1
+		  LoadModel()
+		ok
+
+	  private
+
+		nLoadModel = 0
+
+
+	Class ControllerBase
+
+	  nRecordsPerPage = 5
+	  nRecordsCount = 0
+	  nPagesCount = 0
+	  nActivePage = 0
+
+	  # oView = new tablenameView と oModel = new tablename.Model の動的生成
+	  classname = lower(classname(self))
+	  if right(classname,10)  = :controller
+		tablename = left(classname,len(classname)-10)
+		cCode = "oView = new " + tablename+"View" + nl
+		cCode += "oModel = new " + tablename+"Model" + nl
+		eval(cCode)
+		oModel.connect()
+	  ok
+
+	  cSearchName = "searchname"
+	  cPart = "part"
+	  cPageError = "The page number is not correct"
+	  cLast = "last"
+	  cOperation = "operation"
+	  cRecID = "recid"
+
+	  aColumnsNames = ["id"]
+	  for t in oModel.aColumns
+		aColumnsNames + t
+	  next
+
+	  cMainURL = website + "?"
+
+	  func Routing
+
+		switch      aPageVars[cOperation]
+		on NULL     showtable()
+		on :add     addrecord()
+		on :save    saverecord()
+		on :delete  deleterecord()
+		on :edit    editrecord()
+		on :update  updaterecord()
+		off
+
+	  func ShowTable
+
+		nRecordsCount = oModel.Count( aPageVars[cSearchName] )
+
+		nPagesCount = ceil(nRecordsCount / nRecordsPerPage)
+
+		if aPageVars[cPart] = cLast
+		  aPageVars[cPart] = string(nPagesCount)
+		ok
+
+		nActivePage = number(aPageVars[cPart])
+		if nActivePage = 0 nActivePage = 1 ok
+
+		if ( nActivePage > nPagesCount ) and nRecordsCount > 0
+		  ErrorMsg(cPageError)
+		  return
+		ok
+
+		nStart = (nActivePage-1)*nRecordsPerPage
+
+		if aPageVars[cSearchName] = NULL
+		  oModel.Read( nStart,nRecordsPerPage )
+		else
+		  oModel.Search( aPageVars[cSearchName],nStart,nRecordsPerPage )
+		ok
+
+		oView.GridView(self)
+
+	  func AddRecord
+
+		oModel.clear()
+		oView.FormViewAdd(Self,:save,false) # false ならば レコード ID はない
+
+	  func SaveRecord
+
+		oModel.Insert()
+		oView.SaveView(self)
+
+	  func EditRecord
+
+		oModel.Find( aPageVars[cRecID] )
+		oView.FormViewEdit(Self,:update,true) # true ならば レコード ID はある
+
+	  func UpdateRecord
+
+		oModel.update( aPageVars[cRecID] )
+		oView.UpdateView(self)
+
+	  func DeleteRecord
+
+		oModel.Delete( aPageVars[cRecID] )
+		oView.DeleteView()
+
+	  func braceend
+
+		oModel.Disconnect()
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); WebLib API
+
+WebLib API
+==========
+
+ウェブライブラリ関数、クラスとメソッドについて示します。
+
+=====================   =============   =================================================================================
+関数                    仮引数          解説
+=====================   =============   =================================================================================
+LoadVars                なし            aPageVars リストにリクエストの仮引数とクッキーを保存します。
+WebPage                 なし            WebPage クラスから新しいオブジェクトを作成します。
+BootStrapWebPage        なし            BootStrapWebPage クラスから新しいオブジェクトを作成します。
+HTMLSpecialChars        cString         HTML と等価な特殊文字をエンコードします。
+Template                cFile,oObject   { } で oObject へアクセス後に cFile にある Ring コードを実行します。
+Alert                   cMessage        cMessage を表示するために JavaScript Alert() で HTML ページを生成します。
+HTML2PDF                cString         HTML 文字列 (cString) から PDF ファイルの生成と表示を行います。
+=====================   =============   =================================================================================
+
+このようなクラスが Package System.Web にあります。
+
+=====================	================================================================================
+クラス名				説明
+=====================	================================================================================
+Application				エンコーディング、デコーディング、クッキーなど様々なメソッドがあります。
+Page					HTML ページを生成するためのメソッドがあります。
+ScriptFunctions			JavaScript 関数を生成するためのメソッドがあります。
+StyleFunctions			CSS を生成するためのメソッドがあります。
+PageBuffer				HTML ページをメモリへ生成します (出力を表示しません)。
+HTML2PDF				HTML コードから PDF ファイルを生成します。
+BootStrapPage			BootStrap ライブラリを使います。
+WebPage					各要素のオブジェクトでページを生成しますす。
+HtmlPage				WebPage と同様、標準出力への出力は行いますが表示はしません。
+BootStrapWebPage		BootStrap ライブラリではオブジェクトによりページを生成します。
+ObjsBase				page オブジェクトの親クラスです。
+NewObjectsFunctions 	ページまたは要素により、新しいオブジェクトを作成するためのメソッドです。
+H1						HTML H1 のラップ
+H2						HTML H2 のラップ
+H3						HTML H3 のラップ
+H4						HTML H4 のラップ
+H5						HTML H5 のラップ
+H6						HTML H6 のラップ
+P						HTML P のラップ
+Link					HTML link のラップ
+NewLine					HTML NewLine のラップ
+Div						HTML Div のラップ
+Form					HTML Form のラップ
+Input					HTML Input のラップ
+TextArea				HTML TextArea のラップ
+Select					HTML Select のラップ
+Option					HTML Option のラップ
+Image					HTML Image のラップ
+UL						HTML UL のラップ
+LI						HTML LI のラップ
+Table					HTML Table のラップ
+TR						HTML TR のラップ
+TD						HTML TD のラップ
+TH						HTML TH のラップ
+Audio					HTML Audio のラップ
+Video					HTML Video のラップ
+Nav						HTML Nav のラップ
+Span					HTML Span のラップ
+Button					HTML Button のラップ
+=====================	================================================================================
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Application クラス
+
+Application クラス
+==================
+
+============    =====================================   ========================================================
+メソッド        仮引数                                  説明
+============    =====================================   ========================================================
+DecodeString    cString                                 リクエストの仮引数をデコードします。
+Decode          cString                                 マルチパートまたはフォームデータのデコードをします。
+GetFileName     aArray,cVar                             cVarで aArray にあるファイル名を取得します。
+SetCookie       name,value,expires,path,domain,secure   クッキーの設定
+Cookie          name,value                              name および value のみでクッキーを設定します。
+GetCookies      なし                                    クッキーの取得
+URLEncode       cString                                 URL エンコード
+ScriptLibs      なし                                    BootStrap などを JavaScript ライブラリへ追加します。
+Print           なし                                    ページの内容を出力します。
+Style           cStyle                                  ページの CSS の内容を cStyle へ追加します。
+StartHTML       なし                                    ページの内容に HTTP ヘッダを追加します。
+============    =====================================   ========================================================
+
+DecodeString メソッドは HTTP リクエストの仮引数を取得します。
+
+ファイルのアップロードは Decode および GetFileName メソッドです。
+
+クッキーの追加と読み取りは SetCookie, Cookie および GetCookies メソッドです。
+
+StartHTML, ScriptsLibs, Style と Print メソッドはページの構造、および JavaScript/CSS の対応で使います。
+
+HTML ページで使う URL のエンコードは URLEncode メソッドです。
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); Page クラス
+
+Page クラス
+===========
+
+=====================	=======================================	============================================================================================
+メソッド				仮引数									説明
+=====================	=======================================	============================================================================================
+text					x										ページの内容へ HTMLSpecialChars(x) を追加します (文字列と数値を受け入れます)。
+html					cString									ページの内容に HTML コードを追加します。
+h1						x										<h1> ～ </h1> の間にページの内容 x を追加します。
+h2						x										<h2> ～ </h2> の間にページの内容 x を追加します。
+h3						x										<h3> ～ </h3> の間にページの内容 x を追加します。
+h4						x										<h4> ～ </h4> の間にページの内容 x を追加します。
+h5						x										<h5> ～ </h5> の間にページの内容 x を追加します。
+h6						x										<h6> ～ </h6> の間にページの内容 x を追加します。
+p						aPara									HTML <p> </p> の属性を取得するために aPara リストをハッシュとして使います。
+NewLine					なし									ページの内容に <br /> を追加します。
+AddAttributes			aPara									HTML の要素属性を aPara リストのハッシュとして変換します。
+Link					aPara									HTML <a href> および </a> の属性を取得するために aPara リストをハッシュとして使います。
+Image					aPara									HTML <img> の属性を取得するために aPara リストをハッシュとして使います。
+Button					aPara									HTML <input type=”button”> の属性を取得するために aPara リストをハッシュとして使います。
+ButtonLink				aPara									HTML <input type=”button”> は、リンク属性によりリンクをナビゲートするために使います。
+Textbox					aPara									HTML <input type=”text”> の属性を取得するために aPara リストをハッシュとして使います。
+Editbox					aPara									HTML <textarea> および </textarea> の属性を取得するために aPara を使います。
+Combobox				aPara									HTML <select> は <option> でリスト項目の属性として使います。
+Listbox					aPara									HTML <select multiple=’multiple’> は <option> で項目の属性として使います。
+ulstart					aPara									HTML <ul>
+ulend					aPara									HTML </ul>
+listart					aPara									HTML <li>
+liend					aPara									HTML </li>
+List2UL					aList									Ring のリスト項目から項目をインクルードして HTML <ul> を生成します。
+DivStart				aPara									HTML <div> の属性を取得するために aPara リストをハッシュとして使います。
+NavStart				aPara									HTML <nav> の属性を取得するために aPara リストをハッシュとして使います。
+SpanStart				aPara									HTML <span> の属性を取得するために aPara リストをハッシュとして使います。
+BoxStart				なし									ページのヘッダとして使用するために黒色の背景の Div を生成します。
+DivEnd					なし									HTML </div>
+NavEnd					なし									HTML </nav>
+SpanEnd					なし									HTML </span>
+BoxEnd					なし									HTML </div> であり divend() と同じです。
+FormStart				cAction									HTML <form> は cAction の action 属性または空値です。
+FormPost				cAction									HTML <form method=”post”> は cAction の action 属性です。
+FormEnd					なし									HTML </form>
+Submit					aPara									HTML <input type=”submit”>
+Hidden					cName,cValue							HTML <input type=”hidden”>
+FormUpload				x										HTML のフォームであり、 method=”post” enctype=”multipart/form-data” および x = action
+UploadFile				x										HTML <input type=”file”> および name = x
+Video					aPara									HTML <video>
+Audio					aPara									HTML <audio>
+GetColor				aPara									配色の選択
+Radio					aPara									HTML <input type=”radio”>
+Checkbox				aPara									HTML <input type=”checkbox”>
+Spinner					aPara									HTML <input type=”number”>
+Slider					aPara									HTML <input type=”range”>
+TableStart				aPara									HTML <table>
+TableEnd				なし									HTML </table>
+RowStart				aPara									HTML <tr>
+RowEnd					なし									HTML </tr>
+CellStart				aPara									HTML <td>
+CellEnd					なし									HTML </td>
+HeaderStart				aPara									HTML <th>
+HeaderEnd				なし									HTML </th>
+=====================	=======================================	============================================================================================
+
+aPara にある page メソッドは属性と値を有するリストです。
+aPara で下記の属性値を設定できます。
+
+.. code-block:: ring
+
+	classname id name align style dir value onclick oncontextmenu ondblclick
+	onmousedown onmouseenter onmouseleave onmousemove onmouseover onmouseout
+	onmouseup onkeydown onkeypress onkeyup onabort onbeforeunload onerror
+	onhashchange onload onpageshow onpagehide onresize onscroll onunload
+	onblur onchange onfocus onfocusin onfocusout oninput oninvalid onreset
+	onsearch onselect onsubmit ondrag ondragend ondragenter ondragleave
+	ondragover ondragstart ondrop oncopy oncut onpaste onafterprint
+	onbeforeprint oncanplay oncanplaythrough ondurationchange onemptied
+	onended onloadeddata onloadedmetadata onloadstart onpause onplay
+	onplaying onprogress onratechange onseeked onseeking onstalled onsuspend
+	ontimeupdate onvolumechange onwaiting animationend animationiteration
+	animationstart transitionend onmessage onopen onmousewheel ononline
+	onoffline onpostate onshow onstorage ontoggle onwheel ontouchcancel
+	ontouchend ontouchmove ontouchstart color opacity background backgroundattachment
+	backgroundcolor backgroundimage backgroundposition backgroundrepeat backgroundclip
+	backgroundorigin backgroundsize border borderbottom borderbottomcolor
+	borderbottomleftradius borderbottomrightradius borderbottomstyle borderbottomwidth
+	bordercolor borderimage borderimageoutset borderimagerepeat borderimageslice
+	borderimagesource borderimagewidth borderleft borderleftcolor borderleftstyle
+	borderleftwidth borderradius borderright  borderrightcolor borderrightstyle
+	borderrightwidth borderstyle bordertop bordertopcolor bordertopleftradius
+	bordertoprightradius bordertopstyle bordertopwidth borderwidth boxdecorationbreak
+	boxshadow bottom clear clip display float height left margin marginbottom marginleft
+	marginright margintop maxheight maxwidth minheight minwidth overflow overflowx
+	overflowy padding paddingbottom paddingleft paddingright paddingtop position
+	right top visibility width verticalalign zindex aligncontent alignitems alignself
+	flex flexbasis flexdirection flexflow flexgrow flexshrink flexwrap justifycontent
+	order hangingpunctuation hyphens letterspacing linebreak lineheight overflowwrap
+	tabsize textalign textalignlast textcombineupright textindent textjustify
+	texttransform whitespace wordbreak wordspacing wordwrap textdecoration
+	textdecorationcolor textdecorationline textdecorationstyle textshadow
+	textunderlineposition @fontface @fontfeaturevalues font fontfamily fontfeaturesettings
+	fontkerning fontlanguageoverride fontsize fontsizeadjust fontstretch fontstyle
+	fontsynthesis fontvariant fontvariantalternates fontvariantcaps fontvarianteastasian
+	fontvariantligatures fontvariantnumeric fontvariantposition fontweight direction
+	textorientation unicodebidi writingmode bordercollapse borderspacing captionside
+	emptycells tablelayout counterincrement counterreset liststyle liststyleimage
+	liststyleposition liststyletype @keyframes animation animationdelay animationdirection
+	animationduration animationfillmode animationiterationcount animationname
+	animationplaystate animationtimingfunction backfacevisibility perspective
+	perspectiveorigin transform transformorigin transformstyle transition
+	transitionproperty transitionduration transitiontimingfunction transitiondelay
+	boxsizing content cursor imemode navdown navindex navleft navright navup
+	outline outlinecolor outlineoffset outlinestyle outlinewidth resize textoverflow
+	breakafter breakbefore breakinside columncount columnfill columngap columnrule
+	columnrulecolor columnrulestyle columnrulewidth columnspan columnwidth columns
+	widows orphans pagebreakafter pagebreakbefore pagebreakinside marks quotes
+	filter imageorientation imagerendering imageresolution objectfit objectposition
+	mask masktype mark markafter markbefore phonemes rest restafter restbefore
+	voicebalance voiceduration voicepitch voicepitchrange voicerate voicestress
+	voicevolume marqueedirection marqueeplaycount marqueespeed marqueestyle datatoggle
+	dataride datatarget dataslideto dataslide datadismiss dataplacement datacontent
+	datatrigger dataspy dataoffset dataoffsettop
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); ScriptFunctions クラス
+
+ScriptFunctions クラス
+======================
+
+このクラスには生成されたウェブページへ JavaScript コードを追加するためのメソッドがあります。
+
+このクラスは Page クラスへ統合されており、
+このメソッドから page オブジェクトを使えます。
+
+==================  ==============================================      ===================================================================
+メソッド            仮引数                                              説明
+==================  ==============================================      ===================================================================
+Script              cCode                                               <script> ～ </script> の間に文字列として cCode を追加します。
+ScriptRedirection   cURL                                                cURL へ window.location を設定します。
+ScriptFunc          cFuncName,cCode                                     cCode を有する cFuncName 関数を定義します。
+ScriptFuncAlert     cFuncName,cMsg                                      alert() 関数で cMsg を出力する cFuncName 関数を定義します。
+ScriptFuncAjax      cFuncName,cLink,cDiv                                cDiv へ cLink を読み込みために cFuncName 関数を定義します。
+ScriptFuncClean     cFuncName,cDiv  cDiv                                を消去するために cFuncName 関数を定義します。
+ScriptFuncSelect    cF,aL,cD,cR,cGR,cFC,nTO,cL1,cL2                     グリッドレコードの編集・削除で使います。
+ScriptScrollFixed   cDiv,nSize                                          Size = nSize で Div を固定するために cDiv を設定します。
+==================  ==============================================      ===================================================================
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); StyleFunctions クラス
+
+StyleFunctions クラス
+=====================
+
+このクラスには生成されたウェブページへ CSS を追加するためのメソッドがあります。
+
+ScriptFunctions など StyleFunctions クラスのメソッドは Page クラスへ統合されており、
+このメソッドから page オブジェクトを使えます。
+
+=====================	====================	==============================================================
+メソッド                仮引数                  説明
+=====================	====================	==============================================================
+StyleFloatLeft          なし                    float: left ; を返します。
+StyleFloatRight         なし                    float: right ; を返します。
+StyleSizeFull           なし                    width: 100% ; height: 100% ; を返します。
+Stylecolor              x                       “ color: ” + x + ” ; “ を返します。
+Stylebackcolor          x                       “ background-color: ” + x + ” ;” を返します。
+StyleTextCenter         なし                    “ text-align: center ;” を返します。
+StyleTextRight          なし                    “text-align: right ;” を返します。
+StyleTextLeft           なし                    “text-align: left ;” を返します。
+StyleSize               x,y                     “ width: ” + x + ” ; height: ” + y + ” ;” を返します。
+StyleWidth              x                       “ width: ” + x + ” ;” を返します。
+StyleHeight             x                       “ height: ” + x + ” ;” を返します。
+StyleTop                x                       “ top: ” + x + ” ;” を返します。
+StyleLeft               x                       “ Left: ” + x + ” ;” を返します。
+StylePos                x,y                     “ top: ” + x + ” ;” + ” Left: ” + y + ” ;” を返します。
+StyleHorizontalCenter   なし                    “ margin-right:auto ; margin-left:auto; “ を返します。
+StyleMarginTop          x                       “ margin-top: ” + x + ” ;” を返します。
+StyleMarginRight        x                       “ margin-right: ” + x + ” ;” を返します。
+StyleMarginLeft         x                       “ margin-left: ” + x + ” ;” を返します。
+StyleDivCenter          nWidth,nHeight          ページの中央に Div を作成します。
+StyleAbsolute           なし                    “ position:absolute ;” を返します。
+StyleFixed              なし                    “ position:fixed ;” を返します。
+StyleZIndex             x                       “ z-index: ” + x + ” ;” を返します。
+StyleFontSize           x                       “ font-size: ” + x + ” ;” を返します。
+StyleGradient           x                       グラデーションの生成 (x の値は 1 から 60 まで)
+StyleTable              なし                    テーブルの属性を設定します。
+StyleTableRows          id                      テーブルの偶数、および奇数の横列へ交互に異なる色を設定します。
+StyleTableNoBorder      なし                    “ border-style: none;” を返します。
+=====================	====================	==============================================================
+
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); WebPage クラス
+
+WebPage クラス
+==============
+
+有効な WebPage オブジェクトの属性へアクセスするには括弧を使います。
+
+以下の属性の中からひとつ括弧で選ぶと再度新しい属性を返します。
+
+=====================   ========================================================
+属性                    説明
+=====================   ========================================================
+H1                      HTML H1 のラップ
+H2                      HTML H2 のラップ
+H3                      HTML H3 のラップ
+H4                      HTML H4 のラップ
+H5                      HTML H5 のラップ
+H6                      HTML H6 のラップ
+P                       HTML P のラップ
+Link                    HTML link のラップ
+NewLine                 HTML NewLine のラップ
+Div                     HTML Div のラップ
+Form                    HTML Form のラップ
+Input                   HTML Input のラップ
+TextArea                HTML TextArea のラップ
+Select                  HTML Select のラップ
+Option                  HTML Option のラップ
+Image                   HTML Image のラップ
+UL                      HTML UL のラップ
+LI                      HTML LI のラップ
+Table                   HTML Table のラップ
+TR                      HTML TR のラップ
+TD                      HTML TD のラップ
+TH                      HTML TH のラップ
+Audio                   HTML Audio のラップ
+Video                   HTML Video のラップ
+Nav                     HTML Nav のラップ
+Span                    HTML Span のラップ
+Button                  HTML Button のラップ
+=====================   ========================================================
+
+.. index::
+	pair: ウェブ開発 (CGI ライブラリ); HtmlPage クラス
+
+HtmlPage クラス
+===============
+
+WebPage クラスと同じですが、このような違いがあります。
+
+(1) 標準出力への出力は行いません。
+(2) 出力の取得用に Output メソッドがあります。
+
+文法:
+
+.. code-block:: ring
+
+	output() ---> 文字列を出力
+

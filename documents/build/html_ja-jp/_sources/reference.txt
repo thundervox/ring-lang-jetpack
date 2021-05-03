@@ -1,0 +1,782 @@
+.. index:: 
+	single: 言語リファレンス; はじめに
+
+================
+言語リファレンス
+================
+
+解説内容は、
+
+* 言語のキーワード
+* 言語の関数
+* コンパイラのエラー
+* 実行時のエラー
+* 動作環境のエラー
+* 言語の文法
+* 仮想計算機 (VM) の命令
+
+
+.. index:: 
+	pair: 言語リファレンス; 言語のキーワード
+
+言語のキーワード
+================
+
+キーワードの総数 : 49
+
+* again
+* and
+* but
+* bye
+* call
+* case
+* catch
+* changeringkeyword
+* changeringoperator
+* class
+* def
+* do
+* done
+* else
+* elseif
+* end
+* exit
+* for
+* from
+* func
+* get
+* give
+* if
+* import
+* in
+* load
+* loadsyntax
+* loop
+* new
+* next
+* not
+* off
+* ok
+* on
+* or
+* other
+* package
+* private
+* put
+* return
+* see
+* step
+* switch
+* to
+* try
+* while
+* endfunc
+* endclass
+* endpackage
+
+
+.. index:: 
+	pair: 言語リファレンス; 言語の関数
+
+言語の関数
+==========
+
+関数の総数 : 236
+
+.. code-block:: ring
+
+	acos()
+	add()
+	addattribute()
+	adddays()
+	addmethod()
+	addsublistsbyfastcopy()
+	addsublistsbymove()
+	ascii()
+	asin()
+	assert()
+	atan()
+	atan2()
+	attributes()
+	binarysearch()
+	bytes2double()
+	bytes2float()
+	bytes2int()
+	callgarbagecollector()
+	callgc()
+	ceil()
+	cfunctions()
+	char()
+	chdir()
+	checkoverflow()
+	classes()
+	classname()
+	clearerr()
+	clock()
+	clockspersecond()
+	closelib()
+	copy()
+	cos()
+	cosh()
+	currentdir()
+	date()
+	dec()
+	decimals()
+	del()
+	diffdays()
+	dir()
+	direxists()
+	double2bytes()
+	eval()
+	exefilename()
+	exefolder()
+	exp()
+	fabs()
+	fclose()
+	feof()
+	ferror()
+	fexists()
+	fflush()
+	fgetc()
+	fgetpos()
+	fgets()
+	filename()
+	find()
+	float2bytes()
+	floor()
+	fopen()
+	fputc()
+	fputs()
+	fread()
+	freopen()
+	fseek()
+	fsetpos()
+	ftell()
+	functions()
+	fwrite()
+	getarch()
+	getattribute()
+	getchar()
+	getpathtype()
+	getpointer()
+	getptr()
+	globals()
+	hex()
+	hex2str()
+	input()
+	insert()
+	int2bytes()
+	intvalue()
+	isalnum()
+	isalpha()
+	isandroid()
+	isattribute()
+	iscfunction()
+	isclass()
+	iscntrl()
+	isdigit()
+	isfreebsd()
+	isfunction()
+	isglobal()
+	isgraph()
+	islinux()
+	islist()
+	islocal()
+	islower()
+	ismacosx()
+	ismethod()
+	ismsdos()
+	isnull()
+	isnumber()
+	isobject()
+	ispackage()
+	ispackageclass()
+	ispointer()
+	isprint()
+	isprivateattribute()
+	isprivatemethod()
+	ispunct()
+	isspace()
+	isstring()
+	isunix()
+	isupper()
+	iswindows()
+	iswindows64()
+	isxdigit()
+	left()
+	len()
+	lines()
+	list()
+	list2str()
+	loadlib()
+	locals()
+	log()
+	log10()
+	lower()
+	max()
+	memcpy()
+	memorycopy()
+	mergemethods()
+	methods()
+	min()
+	murmur3hash()
+	newlist()
+	nofprocessors()
+	nullpointer()
+	nullptr()
+	number()
+	obj2ptr()
+	object2pointer()
+	objectid()
+	packageclasses()
+	packagename()
+	packages()
+	perror()
+	pointer2object()
+	pointer2string()
+	pointercompare()
+	pow()
+	prevfilename()
+	ptr2obj()
+	ptr2str()
+	ptrcmp()
+	raise()
+	random()
+	randomize()
+	read()
+	remove()
+	rename()
+	reverse()
+	rewind()
+	right()
+	ring_give()
+	ring_see()
+	ring_state_delete()
+	ring_state_filetokens()
+	ring_state_findvar()
+	ring_state_init()
+	ring_state_main()
+	ring_state_mainfile()
+	ring_state_new()
+	ring_state_newvar()
+	ring_state_runcode()
+	ring_state_runfile()
+	ring_state_runobjectfile()
+	ring_state_setvar()
+	ringvm_callfunc()
+	ringvm_calllist()
+	ringvm_cfunctionslist()
+	ringvm_classeslist()
+	ringvm_evalinscope()
+	ringvm_fileslist()
+	ringvm_functionslist()
+	ringvm_genarray()
+	ringvm_give()
+	ringvm_hideerrormsg()
+	ringvm_info()
+	ringvm_memorylist()
+	ringvm_packageslist()
+	ringvm_passerror()
+	ringvm_scopescount()
+	ringvm_see()
+	ringvm_settrace()
+	ringvm_tracedata()
+	ringvm_traceevent()
+	ringvm_tracefunc()
+	setattribute()
+	setpointer()
+	setptr()
+	shutdown()
+	sin()
+	sinh()
+	sort()
+	space()
+	sqrt()
+	srandom()
+	str2hex()
+	str2hexcstyle()
+	str2list()
+	strcmp()
+	string()
+	substr()
+	swap()
+	sysget()
+	sysset()
+	system()
+	sysunset()
+	tan()
+	tanh()
+	tempfile()
+	tempname()
+	time()
+	timelist()
+	trim()
+	type()
+	ungetc()
+	unsigned()
+	upper()
+	uptime()
+	variablepointer()
+	varptr()
+	version()
+	windowsnl()
+	write()
+	
+.. index:: 
+	pair: 言語リファレンス; コンパイラのエラー
+
+コンパイラのエラー
+==================
+
+* Error (C1)  : 要求された識別子において、仮引数リストにエラーがあります。
+* Error (C2)  : クラス名にエラーがあります。
+* Error (C3)  : ‘ok’ が欠落しているため、制御構造を閉じることができません。
+* Error (C4)  : ‘end’ が欠落しているため、制御構造を閉じることができません。
+* Error (C5)  : next が欠落しているため、制御構造を閉じることができません。
+* Error (C6)  : 関数名にエラーがあります。
+* Error (C7)  : リストの項目にエラーがあります。
+* Error (C8)  : 丸括弧 ‘)’ が欠落しています。
+* Error (C9)  : 角括弧 ‘]’ が欠落しています。
+* Error (C10) : 親クラス名にエラーがあります。
+* Error (C11) : 演算子の式にエラーがあります。
+* Error (C12) : クラスが定義されていません。
+* Error (C13) : 変数名にエラーがあります。
+* Error (C14) : Try/Catch で Catch キーワードが欠落しています！
+* Error (C15) : Try/Catch で Done キーワードが欠落しています！
+* Error (C16) : Switch ステートメントの式でエラーがあります！
+* Error (C17) : Switch ステートメントに OFF がありません。
+* Error (C18) : 開いているブロックで括弧を閉じるのを忘れています！
+* Error (C19) : 数値オーバーフロー！
+* Error (C20) : パッケージ名にエラーがあります。
+* Error (C21) : ‘again’ が欠落しているため、制御構造を閉じることができません。
+* Error (C22) : 関数は既に存在しますが、関数が再定義されました！
+* Error (C23) : 数値の後に ‘(‘ が使用されています！
+* Error (C24) : 親クラス名はサブクラス名と重複しています。
+* Error (C25) : オブジェクト名の後に自己参照アクセスをしようとしています。”
+* Error (C26) : クラスは既に存在しますが、クラスが再定義されました！
+
+* Error (S1) : リテラルが閉じられていません！
+
+* Warning (W1) : ファイル名が重複しています。
+* Warning (W2) : コンパイラ命令 ChangeRingKeyword では二種類の語句が引数として必要です。
+* Warning (W3) : コンパイラ命令 ChangeRingKeyword - キーワードが見つかりません！
+* Warning (W4) : コンパイラ命令  ChangeRingOperator では二種類の語句が引数として必要です。
+* Warning (W5) : コンパイラ命令 ChangeRingOperator - 演算子が見つかりません！
+* Warning (W6) : ループの外側で EXIT 命令を使用しています。
+* Warning (W7) : ループの外側で LOOP 命令を使用しています。
+
+.. index:: 
+	pair: 言語リファレンス; 実行時のエラー
+
+実行時のエラー
+==============
+
+* Error (R1)  : ゼロ除算はできません！
+* Error (R2)  : 配列へのアクセス (インデックスの範囲外です)！
+* Error (R3)  : 未定義関数を呼び出そうとしました！
+* Error (R4)  : スタックオーバーフロー！
+* Error (R5)  : オブジェクトはリストではないため、リストの項目へアクセスできません！
+* Error (R6)  : 変数が必要です。
+* Error (R7)  : 文字列内にある文字には一文字以上割り当てることはできません。
+* Error (R8)  : 変数は文字列ではありません。
+* Error (R9)  : ループの外側で Exit 命令を使用しています。
+* Error (R10) : 数値の範囲外で Exit 命令を使用しています。
+* Error (R11) : クラスが見つからないため、クラス名にエラーがあります！
+* Error (R12) : プロパティが見つからないため、プロパティ名にエラーがあります！
+* Error (R13) : オブジェクトが必要です。
+* Error (R14) : 未定義メソッドを呼び出そうとしました！
+* Error (R15) : 親クラスが見つからないため、クラス名にエラーがあります！
+* Error (R16) : 未知のオブジェクトへのアクセスで括弧を使用しようしました！
+* Error (R17) : 親クラスのない状態で‘Super’を使用したためエラーになりました！
+* Error (R18) : 数値オーバーフロー！
+* Error (R19) : 関数の呼び出しで仮引数の個数が不足しています！
+* Error (R20) : 関数の呼び出しで仮引数の個数が超過しています！
+* Error (R21) : 演算子で不正な型の値を使用しています。
+* Error (R22) : ループの外側で Loop 命令を使用しています。
+* Error (R23) : 数値の範囲外で Loop 命令を使用しています。
+* Error (R24) : 未初期化変数を使用しようとしました。
+* Error (R25) : パッケージが見つからないため、パッケージ名にエラーがあります！
+* Error (R26) : クラスの外側でプライベートメソッドを使用しようとしました。
+* Error (R27) : クラスの外側でプライベート属性を使用しようとしました。
+* Error (R28) : ステップ値で不正なデータ型が使用されています。
+* Error (R29) : For ループで不正なデータ型が使用されています。
+* Error (R30) : 親クラス名は子クラス名と重複しています。
+* Error (R31) : オブジェクトを自己参照で破棄しようとしました。
+* Error (R32) : CALL 命令で要求された変数に文字列があります！
+* Error (R33) : 不正な十進数値です (正しい範囲は >= 0 から <=90 まで)！
+* Error (R34) : 代入操作には変数が必要です。
+* Error (R35) : ファイルを開く、または作成できません！
+* Error (R36) : カラム番号が正しくありません！　リストのカラム番号より大きいです。
+* Error (R37) : 申し訳ございません。このコンテキストにおいてこの命令は対応していません。
+* Error (R38) : 動的ライブラリの読み込み時に実行時エラーが発生しました！
+* Error (R39) : 唯一無二のファイル名を作成するときにエラーが発生しました。
+* Error (R40) : 数値アンダーフロー！
+* Error (R41) : 不正な数値文字列です。
+
+.. index:: 
+	pair: 言語リファレンス; 動作環境のエラー
+
+動作環境のエラー
+================
+
+* Error (E1) : セグメンテーション違反が発生しました！
+* Error (E2) : メモリが足りません！
+* Error (E3) : スコープが存在しないのにスコープを削除しようとしました！
+* Error (E4) : 仮想計算機の命令が長すぎます！
+* Error (E5) : ファイルの種類が正しくありません ― 仮想計算機は Ring オブジェクトファイルのみ扱えます。
+* Error (E6) : Ring オブジェクトファイルのバージョンが正しくありません！
+* Error (E7) : sscanf() 関数で内部エラーが発生しました！
+* Error (E8) : fscanf() 関数で内部エラーが発生しました！
+
+
+.. index:: 
+	pair: 言語リファレンス; 言語の文法
+
+言語の文法
+==========
+
+プログラム → {ステートメント}
+
+ステートメント → ‘package’ <識別子> { ‘.’ <識別子> } [‘{‘ {ステートメント} ‘}’] [‘end’|’endpackage’]
+
+ステートメント → ‘class’ <識別子> [ ‘from’|’:’|’<’ <識別子> ] [‘{‘ {ステートメント} ‘}’][‘end’|’endclass’]
+
+ステートメント → ‘func’|’def’ <識別子> [仮引数リスト] [‘{‘ {ステートメント} ‘}’][‘end’|’endfunc’]
+
+ステートメント → ‘import’ <識別子> { ‘.’ <識別子> }
+
+ステートメント → ‘private’
+
+ステートメント → ‘load’; [‘package'|'again' ] <リテラル>
+
+ステートメント → ‘loadsyntax’ <リテラル>
+
+ステートメント → ‘changeringkeyword’ <旧キーワード> <新キーワード>
+
+ステートメント → ‘changeringoperator’ <旧演算子> <新演算子>
+
+ステートメント → ‘see’|’put’ <式>
+
+ステートメント → ‘give’|’get’ <識別子>
+
+ステートメント → ‘if’ <式> [‘{‘] {ステートメント} [ {‘but’|’elseif’ <式> {ステートメント} } ] [‘else’ {ステートメント} ] ‘ok’|’end’|’}’
+
+ステートメント → ‘Switch’ <式> [‘{‘] { ‘on’|’case’ <式> {ステートメント} } [‘other’ {ステートメント} ] ‘off’|’end’|’}’
+
+ステートメント → ‘for’ <識別子> ‘=’ <式> ‘to’ <式> [ ‘step’ <式> ] [‘{‘] {ステートメント} ‘next’|’end’|’}’
+
+ステートメント → ‘for’ <識別子> ‘in’ <式> [ ‘step’ <式> ] [‘{‘] {ステートメント} ‘next’|’end’|’}’
+
+ステートメント → ‘while’ <式> [‘{‘] {ステートメント} ‘end’|’}’
+
+ステートメント → ‘do’ {ステートメント} ‘again’ <式>
+
+ステートメント → ‘try’ {ステートメント} [‘{‘] ‘catch’ {ステートメント} ‘done’|’end’|’}’
+
+ステートメント → ‘return’ <式>
+
+ステートメント → ‘bye’
+
+ステートメント → ‘exit’
+
+ステートメント → ‘loop’
+
+ステートメント → <式>
+
+ステートメント → エプシロン
+
+仮引数リスト → エプシロン
+
+仮引数リスト → [‘(‘] <識別子> [{ ‘,’ <識別子> }] [‘)’]
+
+式 → <LogicNot> [{ ‘and’|’or’ <LogicNot> }]
+
+LogicNot → [‘not’] <EqualOrNot>
+
+EqualOrNot → [ ‘=’|’!=’ ] <比較>
+
+比較 → <BitOrXor> [ { ‘<’ | ‘>’ | ‘<=’ | ‘>=’ <BitOrXor> } ]
+
+BitOrXor → <BitAnd> [ { ‘|’ | ‘^’ <BitAnd> } ]
+
+BitAnd → <BitShift> [ { ‘&’ <BitShift> } ]
+
+BitShift → <演算> [ { ‘<<’ | ‘>>’ <演算> } ]
+
+演算 → <項> [ { ‘+’ | ‘-‘ <項> } ]
+
+項 → <範囲> [ { ‘*’ | ‘/’ | ‘%’ <範囲> } ]
+
+範囲 → <要素> [ ‘:’ <要素> ]
+
+要素 → <識別子> [ {混成} ] [ ‘=’ <式> ]
+
+要素 → <数値>
+
+要素 → <リテラル>
+
+要素 → ‘:’ <識別子>
+
+要素 → ‘-‘ <要素>
+
+要素 → ‘(‘ <式> ‘)’
+
+要素 → <リスト>
+
+要素 → ‘new’ <識別子>
+
+要素 → <無名関数>
+
+要素 → ‘call’ <識別子> { ‘.’ <識別子> } ‘(‘ <仮引数> ‘)’
+
+リスト → ‘[‘ [ <式> { ‘,’ <式> } ] ‘]’
+
+混成 → { ‘.’ <識別子> }
+
+混成 → ‘[‘ <式> ‘]’
+
+混成 → ‘(‘ [ <式> [ { ‘,’ <式> }] ] ‘)’
+
+混成 → ‘{‘ {ステートメント} ‘}’
+
+無名関数 → ‘func’|’def’| [<仮引数リスト>] ‘{‘ {ステートメント} ‘}’
+
+
+.. index:: 
+	pair: 言語リファレンス; 仮想計算機 (VM) の命令
+
+仮想計算機 (VM) の命令
+======================
+
+定義:
+
+* VM : 仮想計算機
+* Stack : VM スタック
+* IR : 命令レジスタ
+* PC : プログラムカウンタ
+* VP : 変数のポインタ
+* Stack[nSize] : スタックの最後にある項目 (LIFO 構造 : 末尾入力、先頭出力)
+* VV : 変数の値 (変数にはポインタがあり、この変数の値へアクセスします。)
+
+(スタックと変数)
+
+======================= ============================================================================
+演算                    説明
+======================= ============================================================================
+* ICO_PUSHC             IR からスタックへ文字列を追加します。
+* ICO_PUSHN             IR からスタックへ数値を追加します。
+* ICO_PUSHV             VP を stack[nSize] により変数の値で置換します。
+* ICO_LOADADDRESS       IR から変数名を読み取り VP をスタックへ退避します。
+* ICO_ASSIGNMENT        Stack[nSize-1] VV = Stack[nSize] VV , Stack[nSize] の復帰
+* ICO_INC               Stack[nSize] の数値を 1 ずつ増分します。
+* ICO_LOADAPUSHV        ICO_LOADADDRESS そして ICO_PUSHV と同じです。
+* ICO_NEWLINE           新しい行番号を格納します (デバッグ情報)。
+* ICO_FREESTACK         スタックから項目を全て削除します。 nSize = 0 になります。
+* ICO_FILENAME          ソースコードのファイル名を格納します (デバッグ情報)。
+* ICO_FREELOADASCOPE    現在の式にあるスコープリストを解放します。
+======================= ============================================================================
+
+(ジャンプ)
+
+======================= =========================================================================================
+演算                    説明
+======================= =========================================================================================
+* ICO_JUMP              IR から PC へ新しい値を設定します。
+* ICO_JUMPZERO          Stack[nSize] が number = 0 の場合は IR から PC へ新しい値を設定します。
+* ICO_JUMPFOR           For ループの終了
+* ICO_JUMPONE           Stack[nSize] が number = 1 の場合は IR から PC へ新しい値を設定します。
+* ICO_JUMPZERO2         ICO_JUMPZERO と似ていますがスタックへ 1 加算します (複数の ‘AND’条件で必要となります)。
+* ICO_JUMPONE2          ICO_JUMPONE  と似ていますがスタックへ 1 加算します (複数の ‘OR’ 条件で必要となります)。
+======================= =========================================================================================
+
+(比較)
+
+======================= ==========================================================================================================
+演算                    説明
+======================= ==========================================================================================================
+* ICO_LESSEQUAL		If stack[nSize-1] <= stack[nSize] , POP stack[nSize], set Stack[nSize-1] = 1 else set Stack[nSize-1] = 0
+* ICO_EQUAL		If stack[nSize-1] = stack[nSize] , POP stack[nSize], set Stack[nSize-1] = 1 else set Stack[nSize-1] = 0
+* ICO_LESS		If stack[nSize-1] < stack[nSize] , POP stack[nSize], set Stack[nSize-1] = 1 else set Stack[nSize-1] = 0
+* ICO_GREATER		If stack[nSize-1] > stack[nSize] , POP stack[nSize], set Stack[nSize-1] = 1 else set Stack[nSize-1] = 0
+* ICO_GREATEREQUAL	If stack[nSize-1] >= stack[nSize] , POP stack[nSize], set Stack[nSize-1] = 1 else set Stack[nSize-1] = 0
+* ICO_NOTEQUAL		If stack[nSize-1] != stack[nSize] , POP stack[nSize], set Stack[nSize-1] = 1 else set Stack[nSize-1] = 0
+=======================	==========================================================================================================
+
+(算術)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_SUM		Stack[nSize-1] = Stack[nSize-1] + Stack[nSize] , POP stack[nSize]
+* ICO_SUB		Stack[nSize-1] = Stack[nSize-1] - Stack[nSize] , POP stack[nSize]
+* ICO_MUL		Stack[nSize-1] = Stack[nSize-1] * Stack[nSize] , POP stack[nSize]
+* ICO_DIV		Stack[nSize-1] = Stack[nSize-1] / Stack[nSize] , POP stack[nSize]
+* ICO_MOD		Stack[nSize-1] = Stack[nSize-1] % Stack[nSize] , POP stack[nSize]
+* ICO_NEG		Stack[nSize] = - Stack[nSize-1]
+* ICO_PLUSPLUS		Stack[nSize] = Stack[nSize] + 1
+* ICO_MINUSMINUS	Stack[nSize] = Stack[nSize] - 1
+=======================	============================================================================
+
+(論理)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_AND		Stack[nSize-1] = Stack[nSize-1] && Stack[nSize] , POP stack[nSize]
+* ICO_OR		Stack[nSize-1] = Stack[nSize-1] || Stack[nSize] , POP stack[nSize]
+* ICO_NOT		Stack[nSize]   = ! Stack[nSize]  
+=======================	============================================================================
+
+(リスト)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_LISTSTART		一時作業用メモリへ新しいリストを開始します。
+* ICO_LISTITEM		リスト項目を追加します。
+* ICO_LISTEND		リストを終了します。
+* ICO_LOADINDEXADDRESS	Stack[nSize-1] = Stack[nSize-1] VV [ Stack[nSize] ] , POP stack[nSize]
+=======================	============================================================================
+
+(関数)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_LOADFUNC		関数を検索します。
+* ICO_CALL		関数を呼び出します。
+* ICO_RETURN		関数から返します。
+* ICO_RETNULL		関数から NULL を返します。
+* ICO_RETFROMEVAL	eval() の後に返します。
+* ICO_RETITEMREF	リスト項目の参照を返します - 値ではありません。
+* ICO_NEWFUNC		新しい関数を開始します。
+* ICO_BLOCKFLAG		後でジャンプ先を決定するためにフラグを立てます (ICO_RETURN の後で)。
+* ICO_FUNCEXE		関数の実行を開始します。
+* ICO_ENDFUNCEXE	関数の実行を終了します。
+* ICO_ANONYMOUS		無名関数
+* ICO_FREETEMPLISTS	一時作業領域の削除。リスト。
+=======================	============================================================================
+
+(ユーザインタフェース)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_PRINT		値を標準出力へ表示します。
+* ICO_GIVE		キーボードからの標準入力
+=======================	============================================================================
+
+(プログラムの終了・ループ)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_BYE		仮想計算機の実行を終了します。
+* ICO_EXITMARK		ループを終了する場所です。
+* ICO_POPEXITMARK	exit マークを削除します。
+* ICO_EXIT		一階層以上のループを打ち切ります。
+* ICO_LOOP		次のループを継続します。
+=======================	============================================================================
+
+(実行性能の改善)
+
+========================   ==============================================================================
+演算                       説明
+========================   ==============================================================================
+* ICO_PUSHP                スタックへポインタを退避します。
+* ICO_INCP                 ポインタを使用して変数の値を増分します。
+* ICO_PUSHPV               変数ポインタを使用して変数の値を退避します。
+* ICO_INCJUMP              増分後にジャンプします。
+* ICO_INCPJUMP             ポインタを使用して増分した後にジャンプします。
+* ICO_JUMPVARLENUM         変数の値が <= 数値の値ならばジャンプします。
+* ICO_JUMPVARPLENUM        変数の値が (ポインタを使用) <= 数値の値ならばジャンプします。
+* ICO_LOADFUNCP            関数ポインタを退避します。
+* ICO_PUSHPLOCAL           ローカル変数のポインタを退避します。
+* ICO_INCLPJUMP            ローカル変数のポインタで値を増分した後にジャンプします。
+* ICO_JUMPVARLPLENUM       変数の値が (ポインタを使用) <= 数値の値ならばジャンプします。
+* ICO_INCPJUMPSTEP1        変数のポインタで値を増分した後にジャンプします (For ループ step = 1)。
+* ICO_JUMPVARPLENUMSTEP1   変数のポインタで値を増分した後にジャンプします (For ループ step = 1)。
+========================   ==============================================================================
+
+(Try～Catch～Done)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_TRY		try の範囲を開始します。
+* ICO_DONE		try の範囲を終了します。
+=======================	============================================================================
+
+(複製と範囲)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_DUPLICATE		スタックの値を複製します。
+* ICO_RANGE		  	値からリストの値を作成します。
+=======================	============================================================================
+
+オブジェクト指向プログラミング(OOP)
+
+=======================	=============================================================================================================
+演算                    説明
+=======================	=============================================================================================================
+* ICO_NEWOBJ		新しいオブジェクトの作成してから、IR からクラス名を取得を行い、スタックへオブジェクトのポインタを退避します。
+* ICO_SETSCOPE		オブジェクトのスコープへ有効なスコープを設定してから新しいオブジェクトの作成後に呼び出します。
+* ICO_LOADSUBADDRESS	ポインタをスタックに退避してからオブジェクトの属性を取得します。
+* ICO_LOADMETHOD	オブジェクトのメソッドを検索します。
+* ICO_AFTERCALLMETHOD	メソッドの呼び出し後に使用されます - 通常時
+* ICO_AFTERCALLMETHOD2  メソッドの呼び出し後に使用されます - 次の場合
+* ICO_NEWCLASS		新しいクラスの範囲を開始します。
+* ICO_BRACESTART	括弧を開きます。
+* ICO_BRACEEND		括弧を閉じます。
+* ICO_IMPORT		パッケージのインポート
+* ICO_PRIVATE		プライベート属性の範囲を開始します。
+* ICO_SETPROPERTY	属性の値を設定します - Setter を確認します。
+* ICO_CALLCLASSINIT	init() クラスメソッドの呼び出し。
+=======================	=============================================================================================================
+
+(その他)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_SETREFERENCE	参照によりコピーします。
+* ICO_KILLREFERENCE	参照を削除します。
+* ICO_ASSIGNMENTPOINTER 左辺側の変数を決定します。
+* ICO_BEFOREEQUAL	+= , -= , ... などの演算子を決定します。
+=======================	============================================================================
+
+(ビット操作演算子)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_BITAND		Stack[nSize-1] = Stack[nSize-1] & Stack[nSize] , POP stack[nSize]
+* ICO_BITOR		Stack[nSize-1] = Stack[nSize-1] | Stack[nSize] , POP stack[nSize]
+* ICO_BITXOR		Stack[nSize-1] = Stack[nSize-1] ^ Stack[nSize] , POP stack[nSize]
+* ICO_BITNOT		Stack[nSize] = ! Stack[nSize] 
+* ICO_BITSHL		Stack[nSize-1] = Stack[nSize-1] << Stack[nSize] , POP stack[nSize]
+* ICO_BITSHR		Stack[nSize-1] = Stack[nSize-1] >> Stack[nSize] , POP stack[nSize]
+=======================	============================================================================
+
+(For Step)
+
+=======================	============================================================================
+演算                    説明
+=======================	============================================================================
+* ICO_STEPNUMBER	For ループにおけるステップ数を決定します。
+* ICO_POPSTEP		ステップスタックからステップ数を復帰 (POP) します。
+* ICO_LOADAFIRST	変数名に関連する最初のアドレスを読み込みます。
+=======================	============================================================================
+
+(カスタムグローバルスコープ)
+
+=======================	==============================================================================
+演算                    説明
+=======================	==============================================================================
+* ICO_NEWGLOBALSCOPE	新しいカスタムグローバルスコープの開始 - ‘load package’ 命令で使用されます。
+* ICO_ENDGLOBALSCOPE	カスタムグローバルスコープの終了 - ‘load package’ 命令で使用されます。
+* ICO_SETGLOBALSCOPE	現在のグローバルスコープを設定します。
+=======================	==============================================================================
+

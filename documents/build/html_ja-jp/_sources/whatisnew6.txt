@@ -1,0 +1,475 @@
+.. index:: 
+	single: Ring 1.6 の変更履歴; はじめに
+
+=======================
+Ring 1.6 の変更履歴
+=======================
+
+Ring 1.6 (2017年11月30日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.6 の新機能！
+
+* Employee アプリケーション
+* 新ツール : Ring2EXE
+* Android 版 Ring の改善
+* 新ツール : Folder2qrc
+* Ring ビルド用スクリプトの改善
+* RingConsoleColors 拡張機能
+* RingMurmurHash 拡張機能
+* Ring ノートパッドの改善
+* RingQt の改善
+* StdLib の改善
+* Ring VM の改善
+* RingREPL の改善
+* char(9) の代わりに Tab を使うには
+* CR をキャリッジリターンとして使うには
+* ! 演算子を not として使うには
+* && および || 演算子の用法
+* 式の表示後に ? で改行するには
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; Employee アプリケーション
+
+Employee アプリケーション
+=========================
+
+Employee アプリケーションを ring/applications へ追加しました。
+
+開発者: アーメド・ハッサウナ
+
+.. image:: empapp.png
+	:alt: Employee サンプル
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; 新ツール - Ring2EXE
+
+新ツール - Ring2EXE
+===================
+
+現在は、スグレモノである RingEXE (Ring 1.6 以降) があります。
+
+Ring2EXE (Ring にて記述) で Windows, Linux および macOS 用のアプリケーションを手軽に配布できます。
+
+詳しくは「Ring2EXE による Ring アプリケーションの配布方法」を参照してください。
+
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; Android 版 Ring の改善
+
+Android 版 Ring の改善
+======================
+
+複数のソースコードファイル (\*.ring) ではなく Ring オブジェクトファイル (\*.ringo)
+を使用するために Android 版 Ring (RingQt の使用) を更新しました。
+
+このスクリーンショットは Android 版 Cards ゲームのビルドに関する用例です。
+
+cards.ring ではなく cards.ringo を使用します。
+
+大規模プロジェクト構成 (大量の \*.ring ファイル) では、 \*.ringo ファイルのみ使います。
+
+.. image:: cardsqt.png
+	:alt: Android 版 Ring の改善
+
+Qt プロジェクトでモバイル用 RingQt アプリケーションの配布準備をするには Ring2EXE を使用してください。
+
+用例①
+
+.. code-block:: ring
+
+	ring2exe cards.ring -dist -mobileqt
+
+用例②
+
+.. code-block:: ring
+
+	ring2exe formdesigner.ring -dist -mobileqt
+
+.. image:: formdesignerandroid.png
+	:alt: Android 版フォームデザイナー
+
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; 新ツール - Folder2qrc
+
+新ツール - Folder2qrc
+=====================
+
+大量の画像とファイルから構成される大規模 RingQt プロジェクトでは、モバイル・アプリケーション配布時にリソースファイル (\*.qrc) へファイルを必ず追加してください。
+
+Ring 1.6 以降では Folder2qrc ツールにより、一つずつファイルを追加する必要がなくなるので時間の節約になります。
+
+用例:
+
+.. code-block:: bash
+
+	folder2qrc formdesigner.ring
+
+アプリケーションフォルダに移動している間に、メインソースファイルの決定をするために
+Folder2qrc は現在のフォルダとサブフォルダにある全てのファイルを確認します。
+そして mainfile.ringo の後にリソースファイルを追加します (この用例は formdesigner.ringo です)。
+
+出力ファイル : project.qrc
+
+ファイルを開く、または削除するためにリソースは不要です！
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; Ring ビルド用スクリプトの改善
+
+Ring ビルド用スクリプトの改善
+=============================
+
+Ring 1.6 ではソースコードから Ring のビルドを行うためのスクリプトを改善しました。
+
+この更新は 32bit と 64bit システムの Windows, Linux (Ubuntu, Fedora) および macOS で検証済みです。
+
+Windows 用のスクリプトでは Visual Studio のバージョンを基に Visual C/C++ コンパイラを検出するために更新されました。
+
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; RingConsoleColors 拡張機能
+
+RingConsoleColors 拡張機能
+===========================
+
+RingConsoleColors 拡張機能でコンソールアプリケーションの配色を手軽に変更できます。
+
+.. image:: consolecolors.png
+	:alt: RingConsoleColors
+
+詳しくは「RingConsoleColors 関数リファレンス」を参照してください。
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; RingMurmurHash 拡張機能
+
+RingMurmurHash 拡張機能
+========================
+
+Ring 1.6 には RingMurmurHash 拡張機能があります！
+
+開発者: ハッサン・アーメド
+
+用例:
+
+.. code-block:: ring
+
+	load "murmurhashlib.ring"
+
+	key = "Ring Language"
+
+	see murmurhash3_x86_32(key, 0, 0) + nl // 実行結果: 1894444853
+	see murmurhash3_x86_32(key, 0, 1) + nl // 実行結果: 70eaef35
+
+詳しくは「RingMurmurHash 関数リファレンス」を参照してください。
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; Ring ノートパッドの改善
+
+Ring ノートパッドの改善
+=======================
+
+Ring ノートパッドを更新しました。
+
+(1) アプリケーションの実行時にメインファイルの自動設定 (メインファイルボタンを使用)。
+
+(2) メインファイル - 実行前の自動保存。
+
+(3) GUI アプリケーション実行時 - 実行結果ウィンドウで入力用テキストボックスの使用時はフォーカスを変更しないようにしました。
+
+(4) ボタン、およびオプションからウェブアプリケーションを実行できるようになりました。
+
+.. image:: runwebapp1.png
+	:alt: Ring ノートパッド - ウェブアプリケーションの実行 - スクリーンショット 1
+
+Ring 1.6 から Windows ユーザー用に Apache ウェブサーバーが添付されています！
+
+設定は一切不要で指定フォルダからウェブアプリケーションを実行できます。
+
+.. image:: runwebapp2.png
+	:alt: Ring ノートパッド - ウェブアプリケーションの実行 - スクリーンショット 2
+
+(5) ツール - オペレーティングシステム - ターミナル (コマンドプロンプト)、ファイルマネージャー (エクスプローラ)
+
+.. image:: rnotetoolsterminal.png
+	:alt: Ring ノートパッド - ツール - ターミナル - スクリーンショット 1
+
+これにより、アプリケーションフォルダからコマンドプロンプト、またはエクスプローラを手軽に開けます。
+
+.. image:: rnotetoolsterminal2.png
+	:alt: Ring ノートパッド - ツール - ターミナル - スクリーンショット 2
+
+(6) 拡張子 \*.sh と \*.batへの対応
+
+(7) 新しいメニュー: 配布
+
+.. image:: rnotedistribute.png
+	:alt: Ring ノートパッド - 配布
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; RingQt の改善
+
+RingQt の改善
+=============
+
+RingQt を更新しました。
+
+(1) QAllEvents - getkeytext() メソッド
+
+(2) QSQLQuery - exec_2() メソッド
+
+(3) QDockWidget イベント
+
+(4) AppFile() 関数
+
+(5) IsMobile() 関数
+
+(6) QRegion クラス
+
+(7) QCoreApplication クラス
+
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; StdLib の改善
+
+StdLib の改善
+=============
+
+StdLib を更新しました。
+
+(1) Factors() 関数の更新 (表示を行わずに出力を返します)
+
+(2) Palindrome() 関数の更新 (表示を行わずに出力を返します)
+
+(3) stdlibcore.ring で StdLib 関数を使えます (クラスはありません)。
+
+    これはスタンドアローン型のコンソールアプリケーションを作成する場合に便利です。
+
+    stdlib.ring (関数とクラス) は RingLibCurl, RingOpenSSL などのライブラリを読み込みます。
+
+(4) 新しい関数
+
+* SystemSilent(cCommand) : 実行結果を表示せずにシステムをコマンド実行します。
+
+* OSCreateOpenFolder(cFolder) : フォルダの作成後に、現在のフォルダを作成した新しいフォルダへ変更します。
+
+* OSCopyFolder(cParentFolder,cFolderNameToCopy) : 現在のディレクトリへフォルダをコピーします。
+
+* OSDeleteFolder(cFolder) : フォルダの削除
+
+* OSCopyFile(cFileName) : 現在のディレクトリへファイルをコピーします。
+
+* OSDeleteFile(cFileName) : ファイルの削除
+
+* OSRenameFile(cOldFileName,cNewFileName) : ファイル名変更
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; Ring VM の改善
+
+Ring VM の改善
+==============
+
+Ring VM を更新しました。
+
+(1) 式において getter メソッドの複数使用に対応
+
+(2) This と Self を Setter/Getter メソッドを呼び出さずに Setter/Getter/Normal メソッドで使用できるようにするための対応
+
+(3) TempName() 関数の更新 (コードの改善)
+
+(4) ExeFileName() 関数の更新 (コードの改善)
+
+(5) Private 属性 - クラス範囲における再利用の対応 (Private キーワードの後に)
+
+(6) Ring API : ring_scanner_runobjstring()
+
+(7) ring_state_setvar() 関数
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; RingREPL の改善
+
+RingREPL の改善
+===============
+
+RingREPL を更新しました。
+
+(1) RingREPL はコマンドラインの仮引数でスタイルを決定します。
+
+(2) Ring ノートパッドのスタイルに基づき RingREPL のスタイルを設定します。
+
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; char(9) の代わりに Tab を使うには
+
+char(9) の代わりに Tab を使うには
+=================================
+
+Tab 変数は char(9) の代わりに使用するために定義済みです。
+
+用例①:
+
+.. code-block:: ring
+
+	see :one + nl + tab + :two + nl + tab + tab + :three
+
+実行結果:
+
+.. code-block:: none
+
+	one
+	        two
+	                three
+
+変数を別の値へ変更できます。
+
+用例②:
+
+.. code-block:: ring
+
+	tab = "  "
+	see :one + nl + tab + :two + nl + tab + tab + :three
+
+実行結果:
+
+.. code-block:: none
+
+	one
+	  two
+	    three
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; CR をキャリッジリターンとして使うには
+
+CR をキャリッジリターンとして使うには
+=====================================
+
+この用例では、十秒間に同じ行で 1 ～ 10 まで数えます。
+
+.. code-block:: ring
+
+	load "stdlibcore.ring"
+	for x = 1 to 10 see x sleep(1) see cr next
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; ! 演算子を not として使うには
+
+! 演算子を not として使うには
+=============================
+
+Ring には = と != があります。
+
+しかし、論理演算子には and, or, そして not があります。
+
+さら、 ! 演算子を not として使えます。
+
+用例:
+
+.. code-block:: ring
+
+	if ! false
+		see "True!" + nl
+	ok
+
+実行結果:
+
+.. code-block:: none
+
+	True!
+
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; && および || 演算子の用法
+
+&& および || 演算子の用法
+=========================
+
+このようなキーワードが Ring の論理演算子としてあります。
+
+* and
+* or
+* not
+
+また、このような演算子もあります。
+
+* &&
+* ||
+* !
+
+用例:
+
+.. code-block:: ring
+
+	if one() and two()
+		see "Test1 - Fail" + nl
+	else
+		see "Test1 - Pass" + nl
+	ok
+
+	if two() or one()
+		see "Test2 - Pass" + nl
+	else
+		see "Test2 - Fail" + nl
+	ok
+
+	if one() && two()
+		see "Test3 - Fail" + nl
+	else
+		see "Test3 - Pass" + nl
+	ok
+
+	if two() || one()
+		see "Test4 - Pass" + nl
+	else
+		see "Test4 - Fail" + nl
+	ok
+
+	func one return True
+
+	func two return False
+
+実行結果:
+
+.. code-block:: none
+
+	Test1 - Pass
+	Test2 - Pass
+	Test3 - Pass
+	Test4 - Pass
+
+.. index:: 
+	pair: Ring 1.6 の変更履歴; ? 演算子で式の表示後に改行するには
+
+? 演算子で式の表示後に改行するには
+==================================
+
+式の表示後に改行することは一般的です。これは ? 演算子で実現できます！
+
+用例:
+
+.. code-block:: ring
+
+	? "Hello, World!"
+	for x = 1 to 10
+		? x
+	next
+
+実行結果:
+
+.. code-block:: none
+
+	Hello, World!
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10

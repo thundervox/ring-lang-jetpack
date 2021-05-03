@@ -1,0 +1,90 @@
+.. index:: 
+     single: はじめての拡張機能開発; はじめに
+
+======================
+はじめての拡張機能開発
+======================
+
+RingBeep は Windows API の beep() 関数を使用するシンプルな拡張機能の作例です。
+
+.. index:: 
+     pair: はじめての拡張機能開発; 収録先
+
+収録先
+======
+
+この拡張機能は ring/extensions/ringbeep フォルダにあります。
+
+.. index:: 
+     pair: はじめての拡張機能開発; 拡張機能の作成手順
+
+拡張機能の作成手順
+==================
+
+設定ファイルを記述します : ringbeep.cf
+
+.. code-block:: none
+
+	notepad ringbeep.cf
+
+ringbeep.cf ファイルの内容
+
+.. code-block:: none
+
+	<code>
+	#include "windows.h"
+	</code>
+
+	int Beep(int dwFreq,int dwDuration)
+
+実行します : gencode.bat は ringbeep.c を生成します。
+
+.. code-block:: none
+
+	gencode.bat
+
+gencode.bat には Ring 拡張機能生成器を呼び出すための記述があります。
+
+.. code-block:: none
+
+	ring ..\codegen\parsec.ring ringbeep.cf ringbeep.c
+
+拡張機能をビルドするには :
+
+.. code-block:: none
+
+	buildvc.bat
+
+buildvc.bat には Visual C/C++ で拡張機能をビルドするための記述があります。
+
+.. code-block:: none
+
+	cls
+	call ../../src/locatevc.bat
+	cl /c /DEBUG ringbeep.c -I"..\..\include"
+	link /DEBUG ringbeep.obj  ..\..\lib\ring.lib kernel32.lib /DLL /OUT:ringbeep.dll ^
+								/SUBSYSTEM:CONSOLE,"5.01" 
+	del ringbeep.obj
+
+.. index:: 
+     pair: はじめての拡張機能開発; 関数の動作検証
+
+関数の動作検証
+==============
+
+関数の動作検証をします。
+
+.. code-block:: none
+
+	ring test.ring
+
+test.ring の内容:
+
+.. code-block:: ring
+
+	loadlib("ringbeep.dll")
+
+	for f = 750 to 1000 step 50
+		beep(f,300)
+	next
+

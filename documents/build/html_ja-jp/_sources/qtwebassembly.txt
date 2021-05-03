@@ -1,0 +1,209 @@
+.. index:: 
+	single: WebAssembly 用 RingQt アプリケーションのビルド方法; はじめに
+
+==================================================
+WebAssembly 用 RingQt アプリケーションのビルド方法
+==================================================
+
+WebAssembly 用 RingQt アプリケーションのビルド方法です。
+
+.. index:: 
+	pair: WebAssembly 用 RingQt アプリケーションのビルド方法; ダウンロード用件
+
+ダウンロード用件
+================
+
+このリンクを参照してください : https://doc.qt.io/qt-5/wasm.html
+
+検証環境
+
+* Qt (5.15.0) : https://www.qt.io/blog/qt-5.15-released
+
+* Emscripten (1.39.7) : https://emscripten.org/docs/getting_started/index.html
+
+.. code-block:: bash
+
+	emsdk install sdk-fastcomp-1.39.7-64bit
+	emsdk activate sdk-fastcomp-1.39.7-64bit
+
+Emscripten が正常にインストールされているか確認するには、
+
+.. code-block:: bash
+
+	em++ --version
+
+実行結果
+
+.. code-block:: bash
+
+	emcc (Emscripten gcc/clang-like replacement) 1.39.7 
+	(commit 24d88487f47629fac9d4acd231497a3a412bdee8)
+	Copyright (C) 2014 the Emscripten authors (see AUTHORS.txt)
+	This is free and open source software under the MIT license.
+	There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A 
+	PARTICULAR PURPOSE.
+
+.. index:: 
+	pair: WebAssembly 用 RingQt アプリケーションのビルド方法; Ring2EXE の用法
+
+Ring2EXE の用法
+===============
+
+Ring2EXE を使うとアプリケーションの Qt プロジェクトを手軽に準備できます。
+
+用例:
+
+.. code-block:: none
+
+	ring2exe myapp.ring -dist -webassemblyqt
+
+.. note:: この作業は Ring ノートパッド の配布メニューでも行えます。
+
+.. tip:: このオプション (WebAssembly 用の Qt プロジェクトを準備) は配布メニューにあります。
+
+.. index:: 
+	pair: WebAssembly 用 RingQt アプリケーションのビルド方法; Ring アプリケーションの Qt プロジェクト
+
+Ring アプリケーションの Qt プロジェクト
+=======================================
+
+Ring2EXE の実行後、あるいは Ring ノートパッド で配布メニューをクリックした後に、
+
+*  生成した Qt プロジェクトを Qt Creator で開きます。
+
+	フォルダ : target/webassembly/qtproject
+
+	プロジェクトファイル : project.pro
+
+* Qt Creator を使うことで、リソースからコンパイル済みの Ring アプリケーション (YourAppName.ringo) が使えるようになります。
+
+	このファイル (Ring オブジェクトファイル) は Ring コンパイラで生成します。
+
+.. code-block:: none
+
+	ring YourAppName.ring -go -norun
+
+* Qt Creator でもアプリケーションのビルドができます。
+
+(1) アプリケーションで使う画像ファイルをリソースへ追加できます。
+
+	あるいは、テキストエディタ (Notepad など) でファイルを修正します : project.qrc
+
+(2) To find images from your Ring アプリケーションから画像ファイルを使うには、リソースにあるファイル名を指定してください。
+
+用例:
+
+.. code-block:: ring
+
+	if isWebAssembly()
+ 		mypic = new QPixmap(":/cards.jpg")
+	else
+    		mypic = new QPixmap("cards.jpg")
+	ok
+
+.. index:: 
+	pair: WebAssembly 用 RingQt アプリケーションのビルド方法; WebAssembly 用 RingQt の開発における注解
+
+WebAssembly 用 RingQt の開発における注解
+========================================
+
+(1) メインのプロジェクトファイルは main.cpp です。
+
+	このファイルは Ring のコンパイラと仮想計算機、および RingQt を読み出します。
+
+	つぎに、実行時にリソースから Ring オブジェクトファイルを取得します。
+
+	そして、仮想計算機で Ring オブジェクトファイル (ringapp.ringo) を実行します。
+
+	main.cpp でファイルを追加すると複数のファイルを一時作業用フォルダへ
+	展開します (複数のファイルから構成されるプロジェクトを作成します)。
+
+(2) 必要ならば isWebAssembly() を使うことで WebAssembly 用のコードに変更できるようになります。
+
+用例:
+
+.. code-block:: ring
+
+	if isWebAssembly()
+		// WebAssembly のコード
+	else
+  		// ほかのプラットフォーム
+	ok
+
+(3) Qt クラスを扱うときはリソースから画像ファイルを検出します (main.cpp の使用時はコピー不要です)。
+
+
+用例:
+
+.. code-block:: ring
+
+	if isWebAssembly()
+	    mypic = new QPixmap(":/cards.jpg")
+	else
+	    mypic = new QPixmap("cards.jpg")
+	ok
+
+これにより RingQt は AppFile() 関数でファイル名を検出できるようになります。
+
+用例:
+
+.. code-block:: ring
+
+	mypic = new QPixmap(AppFile("cards.jpg"))  # Desktop, Android または WebAssembly
+
+(4) プロジェクトのコードを更新するときは、 Ring2EXE で Qt プロジェクトを再生成しないでください。
+
+その代わり Ring ノートパッド の配布メニューから Ring オブジェクトファイルの生成を選択してください。
+
+そして YourAppName.ringo ファイルを target/webassembly/qtproject へコピーしてファイルを上書きしてださい。
+
+(5) アプリケーションフォルダに Qt リソースファイル (project.qrc) がある場合は、
+
+Ring2EXE または Ring ノートパッド (配布 -  WebAssembly 用の Qt プロジェクトを準備) の実行後に作られた
+リソースファイルを使います。
+
+用例は ring/applications/cards ゲームを参照してください。
+
+(6) StdLib 関数を使うときは  stdlib.ring ではなく stdlibcore.ring をお使いください。
+
+(7) 値 (1000) を打鍵するよりも ClocksPerSecond() 関数をお使いください。
+
+(8) 多重イベントループは非対応ですので、ダイアログのイベントを使うときは代わりに exec() メソッドを呼び出してください。
+
+(9) Sleep() または ProcessEvents() を使うと異常動作の原因となりますので、Qt タイマーをお使いください。
+
+(10) アプリケーションはセキュア環境下で実行されるためファイルシステムにはアクセスできません。
+
+.. tip:: ファイルのダウンロードやアップロード専用の関数をがあります (FileContent サンプルを参照)。 
+
+.. index:: 
+	pair: WebAssembly 用 RingQt アプリケーションのビルド方法; ダイアログ
+
+ダイアログ
+==========
+
+参照先のフォルダ: ring/samples/UsingQtWASM
+
+フォルダ: 
+
+* ColorDialog
+* FontDialog
+* FileDialog
+* FileContent
+
+.. index:: 
+	pair: WebAssembly 用 RingQt アプリケーションのビルド方法; オンラインアプリケーション
+
+オンラインアプリケーション
+==========================
+
+
+* Hello World   : https://ring-lang.github.io/web/helloworld/project.html
+* Matching Game : https://ring-lang.github.io/web/matching/project.html
+* Pairs Game    : https://ring-lang.github.io/web/pairs/project.html
+* Othello Game  : https://ring-lang.github.io/web/othello/project.html
+* Game of Life  : https://ring-lang.github.io/web/gameoflife/project.html
+* Form Designer : https://ring-lang.github.io/web/formdesigner/project.html
+
+.. image:: othelloweb.png
+	:alt: Othello Game

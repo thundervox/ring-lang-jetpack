@@ -1,0 +1,163 @@
+.. index:: 
+	single: プログラムの構造;  はじめに
+
+=================
+プログラムの構造
+=================
+
+複数のソースコードファイルを同じプロジェクトで扱う方法です。
+
+
+.. index:: 
+	pair: プログラムの構造;  ソースコードファイルの階層
+
+ソースコードファイルの階層
+==========================
+
+ソースコードは下記の各階層から構成されています (同一順)。
+
++--------------------------------+
+| ソースコードの階層             |
++================================+
+| ファイルの読み込み             |
++--------------------------------+
+| ステートメントとグローバル変数 |
++--------------------------------+
+| 関数                           |
++--------------------------------+
+| パッケージとクラス             |
++--------------------------------+
+
+アプリケーションは一本以上のファイルから構成されています。
+
+.. index:: 
+	pair: プログラムの構造;  複数のソースコードファイルを扱う方法
+
+複数のソースコードファイルを扱う方法
+====================================
+
+Load 命令はプロジェクトへ別のソースファイルをインクルードします。
+
+
+文法:
+
+.. code-block:: ring
+
+	Load  "filename.ring"
+
+.. note:: Load 命令は、コンパイラの構文解析処理の段階で実行します。
+
+.. tip:: 実行時までファイル名がわからない、または関数でファイルのパスを取得する必要がある場合は、 eval() を使用します。
+
+用例:
+
+.. code-block:: ring
+
+	# ファイル : Start.ring
+
+	Load "sub.ring"
+
+	sayhello("Mahmoud")
+
+.. code-block:: ring
+
+	# ファイル : sub.ring
+
+	func sayhello cName
+		see "Hello " + cName + nl
+
+
+.. index:: 
+	pair: プログラムの構造;  Load Package
+
+Load Package
+============
+
+'Load' 命令により、複数の Ring ソースファイルをプロジェクトで使えますが、
+
+グローバルスコープを共有しているため、グローバル変数の名前衝突が起きることがあります。
+
+この問題は "Load Package" 命令で解決します。
+
+"Load Package" 命令で新規生成したグローバルスコープへライブラリ (\*.ring ファイル) を読み込みます。
+
+これにより既存のグローバル変数との名前衝突を回避できます。これはライブラリ開発でも非常に便利です。
+
+用例:
+
+ファイル: loadpackage.ring
+
+.. code-block:: ring
+
+	x = 100
+	? "Hello, World!"
+	load package "testloadpackage.ring"
+
+	? x
+	test()
+
+ファイル: testloadpackage.ring
+
+.. code-block:: ring
+
+	? "Hello from testloadpackage.ring"
+
+	x = 1000
+
+	test()
+
+	func test
+		? x
+
+実行結果:
+
+.. code-block:: none
+
+	Hello, World!
+	Hello from testloadpackage.ring
+	1000
+	100
+	1000
+
+.. index:: 
+	pair: プログラムの構造; Load Again
+
+Load Again
+==========
+
+Ring 1.12 から Load Again コマンドが使えるようになりました。
+
+このコマンドを使うと Ring ソースファイルにある定数を何度でも読み込めます。
+
+これはグローバル定数による翻訳用 Ring ソースファイルを使用するときに便利です。
+
+用例:
+
+下記はアラビア語と英語に対応するプロジェクトからの引用です。
+
+english.ring と arabic.ring ファイルには翻訳で使う定数があります。
+
+これらのファイルはプログラムの開始時に読み込まれます。
+
+Load コマンドで同じファイルの再読み込みはできません。
+
+Load コマンドは同じソースファイルを一度だけ読み込み、それ以降の読み込み指定は無視するからです。
+
+しかし Load Again コマンドならできます。
+
+よって、下記のコードを使うと実行中にファイルの再利用ができます。
+
+.. code-block:: ring
+
+	func setLang nLanguage
+		if C_ENV_DEFAULT_LANG = nLanguage
+			return
+		ok
+		C_ENV_DEFAULT_LANG = nLanguage
+		# 言語の変更
+			switch nLanguage 
+				on C_TRANSLATION_ENGLISH
+					load again "translation/english.ring"
+				on C_TRANSLATION_ARABIC 
+					load again "translation/arabic.ring"
+			off

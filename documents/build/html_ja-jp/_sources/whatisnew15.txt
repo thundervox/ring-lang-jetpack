@@ -1,0 +1,83 @@
+.. index:: 
+	single: Ring 1.15 の変更履歴; はじめに
+
+====================
+Ring 1.15 の変更履歴
+====================
+
+Ring 1.15 (2021年04月24日更新版 - 開発中) の新機能と変更点です。
+
+.. tip:: 最新の開発状況は https://github.com/ring-lang/ring/tree/master/documents/source/whatisnew15.txt を参照してください。
+
+.. index:: 
+	pair: Ring 1.15 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.15 の新機能！
+
+* Chess Endgame アプリケーション
+* 新作サンプル集
+* そのほかの改善
+
+
+.. index:: 
+	pair: Ring 1.15 の変更履歴; Chess Endgame アプリケーション
+
+Chess Endgame アプリケーション
+==============================
+
+Chess Endgame はデータセットの可視化を行います
+
+このアプリケーションは Microsoft Azure の機械学習により対戦結果の予測をしています。
+
+スクリーンショット:
+
+.. image:: chessendgame1.png
+	:alt: chessendgame
+
+.. image:: chessendgame2.png
+	:alt: chessendgame
+
+.. image:: chessendgame3.png
+	:alt: chessendgame
+
+.. index:: 
+	pair: Ring 1.15 の変更履歴; 新作サンプル集
+
+新作サンプル集
+==============
+
+以下のサンプルを samples フォルダへ追加しました
+
+	*  samples/UsingArabic/WriteArabicFile/using_QFile_write.ring
+	*  samples/UsingArabic/WriteArabicFile/using_QFile_read.ring
+	*  samples/UsingRayLib/more/ex6_jump_player2D.ring
+	*  samples/UsingRayLib/more/ex7_jump_player3D.ring
+	*  samples/UsingRayLib/more/ex8_Aiming_at_3D_moving_targets.ring
+	*  samples/UsingRayLib/more/ex9_jump_player3D_collision_detection.ring
+	*  samples/UsingRayLib/more/ex10_jump_player3D_long_way.ring
+
+.. index:: 
+	pair: Ring 1.15 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+* フォームデザイナー - 翻訳の改善
+* StdLib - List2Code() 関数 - リスト文字列内におけるダブルクォートの対応
+* StdLib - List2Code() 関数 - 整形処理の改善 - 項目の前にタブを追加
+* 拡張機能用のコード - 関数プロトタイプ - 型の出力時に付加される余分な空白文字の除去処理を追加
+* RingLibCurl - curl_easy_setopt() 第三引数のへ (CURLLIST \*) 渡しに対応
+* RingQt - QMessageBox クラス - setIcon() メソッド
+* RingQt - QByteArray クラス - Append() メソッド - バイナリデータへの対応
+* RingQt - QByteArray クラス - Replace() メソッド - 複数バージョンとコードの改善
+* RingQt (WebAssembly) - ファイルのダウンロード - バイナリファイルへの対応
+* Ring VM - 数値と NULL 比較時に NULL から 0 への変換に対応
+* Ring VM - ring_state_stringtokens() 関数
+* Ring VM - ring_state_scannererror() 関数
+* Ring VM - 無限再帰処理の発生時に表示されるメッセージをわかりやすくした
+* Ring コンパイラ - Ring への Ring 組み込み時 - Ring キーワードの保存 (英数大小文字同一視) 
+* Ring コンパイラ - スキャナ - オプション (コメントをトークンとして扱う)
+

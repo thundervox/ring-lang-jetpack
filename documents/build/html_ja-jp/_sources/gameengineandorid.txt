@@ -1,0 +1,110 @@
+.. index:: 
+	single: Android 用ゲームのビルド方法; はじめに
+
+============================
+Android 用ゲームのビルド方法
+============================
+
+モバイル用の RingLibSDL ゲームのビルド方法です。
+
+これにより、 Ring の 2D ゲームエンジンで開発したアプリケーションのパッケージ (\*.apk) を作成できます。
+
+
+.. index:: 
+	pair: Android 用ゲームのビルド方法; Android SDK の要件と更新のダウンロード
+
+Android SDK の要件と更新のダウンロード
+======================================
+
+* Android SDK ツール
+
+	https://developer.android.com/studio/index.html
+
+* Android NDK (android-ndk-r10c で検証済み)
+
+		https://developer.android.com/ndk/index.html
+
+* Apache Ant v1.8 以降
+
+		http://ant.apache.org/bindownload.cgi
+
+* Java SE Development Kit (JDK) v6 以降
+
+		http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+
+* Android SDK を更新して開発に必要な API とツールのパッケージを入手します。
+
+	Android 4.4.2 (API 19) で検証済み
+
+* Windows の場合 - システムにより次の環境変数を定義します。
+
+(1) JAVA_HOME
+
+.. code-block:: ring
+	
+	用例 : C:\Program Files (x86)\Java\jdk1.8.0_05 
+
+(2) ANDROID_HOME	
+
+.. code-block:: ring
+
+	用例 : C:\mahmoud\Tools\Java-Android\adt-bundle-windows-x86-20140702\sdk
+
+.. index:: 
+	pair: Android 用ゲームのビルド方法; プロジェクトのフォルダ
+
+プロジェクトのフォルダ
+======================
+
+プロジェクトのフォルダを開きます : ring/extensions/android/ringlibsdl/project
+
+.. image:: ringlibsdlandroid_shot1.png
+	:alt: Android 版の RingLibSDL
+
+アセットのフォルダへソースコード (\*.ring) および、画像、音声ファイルを追加できます。
+
+.. image:: ringlibsdlandroid_shot2.png
+	:alt: Android 版の RingLibSDL
+
+すぐにビルドできる Flappy Bird 3000 ゲームがあります。
+
+start.ring ファイルから実行開始します。
+
+.. code-block:: ring
+
+	load "game2.ring"
+
+.. index:: 
+	pair: Android 用ゲームのビルド方法; プロジェクトのビルド
+
+プロジェクトのビルド
+====================
+
+ring/extensions/android/ringlibsdl/project フォルダへ移動します。
+
+このコマンドでビルドします (一度だけ必ず実行してください)。
+
+.. code-block:: none
+
+	ndk-build
+
+このコマンドでパッケージ (\*.apk) を作成します。
+
+.. code-block:: none
+
+	ant debug
+
+プロジェクトのビルドにバッチファイル (build.bat) を使うこともできます。
+
+.. code-block:: none
+
+	rem このバッチファイルは、お使いの開発環境に合わせて書き換えてください。
+
+	set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0_05
+	set ANDROID_HOME=C:\mahmoud\Tools\JavaAndroid\adt-bundle-windows-x86-20140702\sdk
+	set NDK_ROOT=C:\mahmoud\Tools\JavaAndroid\android-ndk-r10c
+
+	set path=%path%;C:\mahmoud\Tools\JavaAndroid\android-ndk-r10c
+	set path=%path%;C:\mahmoud\Tools\JavaAndroid\apache-ant-1.9.4\bin
+
+	ndk-build

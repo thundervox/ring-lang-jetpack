@@ -1,0 +1,644 @@
+.. index:: 
+	single: Ring パッケージ管理プログラム (RingPM); はじめに
+
+======================================
+Ring パッケージ管理プログラム (RingPM)
+======================================
+
+Ring パッケージ管理プログラム (RingPM) の用法です。
+
+このツールは Ring パッケージの検索、インストール、および更新をします。
+
+また、パッケージの互換性の確認で意味つきバージョン管理を使います。
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); コマンドラインオプション
+
+コマンドラインオプション
+========================
+
+書式:
+
+.. code-block:: bash
+
+	ringpm [コマンド]
+
+コマンド:
+
+.. csv-table::
+	:header: "コマンド", "説明"
+	:widths:       18,     82
+
+	"search [キーワード...]", 												"新しいパッケージを検索"
+	"refresh", 																"レジストリを更新 (パッケージリスト)"
+	"install [ <パッケージ名> [from <ユーザ名>] [branch <ブランチ名>] ]", 	"パッケージをインストール"
+	"list    [-u : 更新の確認]", 											"インストール済みパッケージのリストを表示"
+	"run     [パッケージ名]", 												"パッケージスクリプトを実行"
+	"update  <パッケージ名>", 												"パッケージを更新"
+	"remove  <パッケージ名>", 												"パッケージを削除"
+	"format", 																"すべてのパッケージを一括削除"
+	"new", 																	"パッケージテンプレートを新規作成"
+	"package", 																"現在のフォルダにパッケージを作成"
+
+.. note:: パッケージの開発検証作業には GitHub アカウント、またはローカル Git サーバが必要です。
+	package.ring による ringpm install でのローカルインストールはできません。
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージの検索
+
+パッケージの検索
+================
+
+search コマンドは新しいパッケージを検索します。
+
+このコマンドは RingPM レジストリ (パッケージのインデックス) を検索します。
+
+RingPM レジストリは登録済み全パッケージのローカルコピーです。
+
+.. code-block:: bash
+
+	ringpm search [キーワード...]
+
+用例:
+
+.. code-block:: bash
+
+	ringpm search notepad
+
+実行結果:
+
+.. code-block:: bash
+
+	Package : ringnotepad (Ring Notepad)
+	Package : notepadppeditorextension (Notepad++ Editor Extension package)
+
+RingPM レジストリにあるパッケージをすべて表示するには、キーワード無指定で Search コマンドを使用してください。
+
+用例:
+
+.. code-block:: bash
+
+	ringpm search
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); RingPM レジストリの更新
+
+RingPM レジストリの更新
+=======================
+
+refresh コマンドはローカルコピーを更新します。
+
+RingPM レジストリは登録済み全パッケージのローカルコピーです。
+
+用例:
+
+.. code-block:: bash
+
+	ringpm refresh
+
+実行結果:
+
+.. code-block:: bash
+
+	No updates to the Registry, Nothing to do!
+
+または
+
+.. code-block:: bash
+
+	The Registry is updated from revision 110 (2019/01/13) to revision 112 (2019/01/15)
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージのインストール
+
+パッケージのインストール
+========================
+
+Install コマンドは新しいパッケージをインストールします。
+
+.. code-block:: bash
+
+	ringpm install [ <パッケージ名> [from <ユーザ名>] [branch <ブランチ名>] ]
+
+RingPM レジストリからパッケージ情報を取得するには、パッケージ名のみ打鍵します。
+または、ユーザ名 (GitHub) と GitHub プロジェクトのブランチ名を決定します。
+
+カレントフォルダがパッケージフォルダならば、パッケージ名の記述は不要です。
+
+用例 (1) :
+
+.. code-block:: bash
+
+	ringpm install ringnotepad
+
+用例 (2) :
+
+.. code-block:: bash
+
+	ringpm install goldmagic800
+
+用例 (3) :
+
+.. code-block:: bash
+
+	ringpm install gameoflife
+
+RingPM レジストリにパッケージが追加されていない場合は、 GitHub ユーザからインストールできます
+
+用例 (4) :
+
+.. code-block:: bash
+
+	ringpm install firstpackage from mahmoudfayed
+
+インストール後にパッケージスクリプト (main.ring) を実行するには
+
+.. code-block:: bash
+
+	ringpm run firstpackage
+
+カレントフォルダのパッケージをインストールするには
+
+用例 (5) :
+
+.. code-block:: bash
+
+	ringpm install
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); インストール済みパッケージのリスト表示
+
+インストール済みパッケージのリスト表示
+======================================
+
+list コマンドはインストール済みパッケージを表示・確認します。
+
+.. code-block:: bash
+
+	ringpm list [-u : 更新の確認]
+
+用例:
+
+.. code-block:: bash
+
+	ringpm list
+
+実行結果:
+
+.. code-block:: bash
+
+	(analogclock)          : The AnalogClock Package [master]         -- (1.0.0)
+	(androidringlibsdl)    : The AndroidRingLibSDL Package [master]   -- (1.0.0)
+	(androidringqt)        : The AndroidRingQt Package [master]       -- (1.0.0)
+	(atomeditorextension)  : The AtomEditorExtension Package [master] -- (1.0.0)
+	(bignumber)            : The BigNumber Package [master]           -- (1.0.0)
+	(calculator)           : The Calculator Package [master]          -- (1.0.0)
+	(cards)                : The Cards Package [master]               -- (1.0.0)
+	(checkers)             : The Checkers Package [master]            -- (1.0.0)
+	(chess)                : The Chess Package [master]               -- (1.0.0)
+	....
+
+新しい更新を確認するには
+
+.. code-block:: bash
+
+	ringpm list -u
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージスクリプトの実行
+
+パッケージスクリプトの実行
+==========================
+
+run コマンドはインストール後にパッケージスクリプト (main.ring) を実行します。これはインストール後の後処理などで使います。
+
+.. code-block:: bash
+
+	ringpm run [パッケージ名]
+
+用例(1):
+
+.. code-block:: bash
+
+	ringpm run ringnotepad
+
+用例(2):
+
+.. code-block:: bash
+
+	ringpm run goldmagic800
+
+用例(3):
+
+.. code-block:: bash
+
+	ringpm run gameoflife
+
+カレントフォルダでパッケージスクリプトを実行するには
+
+用例(4):
+
+.. code-block:: bash
+
+	ringpm run
+
+.. note:: ローカルインストールに対応したいときは run.ring と zip ファイルを使います。
+	詳しくは /tools/ringpm/webassemblyringqt を参照してください。
+
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージの更新
+
+パッケージの更新
+================
+
+update コマンドはパッケージを更新します。
+
+.. code-block:: bash
+
+	ringpm update <パッケージ名>
+
+用例:
+
+.. code-block:: bash
+
+	ringpm update ringnotepad
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージの削除
+
+パッケージの削除
+================
+
+remove コマンドはパッケージを削除します。
+
+.. code-block:: bash
+
+	ringpm remove <パッケージ名>
+
+用例:
+
+.. code-block:: bash
+
+	ringpm remove ringnotepad
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージの全削除
+
+パッケージの全削除
+==================
+
+format コマンドはパッケージをすべて削除します。
+
+用例:
+
+.. code-block:: bash
+
+	ringpm format
+
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージテンプレートの新規作成
+
+パッケージテンプレートの新規作成
+================================
+
+new コマンドはパッケージテンプレートを新規作成します。
+
+.. code-block:: bash
+
+	ringpm new <パッケージ名>
+
+用例:
+
+.. code-block:: bash
+
+	ringpm new myapp
+
+これは新しいフォルダ myapp を作成します。
+
+このようなファイルが新しいフォルダにあります。
+
+* package.ring : パッケージの概要とファイル 
+* main.ring : メインプログラム (Run コマンドで使用)
+* lib.ring : パッケージと関連するライブラリファイル
+
+ファイル : main.ring
+
+.. code-block:: ring
+
+	# メインファイル
+
+	load "lib.ring"
+
+	func main
+
+		? "Hello, World!"
+
+ファイル : lib.ring
+
+.. code-block:: ring
+
+	# ライブラリファイル
+
+ファイル : package.ring
+
+.. code-block:: ring
+
+	aPackageInfo = [
+		:name = "The myapp Package",
+		:description = "Our myapp package using the Ring programming language",
+		:folder = "myapp",
+		:developer = "",
+		:email = "",
+		:license = "MIT License",
+		:version = "1.0.0",
+		:ringversion = "1.10",
+		:versions = 	[
+			[
+				:version = "1.0.0",
+				:branch = "master"
+			]
+		],
+		:libs = 	[
+			[
+				:name = "",
+				:version = "",
+				:providerusername = ""
+			]
+		],
+		:files = 	[
+			"lib.ring",
+			"main.ring"
+		],
+		:ringfolderfiles = 	[
+
+		],
+		:windowsfiles = 	[
+
+		],
+		:linuxfiles = 	[
+
+		],
+		:ubuntufiles = 	[
+
+		],
+		:fedorafiles = 	[
+
+		],
+		:macosfiles = 	[
+
+		],
+		:windowsringfolderfiles = 	[
+
+		],
+		:linuxringfolderfiles = 	[
+
+		],
+		:ubunturingfolderfiles = 	[
+
+		],
+		:fedoraringfolderfiles = 	[
+
+		],
+		:macosringfolderfiles = 	[
+
+		],
+		:run = "ring main.ring",
+		:windowsrun = "",
+		:linuxrun = "",
+		:macosrun = "",
+		:ubunturun = "",
+		:fedorarun = "",
+		:setup = "",
+		:windowssetup = "",
+		:linuxsetup = "",
+		:macossetup = "",
+		:ubuntusetup = "",
+		:fedorasetup = "",
+		:remove = "",
+		:windowsremove = "",
+		:linuxremove = "",
+		:macosremove = "",
+		:ubunturemove = "",
+		:fedoraremove = ""
+	]
+
+.. tip:: リモートのファイル構成については https://github.com/ringpackages/ を参照してください。
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); パッケージ概要ファイル
+
+パッケージ概要ファイル
+======================
+
+パッケージ概要ファイル (package.ring) には、 aPackageInfo のリストで定義されたパッケージ情報があります。
+
+.. csv-table::
+	:header: "属性", "説明"
+	:widths:       18,     82
+
+	"Name",						"パッケージ名"
+	"Description",				"パッケージの概要"
+	"Folder",					"フォルダ名 (ring/ringpm/packages へ作成)"
+	"Developer",				"パッケージ開発者名"
+	"Email",					"パッケージ開発者の電子メールアドレス"
+	"License",					"パッケージの使用許諾条件"
+	"Version",					"パッケージの現行バージョン (最新版数)"
+	"RingVersion",				"必要とされる Ring 言語のバージョン (最小版数)"
+	"Versions",					"GitHub プロジェクトの別ブランチにより提示されるバージョンのリスト"
+	"Libs",						"依存性リスト (名前、バージョンと GitHub のユーザ名)"
+	"Files",					"ファイルリスト (ring/ringpm/packages/[フォルダ] へインストール)"
+	"RingFolderFiles",			"ファイルリスト (Ring のフォルダへインストール)"
+	"WindowsFiles",				"Files と同じですが Microsoft Windows のみで行う処理を指定"
+	"LinuxFiles",				"Files と同じですが Linux のみで行う処理を指定"
+	"MacOSFiles",				"Files と同じですが macOS のみで行う処理を指定"
+	"UbuntuFiles",				"Files と同じですが Ubuntu のみで行う処理を指定"
+	"FedoraFiles",				"Files と同じですが Fedora のみで行う処理を指定"
+	"WindowsRingFolderFiles", 	"RingFolderFiles と同じですが Microsoft Windows のみで行う処理を指定"
+	"LinuxRingFolderFiles", 	"RingFolderFiles と同じですが Linux のみで行う処理を指定"
+	"MacOSRingFolderFiles", 	"RingFolderFiles と同じですが macOS のみで行う処理を指定"
+	"UbuntuRingFolderFiles", 	"RingFolderFiles と同じですが Ubuntu のみで行う処理を指定"
+	"FedoraRingFolderFiles", 	"RingFolderFiles と同じですが Fedora のみで行う処理を指定"
+	"Run",						"パッケージで実行するシステムコマンド (コマンドプロンプトまたは端末)"
+	"WindowsRun ",				"Run と同じですが Microsoft Windows のみで行う処理を指定"
+	"LinuxRun",					"Run と同じですが Linux のみで行う処理を指定"
+	"MacOSRun",					"Run と同じですが macOS のみで行う処理を指定"
+	"UbuntuRun",				"Run と同じですが Ubuntu のみで行う処理を指定"
+	"FedoraRun",				"Run と同じですが Fedora のみで行う処理を指定"
+	"Setup",					"パッケージファイルのダウンロード後に実行するシステムコマンド (コマンドプロンプトまたは端末)"
+	"WindowsSetup",				"Setup と同じですが Microsoft Windows のみで行う処理を指定"
+	"LinuxSetup",				"Setup と同じですが Linux のみで行う処理を指定"
+	"MacOSSetup",				"Setup と同じですが macOS のみで行う処理を指定"
+	"UbuntuSetup",				"Setup と同じですが Ubuntu のみで行う処理を指定"
+	"FedoraSetup",				"Setup と同じですが Fedora のみで行う処理を指定"
+	"Remove",					"パッケージファイルの削除前に実行するシステムコマンド (コマンドプロンプトまたは端末)"
+	"WindowsRemove",			"Remove と同じですが Microsoft Windows のみで行う処理を指定"
+	"LinuxRemove",				"Remove と同じですが Linux のみで行う処理を指定"
+	"MacOSRemove",				"Remove と同じですが macOS のみで行う処理を指定"
+	"UbuntuRemove",				"Remove と同じですが Ubuntu のみで行う処理を指定"
+	"FedoraRemove",				"Remove と同じですが Fedora のみで行う処理を指定"
+
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); カレントフォルダでのパッケージ作成
+
+カレントフォルダでのパッケージ作成
+==================================
+
+package コマンドは既存アプリケーションのパッケージを作成します
+
+アプリケーションのフォルダへ移動後に、
+
+.. code-block:: bash
+
+	ringpm package
+
+を実行するとパッケージ定義ファイル (package.ring) の作成後、パッケージ定義へアプリケーションのファイルリストをすべて追加します。
+
+RingPM で作成したパッケージには、パッケージ情報とファイルリストを記したパッケージ定義ファイル (package.ring) を生成します。
+
+用例:
+
+Ring ノートパッドのパッケージファイル定義は
+
+.. code-block:: ring
+
+	aPackageInfo = [
+		:name = "The RingNotepad Package",
+		:description = "Our RingNotepad package using the Ring programming language",
+		:folder = "ringnotepad",
+		:developer = "Mahmoud Fayed",
+		:email = "msfclipper@yahoo.com",
+		:license = "MIT License",
+		:version = "1.0.0",
+		:ringversion = "1.10",
+		:versions = 	[
+			[
+				:version = "1.0.0",
+				:branch = "master"
+			]
+		],
+		:libs = 	[
+			[
+				:name = "stdlib",
+				:version = "1.0",
+				:providerusername = ""
+			],
+			[
+				:name = "ringqt",
+				:version = "1.0",
+				:providerusername = ""
+			],
+			[
+				:name = "findinfiles",
+				:version = "1.0",
+				:providerusername = ""
+			],
+			[
+				:name = "formdesigner",
+				:version = "1.0",
+				:providerusername = ""
+			],
+			[
+				:name = "libdepwin_apache",
+				:version = "1.0",
+				:providerusername = ""
+			]
+		],
+		:files = 	[
+			"main.ring",
+			"README.md"
+		],
+		:ringfolderfiles = 	[
+			"applications/rnote/batch/killwebserver.bat",
+			"applications/rnote/batch/run.bat",
+			"applications/rnote/batch/run2.bat",
+			"applications/rnote/image/back.jpg",
+			"applications/rnote/image/back2.jpg",
+			"applications/rnote/image/close.png",
+			"applications/rnote/image/colors.png",
+			"applications/rnote/image/copy.png",
+			"applications/rnote/image/cut.png",
+			"applications/rnote/image/debug.png",
+			"applications/rnote/image/font.png",
+			"applications/rnote/image/formdesigner.png",
+			"applications/rnote/image/new.png",
+			"applications/rnote/image/notepad.png",
+			"applications/rnote/image/open.png",
+			"applications/rnote/image/paste.png",
+			"applications/rnote/image/print.png",
+			"applications/rnote/image/project.png",
+			"applications/rnote/image/richtext.png",
+			"applications/rnote/image/run.png",
+			"applications/rnote/image/rungui.png",
+			"applications/rnote/image/save.png",
+			"applications/rnote/image/saveas.png",
+			"applications/rnote/image/search.png",
+			"applications/rnote/image/source.png",
+			"applications/rnote/image/undo.png",
+			"applications/rnote/image/web.png",
+			"applications/rnote/README.md",
+			"applications/rnote/rnote.ring",
+			"applications/rnote/rnoteactivefile.ring",
+			"applications/rnote/rnoteactivefolder.ring",
+			"applications/rnote/rnoteautocomplete.ring",
+			"applications/rnote/rnotebase.ring",
+			"applications/rnote/rnotecontroller.ring",
+			"applications/rnote/rnotedistribute.ring",
+			"applications/rnote/rnoteeditmenu.ring",
+			"applications/rnote/rnoteeditorevents.ring",
+			"applications/rnote/rnotefilemenu.ring",
+			"applications/rnote/rnotefiles.ring",
+			"applications/rnote/rnotefilestabs.ring",
+			"applications/rnote/rnotefind.ring",
+			"applications/rnote/rnotefindinfiles.ring",
+			"applications/rnote/rnoteformdesigner.ring",
+			"applications/rnote/rnotegoto.ring",
+			"applications/rnote/rnotehelp.ring",
+			"applications/rnote/rnotelists.ring",
+			"applications/rnote/rnotemainfiletoolbar.ring",
+			"applications/rnote/rnotemainwindow.ring",
+			"applications/rnote/rnotemode.ring",
+			"applications/rnote/rnoteoutputwindow.ring",
+			"applications/rnote/rnoteprogrammenu.ring",
+			"applications/rnote/rnoterun.ring",
+			"applications/rnote/rnotesettings.ring",
+			"applications/rnote/rnotestyle.ring",
+			"applications/rnote/rnotetabwidth.ring",
+			"applications/rnote/rnotetools.ring",
+			"applications/rnote/rnotetreeviewevents.ring",
+			"applications/rnote/rnoteviewmenu.ring",
+			"applications/rnote/rnotewebbrowser.ring"
+		],
+		:run = "ring main.ring"
+	]
+
+.. index:: 
+	pair: Ring パッケージ管理プログラム (RingPM); RingPM レジストリファイル
+
+RingPM レジストリファイル
+=========================
+
+RingPM レジストリは、登録済み全パッケージのローカルコピーです。
+
+.. code-block:: ring
+
+	aPackagesRegistry = [
+		[ :name = "ringpresentation",
+		  :description = "Powerpoint presentation for the Ring programming language",
+		  :ProviderUserName = "ringpackages"
+		]
+		# ...
+	]
+
+このリストでパッケージを定義しています。
+
+* パッケージ名
+* パッケージの概要
+* 開発者のユーザ名 (GitHub ユーザ名)
+
+新しいパッケージを登録するには、レジストリファイルを更新後に Pull リクエストを送信します。
+
+URL : https://github.com/ring-lang/ring/blob/master/tools/ringpm/registry/registry.ring
+

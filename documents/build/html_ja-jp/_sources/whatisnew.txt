@@ -1,0 +1,597 @@
+.. index:: 
+	single: Ring 1.1 の変更履歴; はじめに
+
+===================
+Ring 1.1 の変更履歴
+===================
+
+Ring 1.1 (2016年10月06日) の変更点と新機能です。
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.1 の新機能！
+
+* 自然言語プログラミング機能を改善
+* Ring オブジェクトファイル (\*.ringo) の生成と実行
+* シンタックスの柔軟性と入出力、および制御構造の各種記法
+* 新しい関数と変更
+* Ring で記述した StdLib 関数とクラス
+* RingLibSDL
+* デモプロジェクト - 2D ゲームエンジン
+* RingSQLite
+* 拡張機能に関するコード生成器の改善
+* 新しい属性を定義するためにクラス範囲で Self.属性 の使用
+* クラスのメソッド内における多重括弧での This.属性 の使用
+* 取扱説明書の増補
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; 自然言語プログラミング機能を改善
+
+自然言語プログラミング機能を改善
+================================
+
+Ring は、画期的なプログラミング言語であり、小規模のシンタックス、高性能な実装 (小規模、透過型、および視覚型)、
+短時間で作成・構築できる宣言型、および自然なドメイン特化言語機能を標準装備しています。
+
+この公開版では、式の評価後のメソッド呼び出しに対応しました。
+
+この用例をご確認ください:
+
+.. code-block:: ring
+
+	# 自然言語コード
+	new program {
+		Accept 2 numbers then print the sum
+	}
+
+	# 自然言語コードの実装
+	class program
+		# キーワード
+			Accept=0 numbers=0 then=0 print=0 the=0 sum=0
+
+		# 実行
+		func braceexpreval x
+			value = x
+		func getnumbers
+			for x=1 to value
+				see "Enter Number ("+x+") :" give nNumber
+				aNumbers + nNumber
+			next
+		func getsum
+			nSUm = 0
+			for x in aNumbers nSum+= x next
+			see "The Sum : " + nSum
+		private
+			value=0	aNumbers=[]
+		
+実行結果: 
+
+.. code-block:: ring
+
+	Enter Number (1) :3
+	Enter Number (2) :4
+	The Sum : 7
+
+詳しくは “自然言語プログラミング” の章を参照してください。
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; Ring オブジェクトファイル (\*.ringo) の生成と実行
+
+Ring オブジェクトファイル (\*.ringo) の生成と実行
+=================================================
+
+この機能は、ソースコードの配布を行わずにアプリケーションを配布できるようにします。
+アプリケーションの配布を単純な処理により、完全なプロジェクトの単体 Ring オブジェクトファイルを取得できます (複数のソースコードファイル)。
+また、Ring オブジェクトファイルを使うとアプリケーションのコンパイルで、ソースファイルの読み込みにかかる処理時間が無くなり、動作速度の向上につながります。
+
+この機能の詳細は「コマンドラインのオプション」を参照してください。
+
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; シンタックスの柔軟性
+
+シンタックスの柔軟性と入出力、および制御構造の様々な記法
+========================================================
+
+プログラマはプログラミング言語のシンタックスには神経質です。
+すばらしいプログラマは様々な記法で仕事をする方法を理解していますが、プログラマには各々好みの記法があります。
+
+プログラミング言語ごとに好き嫌いの分かれる記法があります。
+Ring は、あまたあるプログラミング言語の一星です。
+もっと優れたシンタックスを求めているプログラマのために、選択肢をご用意させていただきました。
+
+また、これらの機能が自然言語プログラミングには最も必要です。
+
+用例 :
+
+言語のキーワードと演算子の変更で使う二種類のコマンドがあります。
+
+.. code-block:: ring
+
+	ChangeRingOperator + plus 
+	ChangeRingKeyword see print
+
+	Print 5 plus 5  
+
+	ChangeRingOperator plus +
+	ChangeRingKeyword print see
+
+入出力用の新しい記法があります (オプション扱い)。
+
+用例:
+
+.. code-block:: ring
+
+	Put "What is your name? "
+	Get cName
+	Put "Hello " + cName
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	Print("What is your name? ")    # 画面へメッセージを表示
+	cName=GetString()               # ユーザからの標準入力を取得
+	print("Hello #{cName}")         # hello と言おう！
+
+制御構造用の新しい記法があります （オプション扱い）。
+
+用例:
+
+.. code-block:: ring
+
+	While True
+
+		Put " 
+			Main Menu
+			---------
+			(1) Say Hello
+			(2) About
+			(3) Exit
+
+		    " Get nOption
+
+		Switch nOption
+		Case 1 
+			Put "Enter your name : " 
+			Get name 
+			Put "Hello " + name + nl
+		Case 2 
+			Put "Sample : using while loop" + nl
+		Case 3 
+			Bye
+		Else 
+			Put "bad option..." + nl
+		End
+	End
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	While True {
+
+		print(" 
+			Main Menu
+			---------
+			(1) Say Hello
+			(2) About
+			(3) Exit
+
+			  ")
+
+		nOption = GetString()
+
+		switch nOption {
+		case 1 
+			print("Enter your name : ")
+			name = getstring()
+			print("Hello #{name}\n")
+		case 2 
+			print("Sample : using switch statement\n")
+		case 3 
+			Bye
+		else 
+			print("bad option...\n")
+		}
+
+	}
+
+この章を参照してください:
+
+* 入門 - 第二形式
+* 入門 - 第三形式
+* 制御構造 - 第二形式 - Lua および Ruby 風の記法
+* 制御構造 - 第三形式 - C 風の記法 (括弧の使用)
+* シンタックスの柔軟性
+
+.. note:: これらすべての記法は自動的かつ同時にコンパイラで使えます。
+	例えば Put/Get および括弧の使用を許可するなど同じプロジェクトでは記法を一つだけ選択するのが良いです
+	(記法を併用して、別の記法を作成することもできます)。
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; 新しい関数と変更
+ 
+新しい関数と変更
+================
+
+変更:
+
+* get() 関数 : sysget() へ変更。
+* sort(), find() 関数 : オブジェクトのリストでも動作するようになりました。
+
+
+追加:
+
+* clockspersecond()
+* CurrentDir()
+* ExeFileName()
+* ChDir()
+* ExeFolder()
+* varptr()
+* space()
+* nullpointer()
+* object2pointer()
+* pointer2object()
+
+この章を参照してください:
+
+* システム関数
+* オブジェクト指向プログラミング (OOP)
+* 低水準関数
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; Ring で記述された StdLib 関数とクラス
+
+Ring で記述された StdLib 関数とクラス
+=====================================
+
+Ring 1.1 には Ring チームの協力により Ring で記述された StdLib ライブラリがあります。
+
+このライブラリでは新しい関数とクラスの実用的なグループを実装しています。
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	Puts("Test Times()")
+	Times ( 3 , func { see "Hello, World!" + nl } )
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	Puts("Test Map()")
+	See Map( 1:10, func x { return x*x } )
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	Puts("Test Filter()")
+	See Filter( 1:10 , func x { if x <= 5 return true else return false ok } )
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	See "Testing the String Class" + nl
+	oString = new string("Hello, World!")
+	oString.println()
+	oString.upper().println()
+	oString.lower().println()
+	oString.left(5).println()
+	oString.right(6).println()
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oList = new list ( [1,2,3] )
+	oList.Add(4)
+	oList.print()
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oStack = new Stack
+	oStack.push(1)
+	oStack.push(2)
+	oStack.push(3)
+	see oStack.pop() + nl
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	oQueue = new Queue
+	oQueue.add(1)
+	oQueue.add(2)
+	oQueue.add(3)
+	see oQueue.remove() + nl
+
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	ohashtable = new hashtable
+	See "Test the hashtable Class Methods" + nl
+	ohashtable { 
+		Add("Egypt","Cairo")
+		Add("KSA","Riyadh")
+		see self["Egypt"] + nl
+		see self["KSA"] + nl
+		see contains("Egypt") + nl
+		see contains("USA") + nl
+		see index("KSA")  + NL
+		print()
+		delete(index("KSA"))
+		see copy("*",60) + nl
+		print()
+	}
+
+用例:
+
+.. code-block:: ring
+
+	Load "stdlib.ring"
+
+	otree = new tree
+	See "Test the tree Class Methods" + nl
+	otree {
+		set("The first step")	# ルートノードの値を設定します。
+		see value() + nl
+		Add("one")
+		Add("two")
+		Add("three") {
+			Add("3.1")
+			Add("3.2")
+			Add("3.3")
+			see children
+		}
+		see children
+		oTree.children[2] {
+			Add("2.1") Add("2.2") Add("2.3") {
+				Add("2.3.1") Add("2.3.2") Add("test")
+			}
+		}
+		oTree.children[2].children[3].children[3].set("2.3.3")
+	}
+	see copy("*",60) + nl
+	oTree.print()
+
+この章を参照してください:
+
+* StdLib 関数
+* StdLib クラス
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; RingLibSDL 
+
+RingLibSDL 
+==========
+
+Ring 1.0 では Allegro ゲームプログラミング・ライブラリ (RingAllegro) でゲームを作成できるようになりました。
+
+Ring 1.1 では LibSDL (RingLibSDL) も使用可能です。
+
+用例:
+
+.. code-block:: ring
+
+	Load "libsdl.ring"
+
+	SDL_Init(SDL_INIT_EVERYTHING)
+	win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN)
+	SDL_Delay(2000)
+	SDL_DestroyWindow(win)
+	SDL_Quit()
+
+
+RingLibSDL の章を参照してください。
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; デモプロジェクト - 2D ゲームエンジン
+
+デモプロジェクト - 2D ゲームエンジン
+====================================
+
+最良実行性能を得るには C/C++ などでゲームエンジンを作成後にエンジン用の Ring クラスを実装します。
+
+一般的な 2D ゲームの構造は単純明快であり、 Ring でゲームエンジンを作成しても十分高速です。
+
+また、これは言語の概念として、オブジェクト指向プログラミング (OOP) によるオブジェクトの構築方法、
+多重構造の宣言型プログラミングの用法、
+または自然言語プログラミングによる強力なアクセス方法について学ぶための優れたデモプロジェクトです。
+
+このプロジェクトでは最初の方法を選択します (多重構造の宣言型プログラミング)。
+
+用例:
+
+.. code-block:: ring
+
+	Load "gameengine.ring"	# ゲームエンジンへ制御権を与えます。
+
+	func main		# ゲームエンジンにより呼び出されます。
+
+		oGame = New Game	# Game オブジェクトの作成
+		{
+			title = "My First Game"
+			text {
+				x = 10	y=50
+				animate = false
+				size = 20
+				file = "fonts/pirulen.ttf"
+				text = "game development using ring is very fun!"
+				color = rgb(0,0,0)	# 配色 = 黒色
+			}
+			text {
+				x = 10	y=150
+				# アニメーション部分 ======================================
+				animate = true				# アニメーションの使用
+				direction = GE_DIRECTION_INCVERTICAL	# y の増分
+				point = 400	 	# y=400 になるまで継続
+				nStep = 3		# 毎回 y+= 3 を行う
+				#==========================================================
+				size = 20
+				file = "fonts/pirulen.ttf"
+				text = "welcome to the real world!"
+				color = rgb(0,0,255)	# 配色 = 青色
+			}
+			Sound {					# 音声の再生
+				file = "sound/music1.wav"	# イベントループの開始
+			}		
+		}					# イベントループの開始
+
+“デモプロジェクト - 2D ゲームエンジン”の章を参照してください。
+
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; RingSQLite
+
+RingSQLite
+==========
+
+ODBC 関数 (Ring 1.0 以降)、 SQLite 関数 (Ring 1.1 以降) を実装しました。これにより、各種データベース、および MySQL に標準対応しました。
+
+用例:
+
+.. code-block:: ring
+
+	oSQLite = sqlite_init()
+
+	sqlite_open(oSQLite,"mytest.db") 
+
+	sql = "CREATE TABLE COMPANY("  +
+	         "ID INT PRIMARY KEY     NOT NULL," +
+        	 "NAME           TEXT    NOT NULL," +
+	         "AGE            INT     NOT NULL," +
+        	 "ADDRESS        CHAR(50)," +
+	         "SALARY         REAL );"
+
+	sqlite_execute(oSQLite,sql) 
+
+	sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "  +
+        	 "VALUES (1, 'Mahmoud', 29, 'Jeddah', 20000.00 ); " +
+	         "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) "  +
+        	 "VALUES (2, 'Ahmed', 27, 'Jeddah', 15000.00 ); "     +
+	         "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
+        	 "VALUES (3, 'Mohammed', 31, 'Egypt', 20000.00 );" +
+	         "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
+        	 "VALUES (4, 'Ibrahim', 24, 'Egypt ', 65000.00 );"
+
+	sqlite_execute(oSQLite,sql)
+
+	aResult =  sqlite_execute(oSQLite,"select * from COMPANY") 
+	for x in aResult
+		for t in x
+			see t[2] + nl
+		next
+	next
+	see copy("*",50)  + nl
+	for x in aResult
+		see x["name"] + nl
+	next
+	sqlite_close(oSQLite) 
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; 拡張機能用のコード生成器の改善
+
+
+拡張機能用のコード生成器の改善
+==============================
+
+Ring へ新しいライブラリを追加するためにコード生成器 (Ring にて記述) を使用しています。
+
+RingQt と RingAllegro (Ring 1.1 では RingLibSDL) はコード生成器で作成しました。
+
+また、次の機能を追加しました。
+
+* 構造体メンバの設定と取得 (数値とポインタ)
+* 定数の使用
+* コード生成器の改善
+
+コード生成器の章を参照してください。
+
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; 新しい属性を定義するためにクラス範囲で Self.属性 の使用
+
+
+新しい属性を定義するためにクラス範囲で Self.属性 の使用
+=======================================================
+
+新しい属性を定義するためにクラス範囲 (クラス名の後、およびメソッドの前) で
+Self.属性 を使えます。
+
+
+.. code-block:: ring
+
+	class Person
+		name		# グローバル変数ではない場合は、属性名を定義します。
+		address
+		phone
+
+	class person2
+        	self.name	# 必ず属性を定義してください。
+	        self.address
+	        self.phone
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; クラスのメソッド内における多重括弧での This.属性 の使用
+
+
+クラスのメソッド内における多重括弧での This.属性 の使用
+=======================================================
+
+メソッド内から別オブジェクトへのアクセスで多重括弧 { } を使えます。
+この場合、括弧内、および Self で {} でアクセスするオブジェクトを指定するときに
+現在のオブジェクトの有効範囲は変更されます。この場合において
+This.属性 および This.属性() は現在のクラスから作成される
+オブジェクトへアクセスするために使えます。
+
+詳しくはオブジェクト指向プログラミングの章を参照してください。
+
+また RingQt (GUI) で開発した Weight History アプリケーションも併せて参照してください。
+
+.. index:: 
+	pair: Ring 1.1 の変更履歴; 取扱説明書の増補
+
+取扱説明書の増補
+================
+
+Ring 1.1 の取扱説明書 (800 ページ) は Ring 1.0 (2016年01月25日公開) の取扱説明書 (340 ページ) よりも改善しています。
+
+良質な知識を理解して頂きたく言語関連などの章を多数加筆しました。
+
+* 言語リファレンス
+* スコープの規則
+* よくある質問と回答集
+
+など多岐にわたります！

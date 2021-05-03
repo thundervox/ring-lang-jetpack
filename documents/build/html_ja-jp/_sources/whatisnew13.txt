@@ -1,0 +1,501 @@
+.. index:: 
+	single: Ring 1.13 の変更履歴; はじめに
+
+====================
+Ring 1.13 の変更履歴
+====================
+
+Ring 1.13 (2020年09月15日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.13 の新機能！
+
+* Ring 入門書のご案内
+* WebAssembly への対応
+* スレッド機能の改良
+* Laser ゲーム
+* Magic Balls ゲーム
+* MoneyBoxes ゲーム
+* Matching ゲーム
+* Pairs ゲーム
+* Word ゲーム
+* Tetris ゲーム
+* Escape ゲーム
+* Hassouna Course のサンプル集
+* SpaceVim エディタへの対応
+* RingQt の改良
+* RingRayLib の改良
+* RingStbImage 拡張機能
+* 低水準関数の追加
+* フォルダ構成の改善
+* そのほかの改善
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Ring 入門書のご案内
+
+Ring 入門書のご案内
+===================
+
+Apress: Beginning Ring Programming (From Novice to Professional)
+
+URL: https://www.apress.com/gp/book/9781484258323
+
+※日本では Amazon などで英語洋書の取り扱いある書店にて取り寄せ、または購入できます。
+
+.. image:: ringbookbyapress.png
+	:width: 310pt
+	:height: 450pt
+	:alt: Ring Book by Apress
+
+本書は実践的で豊富な用例により Ring プログラミングの世界を解りやすく丁寧に解説することを目的としています。
+
+どんなことがわかるようになるの？
+
+* Ring の入門とデータ型、入出力 (I/O)、関数、さらにクラスを習得します。
+* Ring で構造化、自然言語、オブジェクト指向、関数型、およびメタプログラミングができるようになります。
+* Ring の機能をすべて活用することで、プログラムのコードのリファクタリングとクリーンなプログラムのアーキテクチャ開発ができるようになります。
+* Ring ゲームエンジンでプロ級のビデオゲームをサクッと作れるようなります。
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; WebAssembly への対応
+
+WebAssembly への対応
+====================
+
+Ring で WebAssembly アプリケーションの配布に対応しました (WebAssembly の対応に Qt を採用)。
+
+* Hello World : https://ring-lang.github.io/web/helloworld/project.html
+* Matching Game : https://ring-lang.github.io/web/matching/project.html
+* Pairs Game : https://ring-lang.github.io/web/pairs/project.html
+* Othello Game : https://ring-lang.github.io/web/othello/project.html
+* Game of Life : https://ring-lang.github.io/web/gameoflife/project.html
+* Online Form Designer : https://ring-lang.github.io/web/formdesigner/project.html
+
+.. image:: othelloweb.png
+	:alt: Othello ゲーム
+
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; スレッド機能の改良
+
+スレッド機能の改良
+==================
+
+Ring 1.13 ではスレッド機能を改良しました。
+
+(1) Ring VM はスレッドごとに独立したメモリプールを使うように改訂されました (高速化)。
+(2)RingAllegro スレッド関数で様々な検証を行いました。
+(3) RingLibUV はコールバック関数使用時にスレッドセーフになるよう改訂されました。
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Laser ゲーム
+
+Laser ゲーム
+============
+
+Laser ゲームの実装です。
+
+.. image:: lasergame2.png
+	:alt: Laser ゲーム
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Magic Balls ゲーム
+
+Magic Balls ゲーム
+==================
+
+Magic Balls ゲームの実装です。
+
+.. image:: magicballs.png
+	:alt: Magic Balls ゲーム
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; MoneyBoxes ゲーム
+
+Money Boxes ゲーム
+==================
+
+箱を開いて必要な金額が貯まっているか調べてみましょう！
+
+.. image:: moneyboxes.png
+	:alt: Money Boxes ゲームe
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Matching ゲーム
+
+Matching ゲーム
+===============
+
+Matching ゲームの実装です。
+
+.. image:: matchinggame.png
+	:alt: Matching ゲーム
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Pairs ゲーム
+
+Pairs ゲーム
+============
+
+Pairs ゲームの実装です。
+
+.. image:: pairsgame.png
+	:alt: Pairs ゲーム
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Word ゲーム
+
+Word ゲーム
+===========
+
+Word ゲームの実装です。
+
+.. image:: wordgame2.png
+	:alt: Word ゲーム
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Tetris ゲーム
+
+Tetris ゲーム
+=============
+
+Tetris ゲームの実装です。
+
+改良点
+
+* 新しいブロックは無作為に選ばれます (様々なブロック、色と配置)
+* ブロックの移動や回転、加速ができます。
+* 得点: 横列がそろうと10 点を得られます (ゲームでは積み重なった横列の確認を厳密に行います)
+* ゲームは無人で永久動作するようにできています (ゲームオーバー後にゲームを自動でやりなおします)
+
+.. image:: tetris.png
+	:alt: Tetris Game
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Escape ゲーム
+
+Escape ゲーム
+=============
+
+ヘビから逃げつつヘビが成長しないよう星を集めよ。
+
+.. image:: escapegame.png
+	:alt: Escape Game
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Hassouna Course のサンプル集
+
+Hassouna Course のサンプル集
+============================
+
+URL (YouTube): https://www.youtube.com/watch?v=6VIHMyrEilw&list=PLHIfW1KZRIfl6KzfLziFl650MmThnQ0jT
+
+この講座のサンプル集を ring/samples/UsingArabic/HassounaCourse フォルダへ追加しました。
+
+Rockets サンプル
+
+.. image:: hassouna3.png
+	:alt: Hassouna Course のサンプル集
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; SpaceVim エディタへの対応
+
+SpaceVim エディタへの対応
+=========================
+
+URL: https://github.com/SpaceVim/SpaceVim
+
+スクリーンショット:
+
+.. image:: ringinvim.png
+	:alt: SpaceVim の Ring 対応
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; Better RingQt の改良
+
+RingQt の改良
+=============
+
+(1) 以下のクラスを RingQt へ追加しました。
+
+* QAbstractAxis
+* QAbstractBarSeries
+* QAbstractSeries
+* QAreaLegendMarker
+* QAreaSeries
+* QBarCategoryAxis
+* QBarLegendMarker
+* QBarSeries
+* QBarSet
+* QBoxPlotLegendMarker
+* QBoxPlotSeries
+* QBoxSet
+* QCandlestickLegendMarker
+* QCandlestickModelMapper
+* QCandlestickSeries
+* QCandlestickSet
+* QCategoryAxis
+* QChart
+* QChartView
+* QDateTimeAxis
+* QHBarModelMapper
+* QHBoxPlotModelMapper
+* QHCandlestickModelMapper
+* QHPieModelMapper
+* QHXYModelMapper
+* QHorizontalBarSeries
+* QHorizontalPercentBarSeries
+* QHorizontalStackedBarSeries
+* QLegend
+* QLegendMarker.
+* QLineSeries
+* QLogValueAxis
+* QPercentBarSeries
+* QPieLegendMarker
+* QPieSeries
+* QPieSlice
+* QPolarChart
+* QScatterSeries
+* QSplineSeries
+* QStackedBarSeries
+* QVBarModelMapper
+* QVBoxPlotModelMapper
+* QVCandleStickModelMapper
+* QVPieModelMapper
+* QVXYModelMapper
+* QValueAxis
+* QXYLegendMarker
+* QXYSeries
+* QGraphicsScene
+* QMovie
+
+(2) QtConverter アプリケーションの改善
+
+このアプリケーション Ring コード生成器で Qt クラスを用意するために使います。
+
+これにより Ring コード生成器で Qt クラスで RingQt クラスを生成します。
+
+アプリケーションのユーザインタフェースを改訂しました。これにより生産性が向上しました！
+
+.. image:: qtconverter.png
+	:alt: QtConverter
+
+(3) Android 版 RingQt - Qt プロジェクト - Special folders for Ring と RingQt の特別なフォルダ
+
+(4) Qt 5.15.0 の採用
+
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; RingRayLib の改良
+
+RingRayLib の改良
+=================
+
+(1) 関数はすべてポインタではなくオブジェクトを返すようなりました
+
+(2) RayMath ライブラリへの対応
+
+(3) RayLib から RingRayLib へサンプルを追加移植しました。
+
+* Scissor Test
+* Input Gestures Detection
+* Bouncing Ball
+* Rectangle Rounded
+* Draw Circle Sector
+* RayLib Logo Animation
+* First Person Maze
+
+.. image:: raylib_firstpersonmaze.png
+	:alt: firstpersonmaze
+
+* Plane Rotations 
+
+.. image:: raylib_planerotations.png
+	:alt: planerotations
+
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; RingStbImage 拡張機能
+
+RingStbImage 拡張機能
+======================
+
+stb_image ライブラリに対応した新しい拡張機能です。
+
+用例:
+
+.. code-block:: ring
+
+	# ライブラリの読み込み
+		load "stbimage.ring"
+	# 画像の情報
+		width=0	height=0 channels=0
+	# Ring はプログラム終了後に cData を自動的に解放します
+		cData = stbi_load("ring.jpg",:width,:height,:channels,STBI_rgb)
+	# 画面へ結果を表示
+		? "Size (bytes): " + len(cData)
+		? "Width : " + width
+		? "Height: " + height
+		? "Channels: " + channels
+
+実行結果:
+
+.. code-block:: ring
+
+	Size (bytes): 557371
+	Width : 563
+	Height: 330
+	Channels: 3
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; 低水準関数の追加
+
+低水準関数の追加
+================
+
+以下の低水準関数を追加しました。
+
+詳しくは取扱説明書にある低水準関数の章を参照してください。
+
+.. code-block:: ring
+
+	setpointer(pointer,nNewAddress)
+	getpointer(pointer) ---> nAddress
+	pointer2string(pointer,nStart,nCount) ---> cString
+	memcpy(pDestinationPointer,cSourceString,nSize)
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; フォルダ構成の改善
+
+フォルダ構成の改善
+===================
+
+プロジェクトのフォルダとソースコードを整理し直しました。
+
+(1) Language フォルダ - コンパイラおよび仮想マシンに関するソースコードとビジュアルソースを収録。
+
+(2) Extensions フォルダ (C/C++ ライブラリとの接続) - libdepwin, android および webassembly フォルダを収録。
+
+(3) Libraries フォルダ - Ring で記述した Ring ライブラリと GuiLib および ObjectsLib を収録。
+
+(4) Tools フォルダ - 開発ツール - エディタ, RingNotepad, FormDesigner を収録。
+
+(5) Samples フォルダ - Ring サンプル集 - このフォルダは頻繁に整理整頓を行います。
+
+
+.. index:: 
+	pair: Ring 1.13 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+* 新作アプリケーション集
+	* Towers of Hanoi
+	* Questions ゲーム
+	* Money Case ゲーム
+	* Rock Paper Scissors ゲーム
+	* Lottery ゲーム
+	* Nim ゲーム
+	* Eight Queens ゲーム
+	* Typing Quiz
+	* Pong 2 ゲーム
+	* Space Shooter ゲーム
+
+* 新作サンプル集
+	* ring/samples/Language/HelloWorld フォルダ
+	* ring/samples/Language/ChangeIsNULL フォルダ
+	* ring/samples/Language/Console/customsee.ring 
+	* ring/samples/Language/Numbers/decimalscount.ring
+	* ring/samples/Language/EvalInScope/swap.ring
+	* ring/samples/Language/EvalInScope/global.ring
+	* ring/samples/Language/EvalInScope/enum.ring
+	* ring/samples/Language/Endian/endian.ring
+	* ring/samples/Language/VariablePointer/varptr4.ring 
+	* ring/samples/Language/VariablePointer/varptr5.ring 
+	* ring/samples/Language/DebugCode フォルダ
+	* ring/samples/Language/ClassMethods フォルダ
+	* ring/samples/Language/Lists/CheckHashTableAttribute.ring
+	* ring/samples/Language/RingFileTokens フォルダ (Ring コンパイラ - スキャナの出力)
+	* ring/samples/ProblemSolving/Fib フォルダ
+	* ring/samples/ProblemSolving/ArrayPathDest/solveArrayPathDest.ring
+	* ring/samples/ProblemSolving/PegSolitaire/peg-soli.ring
+	* ring/samples/General/RosettaCode/uniquecharacters.ring
+	* ring/samples/General/RosettaCode/similarcharacters.ring
+	* ring/samples/General/RandomLatinSquares フォルダ
+	* ring/samples/General/FactorialRecursion フォルダ
+	* ring/samples/UsingArabic/RightToLeft フォルダ (Set Layout Direction)
+	* ring/samples/UsingWebLib/Unicode フォルダ
+	* ring/samples/UsingQt/InputMask フォルダ
+	* ring/samples/UsingQt/PlayGif フォルダ
+	* ring/samples/UsingQt/TableWidget フォルダ
+	* ring/samples/UsingQt/ButtonSizeInLayout フォルダ
+	* ring/samples/UsingQt/DateTimeEditFormat フォルダ (Date Picker Control)
+	* ring/samples/UsingQML/sample10 フォルダ (Charts Samples)
+	* ring/samples/UsingQML/sample11 フォルダ (Data Visualization Samples)
+	* ring/samples/UsingQtWASM/colordialog フォルダ
+	* ring/samples/UsingQtWASM/fontdialog フォルダ 
+	* ring/samples/UsingQtWASM/filedialog フォルダ 
+	* ring/samples/UsingQtWASM/filecontent フォルダ (ファイルのダウンロードとアップロード)
+	* ring/samples/UsingRayLib/more/ex4_levelsofcubes.ring
+	* ring/samples/UsingOpenGL/cubeongpu/cubeongpu.ring
+	* ring/samples/UsingOpenGL/cubeongpu2/cubeongpu.ring
+
+* Ring ノートパッド - 実行結果ウィンドウ - バッファ容量を 1 MB に設定
+* Ring ノートパッド - View メニュー - ソースコード (フルスクリーン)
+* Ring ノートパッド - 各種スタイルのキーボードショートカット
+* Ring ノートパッド - ドット記号があるフォルダへのファイルの保存に対応
+* Ring ノートパッド - Browser ウィンドウ - 現在のスタイルに従い配色を設定
+* Ring ノートパッド - 関数リスト - "def" で定義した関数の表示
+* Ring ノートパッド - 配布メニュー - WebAssembly (RingQt) の配布でウェブブラウザを使用
+* Form Designer - ツールバー - ウィンドウスタイルの幅を拡大
+* Form Designer - ツールバー - Select Objects ボタンの新規アイコン
+* Gold Magic 800 - レベルエディタ - ウィンドウサイズの縮小
+* Super Man 2016 - ゲームオーバー時のメッセージアニメーション表示速度を速くした
+* Super Man 2016 - 超人と壁の衝突判定におけるコードの改善
+* Game Engine - Game Class - Icon プロパティ (ウィンドウのアイコン設定)
+* Ring game ゲームエンジンで開発したゲームのウィンドウへアイコンを設定
+* 型ヒントライブラリ - コードを改善
+* StdLib - IsMainSourceFile() 関数 - コードを改善
+* StdLib - TimeInfo() 関数 - TimeList() の全情報が利用可能になりました
+* StdLib - Map() と Filter() 関数 - グローバルスコープへのアクセスに対応
+* StdLib - NewList() 関数は不要になりました - List() 関数をお使いください
+* WebLib - Template() 関数 - グローバルスコープへのアクセスに対応
+* Objects Library - API を改善
+* Natural Library - コードを改善
+* RingLibSDL - LibSDL バージョンを 2.0.10 から 2.0.12 へ更新
+* RingOpenGL - コードを改善 (GLEW 関数の追加)
+* RingFreeGLUT - コードを改善 (関数を多数追加)
+* RingLibUV - コードを改善 - VarPtr() 関数を使用したサンプル
+* RingPM - 大文字の実行可能ファイルを渡す端末へ対応
+* Ring2EXE - WebAssembly (RingQt) の配布でウェブブラウザを使用
+* Ring2EXE - 実行可能ファイルが対象のフォルダに存在するときは削除を行います
+* Ring2EXE - リソースファイルに記載されているファイルは対象のフォルダへコピーするようになりました
+* Ring2EXE - Android 版の配布 - Ring よび RingQt フォルダのコピー処理
+* Ring テスト - 全てのテスト実行終了後にレポートの概要を表示
+* CodeGen - オプションの追加: PassNullBeforeVMPointer (C++ クラス用)
+* CodeGen - RING_API_ISPOINTER() ではなく RING_API_ISCPOINTER() の使用
+* Ring コンパイラ - ChangeRingKeyword - 同一行でのコメントと複数コマンドに対応
+* Ring コンパイラ - ChangeRingOperator - 同一行でのコメントと複数コマンドに対応
+* Ring コンパイラ - ring_parser.c - コードを改善
+* Ring コンパイラ - ring_stmt.c - コードを改善
+* Ring コンパイラ - ring_expr.c - コードを改善
+* Ring コンパイラ - ring_state.c - 英数大小文字同一視機能のフラグ
+* Ring コンパイラ - Load コマンド - ring/bin/load フォルダからのライブラリ読み込みに対応
+* Ring コンパイラ - LoadSyntax コマンド - ring/bin/load フォルダからのライブラリ読み込みに対応
+* Ring コンパイラ - コマンド: ? <式> - 式の欠落時に表示されるエラーメッセージをわかりやすくした
+* Ring コンパイラ - エラーメッセージの改善
+* Ring VM - リスト定義の用法 - リスト自体の使用に対応 (要素に限定しません)
+* Ring VM - List() 関数 - List(nRow,nCols) による二次元リストの作成に対応
+* Ring VM - List() 関数 - 実効性能の向上
+* Ring VM - オブジェクトファイル - ファイルリストの保存と復元
+* Ring VM - ring_vmexpr.c - コードを改善 - マジックナンバーの除去
+* Ring VM - ring_state_filetokens() - オプションのパラメータにおける英大小同一機能
+* Ring VM - ring_state_setvar() - コードを改善
+* Ring VM - int2bytes(), float2bytes() と double2bytes() で sizeof() 関数を使うようになりました
+* Ring VM - fclose() 関数 - FILE ポインタが NULL のときにエラーメッセージを表示
+* Ring VM - Extensions API - 整数ポインタ取得時における呼び出し元のローカルスコープに対応

@@ -1,0 +1,119 @@
+﻿.. index:: 
+	single: ソケット; はじめに
+
+=====================
+RingSockets 拡張機能
+=====================
+
+RingSockets 拡張機能の用法です。
+
+.. index:: 
+	pair: ソケット; TCP サーバ
+
+TCP サーバ
+==========
+
+用例 (TCP サーバのコード): 
+
+.. code-block:: ring
+
+	load "sockets.ring" 
+
+	sock = socket(AF_INET,SOCK_STREAM,0) 
+	bind(sock,"127.0.0.1",5050)
+	listen(sock,5)
+	ns = accept(sock)
+
+	send(ns,"Hello Client")
+	msg = recv(ns,1024)
+	? "Client Say >> " + msg
+	close(ns)
+	close(sock)
+	? "ソケットの接続を終了しました"
+
+.. index:: 
+	pair: ソケット; TCP クライアント
+
+TCP クライアント
+================
+
+用例 (TCP クライアントのコード):
+
+.. code-block:: ring
+
+	load "sockets.ring" 
+
+	sock = socket(AF_INET,SOCK_STREAM)
+	connect(sock,"127.0.0.1",5050)
+
+	send(sock,"Hello Server")
+	msg = recv(sock,1024)
+	? "Server Say >> " + msg
+
+	close(sock)
+	? "ソケットの接続を終了しました"
+
+.. index:: 
+	pair: ソケット; 関数
+
+関数
+====
+
+この拡張機能の関数一覧です。
+
+.. code-block:: none
+
+	socket(nAddressFamily, nConnectionType) -> SocketHandle
+	bind(pSocketHandle, cHost , nPort)
+	listen(pSocketHandle, nBacklog)
+	accept(pSocketHandle) -> pConnectionHandle
+	send(pConnectionHandle|pSocketHandle,cMessage)
+	sendto(pSocketHandle,cMessage)
+	recv(pConnectionHandle|pSocketHandle,nBuffer) -> cData
+	recvfrom(pSocketHandle, nBuffer) -> cData
+	connect(pSocketHandle, cHost , nPort) -> 成功時は <0> を返します
+	close(pSocketHandle|pConnectionHandle)
+	gethostbyname(cHostName) -> cIPAddress
+	gethostbyaddr(cIPAddress) -> aListOfHostInfo
+	gethostname() -> cHostName
+	getservbyname(cName) -> nPort
+	getservbyport(nPort) -> cName
+
+用例:
+
+.. code-block:: ring
+
+	load "sockets.ring"
+
+	host = gethostbyname("google.com")
+	? host
+	line()
+	? gethostbyaddr(host)
+	line()
+	? gethostname()
+	line()
+	? getservbyname("ftp")
+	line()
+	? getservbyport(21)
+
+	func line ? copy("=",30)
+
+.. index:: 
+	pair: ソケット; 定数
+
+定数
+====
+
+アドレス系統:
+
+.. code-block:: none   
+
+	AF_INET       #  IPV4 を使用します。
+	AF_INET6      #  IPV6 を使用します。
+
+接続方法:
+
+.. code-block:: none   
+
+	SOCK_STREAM   #  TCP プロトコルを使用します。
+	SOCK_DGRAM    #  UDP プロトコルを使用します。

@@ -1,0 +1,487 @@
+.. index:: 
+	single: Ring 1.11 の変更履歴; はじめに
+
+====================
+Ring 1.11 の変更履歴
+====================
+
+Ring 1.11 (2019年09月15日) の新機能と変更点です。
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; 新機能と変更リスト
+
+新機能と変更リスト
+==================
+
+Ring 1.11 の新機能！
+
+* 3Dサンプルの追加
+* Checkers ゲーム
+* Sokoban ゲーム
+* Maze ゲーム
+* Snake ゲーム
+* Sudoku ゲーム
+* デスクトップスクリーンショットアプリケーション
+* 文書読み上げアプリケーション
+* RingRayLib 拡張機能
+* ZeroLib ライブラリ
+* StdLib - 関数の追加
+* RingQt の改良
+* 実行性能の向上
+* 取扱説明書の増補
+* そのほかの改善
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; 3Dサンプルの追加
+
+3Dサンプルの追加
+================
+
+Ring 1.11 より Qt3D 用の3Dサンプルがあります。
+
+* Folder : ring/samples/other/UsingQt3D (18 サンプル収録)
+
+.. image:: qt3dex18.png
+	:alt: Qt3D 用例 18
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; Checkers ゲーム
+
+Checkers ゲーム
+===============
+
+遊びかたは国際ルールですが、強制ジャンプを採用した Checkers の方言です。
+
+無効な移動、無効なジャンプ、強制ジャンプを扱います。
+
+正方形は錯誤を示すために色分けしています。
+
+正方形は移動元と移動先、またはジャンプ先を示すために色分けしています。
+
+.. image:: checkersgame.png
+	:alt: Checkers ゲーム
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; Sokoban ゲーム
+
+Sokoban ゲーム
+==============
+
+Sokoban ゲームを短時間で実装したものです。
+
+2Dゲーム用 Ring ゲームエンジンを用いて二時間で開発しました (300行以下のコード)
+
+.. image:: sokoban.jpg
+	:alt: Sokoban ゲーム
+
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; Maze ゲーム
+
+Maze ゲーム
+===========
+
+Maze ゲームを短時間で実装したものです。
+
+2Dゲーム用 Ring ゲームエンジンを用いて開発しました (約100行のコード)
+
+このゲームにはレベルデザイナーも搭載してあります (10分で開発、37行のコード)
+
+.. image:: maze.png
+	:alt: Maze ゲーム
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; Snake ゲーム
+
+Snake ゲーム
+============
+
+Snake ゲームを短時間で実装したものです。
+
+2Dゲーム用 Ring ゲームエンジンを用いて開発しました (約200行のコード)
+
+.. image:: snake.png
+	:alt: Snake ゲーム
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; Sudoku ゲーム
+
+Sudoku ゲーム
+=============
+
+9×9 のマスから構成される各列・各段と 9 つの 3×3 の補助マスを埋めて、全部のマスを 1～9 までの数字を全て埋めて完成させます。
+
+.. image:: sudoku.jpg
+	:alt: Sudoku ゲーム
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; デスクトップスクリーンショットアプリケーション
+
+デスクトップスクリーンショットアプリケーション
+==============================================
+
+.. image:: dssapp.png
+	:alt: デスクトップスクリーンショットアプリケーション
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; 文書読み上げアプリケーション
+
+文書読み上げアプリケーション
+============================
+
+.. image:: ttsapp.png
+	:alt: 文書読み上げアプリケーション
+
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; RingRayLib 拡張機能
+
+RingRayLib 拡張機能
+===================
+
+Ring 1.11 より RayLib ゲームプログラミングライブラリに対応した拡張機能があります。
+
+用例:
+
+.. code-block:: ring
+
+	load "raylib.ring"
+
+	screenWidth 	= 800
+	screenHeight 	= 450
+
+	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window")
+
+	SetTargetFPS(60)
+
+	while !WindowShouldClose() 
+		BeginDrawing()
+		ClearBackground(RED)
+		DrawText("Congrats! You created your first window!", 190, 200, 20, WHITE)
+	        EndDrawing()
+	end
+
+	CloseWindow()
+
+実行結果:
+
+.. image:: raylib_ex1.png
+	:alt: RayLib の用例
+
+用例:
+
+.. code-block:: ring
+
+	load "raylib.ring"
+
+	screenWidth = 800
+	screenHeight = 450
+
+	InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing")
+
+	SetTargetFPS(60)
+
+	while !WindowShouldClose()
+
+		BeginDrawing()
+
+		ClearBackground(RAYWHITE)
+
+		DrawText("some basic shapes available on raylib", 20, 20, 20, DARKGRAY)
+		DrawCircle(screenWidth/4, 120, 35, DARKBLUE)
+		DrawRectangle(screenWidth/4*2 - 60, 100, 120, 60, RED)
+		DrawRectangleLines(screenWidth/4*2 - 40, 320, 80, 60, ORANGE)  
+		DrawRectangleGradientH(screenWidth/4*2 - 90, 170, 180, 130, MAROON, GOLD)
+
+		DrawTriangle(Vector2(screenWidth/4*3, 80),
+				 Vector2(screenWidth/4*3 - 60, 150),
+				 Vector2(screenWidth/4*3 + 60, 150), VIOLET)
+
+		DrawPoly(Vector2(screenWidth/4*3, 320), 6, 80, 0, BROWN)
+
+		DrawCircleGradient(screenWidth/4, 220, 60, GREEN, SKYBLUE)
+
+		DrawLine(18, 42, screenWidth - 18, 42, BLACK)
+		DrawCircleLines(screenWidth/4, 340, 80, DARKBLUE)
+		DrawTriangleLines(Vector2(screenWidth/4*3, 160),
+				  Vector2(screenWidth/4*3 - 20, 230),
+				  Vector2(screenWidth/4*3 + 20, 230), DARKBLUE)
+		EndDrawing()
+
+	end
+
+	CloseWindow()
+
+実行結果:
+
+.. image:: ex1_basicshapes.png
+	:alt: RayLib の用例
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; ZeroLib ライブラリ
+
+ZeroLib ライブラリ
+==================
+
+Ring 1.11 より添字 0 始点のリストと文字列用クラスである ZeroLib ライブラリがあります。
+
+用例:
+
+.. code-block:: ring
+
+	load "zerolib.ring"
+
+	? "Using List - Index start from 0"
+	List = Z( [1,2,3] )
+	List.Add(4)
+	List.Add(5)
+	? List[0]
+	? List[1]
+	? List[2]
+	? List[3]
+	? List[4]
+	nIndex = List.find(2)
+	? "Find(2) = " + nIndex
+	List.delete(0)
+	? "After deleting the first item : List[0]" 
+	? "Now List[0] = " + List[0] 
+
+	? "Using String - Index start from 0"
+	String = Z( "Welcome" )
+	? String[0]
+	? String[1]
+	? String[2]
+	? String[3]
+	? String[4]
+	? String[5]
+	? String[6]
+
+実行結果:
+
+.. code-block:: ring 
+
+	Using List - Index start from 0
+	1
+	2
+	3
+	4
+	5
+	Find(2) = 1
+	After deleting the first item : List[0]
+	Now List[0] = 2
+	Using String - Index start from 0
+	W
+	e
+	l
+	c
+	o
+	m
+	e
+
+	
+.. index:: 
+	pair: Ring 1.11 の変更履歴; StdLib - 関数の追加
+
+StdLib - 関数の追加
+===================
+
+次の関数を StdLib へ追加しました
+
+* IsListContainsItems(aParent,aChild)
+* IsBetween(nNumber,nMin,nMax)
+* TimeInfo(cInformation)
+
+用例:
+
+.. code-block:: ring
+
+	load "stdlibcore.ring"
+	? "Using the IsListContainsItems() function" 
+	aList1 = "a":"z"
+	aList2 = [:h,:l,:p,:u]
+	? IsListContainsItems(aList1,aList2)
+	? "Using the IsBetween() function"
+	? isBetween(1,3,4)
+	? isBetween(4,1,6)
+	? "Using the TimeInfo() function"
+	? timeInfo(:date)
+	? timeInfo(:year)
+	? timeInfo(:time)
+	? timeInfo(:hour_12)
+
+実行結果:
+
+.. code-block:: ring
+
+	Using the IsListContainsItems() function
+	1
+	Using the IsBetween() function
+	0
+	1
+	Using the TimeInfo() function
+	05/24/19
+	2019
+	15:30:33
+	03
+
+前述した関数の詳細は StdLib 関数の章を参照してください。
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; RingQt の改良
+
+RingQt の改良
+=============
+
+* Qt 5.12.3 を用いての RingQt のビルド
+
+* Android 用 RingQt - WebView モジュールの存在時に WebView をインクルードするためにプロジェクトファイルを更新
+
+* QString クラス - 新規メソッド
+
+	* compare()
+	* contains()
+	* indexOf()
+	* insert()
+	* isRightToLeft()
+	* remove()
+	* repeated()
+	* replace()
+	* startsWith()
+	* endsWith()
+	* toHtmlEscaped()
+	* clear()
+	* isnull()
+	* resize()
+	* fill()
+
+* QAxBase および QVariant - API の改善
+
+* RingQt へ下記のクラスを追加しました。
+
+	* QQuickView クラス
+	* QPrintDialog クラス
+	* QAxWidget2 クラス
+	* QTextToSpeech クラス 
+	* QGraphicsView クラス
+	* QAbstractAspect クラス
+	* QNode クラス
+	* QEntity クラス
+	* QTransform クラス
+	* QAspectEngine クラス
+	* QTorusMesh クラス
+	* QConeMesh クラス
+	* QCylinderMesh クラス
+	* QCuboidMesh クラス
+	* QPlaneMesh クラス
+	* QSphereMesh クラス
+	* QPhongMaterial クラス
+	* QForwardRenderer クラス
+	* Qt3DWindow クラス
+	* QAbstractCameraController クラス
+	* QFirstPersonCameraController クラス
+	* QTextureMaterial クラス
+	* QExtrudedTextMesh クラス
+	* QText2DEntity クラス
+	* QSkyBoxEntity クラス
+	* QConeGeometry クラス
+	* QOrbitCameraController クラス
+	* QDiffuseSpecularMaterial クラス
+	* QGoochMaterial クラス
+	* QMetalroughMaterial クラス
+	* MorphPhongMaterial クラス
+	* QPervertexColorMaterial クラス
+	* QInputAspect クラス
+	* QFrameAction クラス
+	* QLogicAspect クラス
+	* QCamera クラス
+	* QCameraLens クラス
+	* QMesh クラス
+	* QTechnique クラス
+	* QMaterial クラス
+	* QEffect クラス
+	* QRenderPass クラス
+	* QSceneLoader クラス
+	* QPointLight クラス
+	* QRenderAspect クラス
+	* QTextureLoader クラス
+	* QObjectPicker クラス
+	* QCameraSelector クラス
+	* QCullFace クラス
+	* QDepthTest クラス
+	* QViewPort クラス
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; 実行性能の向上
+
+実行性能の向上
+==============
+
+Ring 1.11 は Ring 1.10 よりも高速です。
+
+アプリケーションにもよりますが 10% ～ 30% ほどの性能向上が見込めます。
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; 取扱説明書の増補
+
+取扱説明書の増補
+================
+
+次の章を取扱説明書へ追加しました。
+
+* チュートリアル: C/C++ による拡張機能の開発方法
+* Qt3D の用法
+* ZeroLib の用法
+* RingRayLib の用法
+
+.. index:: 
+	pair: Ring 1.11 の変更履歴; そのほかの改善
+
+そのほかの改善
+==============
+
+* 新規サンプル
+	* samples/other/ModuloTimesTableCircle フォルダ
+	* samples/other/saveimage folder
+	* samples/other/UsingQML folder
+	* samples/other/myguicontrol.ring 
+	* samples/other/qcalendarwidget.ring
+	* samples/other/qcalendarwidget2.ring
+	* samples/other/sudoku-KL02.ring
+	* samples/other/sudoku-KL02-longproblem.ring
+	* samples/other/zerobasedlist.ring
+	* ringlibs/gameengine/lesson17.ring (ボタンの用法)
+	* samples/other/SQLTutorial/SQL-Tutorial.ring
+	* samples/other/DrawFourier/AA-Draw-Fourier.ring
+	* samples/other/SmartPhoneEmulator/ejemploKey.ring
+	* samples/other/DiscreteFourierTransform/DiscreteFourierTransform.ring
+	* samples/other/phonedatabase/PhoneDatabase.ring
+* Gold Magic 800 - レベルの追加 (44 レベル)
+* Fifteen Puzzle ゲーム 3D - コードの改善 (アニメーション速度)
+* Flappy Bird 3000 - ゲームオーバー時、時機 (鳥) を落下させる演出へ変更
+* Ring ノートパッド - 着脱可能ウィンドウ方式時のキーボード・ショートカット
+* Ring ノートパッド - 関数リストの表示時に "_" 文字がある関数を除外しなくなりました
+* Ring ノートパッド - 実行結果ウィンドウ - データの送信 - コードの改良
+* Ring ノートパッド - 検索と置換ウィンドウ - コードの改良
+* Ring ノートパッド - 編集メニュー - テキストの挿入ウィンドウ
+* Ring ノートパッド - 編集メニュー - 大文字と小文字オプション
+* Ring ノートパッド - 編集メニュー - 接頭字オプション
+* Ring ノートパッド - 編集メニュー - コメント行とコメントブロック行
+* Ring ノートパッド - ファイルタブ - コンテキストメニュー (ほかのファイルを閉じる、使用中のファイルを閉じる、すべてのファイルを閉じる)
+* RingPM - パッケージの更新 - 依存性の再インストールをしなくなりました
+* 2Dゲーム用 Ring ゲームエンジン - 追加 : GE_FULLSCREEN, GE_SCREEN_W および GE_SCREEN_H
+* 2Dゲーム用 Ring ゲームエンジン - 追加 : ゲームオブジェクトの name プロパティ
+* 2Dゲーム用 Ring ゲームエンジン - 追加 : find() ゲームクラスのメソッド (名前によるオブジェクトの検索)
+* 2Dゲーム用 Ring ゲームエンジン - oGame[:ObjectName] によるオブジェクトへのアクセスに対応
+* Natural ライブラリ - 実行性能の改良
+* FoxRing - 追加: frCTOD() 関数
+* 拡張機能用のコード生成器 - 新規構造体によるマネージドポインタを用いた関数の生成
+* Ring VM - Ring オブジェクトファイルエラーに関するエラーコード
+* Ring VM - Eval() 関数 - コードの改良 (実行性能の改善)
+* Ring VM - ステート管理 - コードの改良
+* Ring VM - ">" 演算子と演算子オーバーロード - コードの改良
+* Ring VM - 代入とオブジェクトメソッドの呼び出し - コードの改良
+* Ring VM - オブジェクト指向プログラミング (OOP) - Getter、 メソッド - 実行性能の改善
+* Ring API - C 拡張機能での RING_API_ISLIST() の対応
+* Ring コンパイラ - 条件分岐の記述時に開業後の数値とリテラルに対応
+* Ring コンパイラ - 行の開始におけるセミコロン (;) へ対応
+* Ring コンパイラ - ループ外からの Loop と Exit 命令は使えなくなりました
